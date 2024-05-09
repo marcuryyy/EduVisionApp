@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:windowTranslucentStatus="true"
+    android:windowTranslucentNavigation="true"
+    android:fitsSystemWindows="true"
+    tools:context=".AuthActivity">
+
+
+    <TextView
+        android:id="@+id/add_class_label"
+        android:layout_width="239dp"
+        android:layout_height="36dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:text="Добавление класса"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05" />
+
+    <EditText
+        android:id="@+id/class_name"
+        android:layout_width="342dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="108dp"
+        android:ems="10"
+        android:hint="Название класса"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_class_label" />
+
+    <Button
+        android:id="@+id/button_create_class"
+        android:layout_width="261dp"
+        android:layout_height="54dp"
+        android:text="Создать класс"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_class_label"
+        app:layout_constraintVertical_bias="0.973" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
