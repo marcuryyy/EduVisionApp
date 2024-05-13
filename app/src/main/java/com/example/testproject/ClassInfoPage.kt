@@ -28,7 +28,6 @@ class ClassInfoPage : AppCompatActivity() {
 
         val classes_from_database = fetchDataFromSQLite(class_title.text.toString())
 
-       // val student_list: MutableList<String> =  mutableListOf()
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, classes_from_database)
         list_view.adapter = adapter
 
@@ -41,8 +40,7 @@ class ClassInfoPage : AppCompatActivity() {
         }
         }
     private fun fetchDataFromSQLite(class_title:String): List<String> {
-        // Perform SQLite query to fetch data
-        // For example:123
+
         val db = DBstudent(this, null)
         val readableDB = db.readableDatabase
         val cursor = readableDB.rawQuery("SELECT * FROM students WHERE class_id = '$class_title'", null)
