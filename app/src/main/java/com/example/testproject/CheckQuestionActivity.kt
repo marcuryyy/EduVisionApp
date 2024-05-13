@@ -2,9 +2,11 @@ package com.example.testproject
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -35,10 +37,14 @@ class CheckQuestionActivity : CameraActivity() {
         }
 
         cameraBridgeViewBase = findViewById(R.id.camera_view)
-
+        val results_button: Button = findViewById(R.id.results_button)
         cameraBridgeViewBase.setCvCameraViewListener(MyCameraListener())
         cameraBridgeViewBase.enableView()
 
+        results_button.setOnClickListener{
+            val intent = Intent(this, ResultsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun getCameraViewList(): List<CameraBridgeViewBase> {
@@ -66,8 +72,6 @@ class CheckQuestionActivity : CameraActivity() {
     }
 
     class MyCameraListener : CameraBridgeViewBase.CvCameraViewListener2 {
-        private lateinit var mRgba: Mat
-        private val mGray: Mat = Mat()
         private var text_to_put: String = ""
         override fun onCameraViewStarted(width: Int, height: Int) {
 
