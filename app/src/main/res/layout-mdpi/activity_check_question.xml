@@ -14,11 +14,11 @@
     <org.opencv.android.JavaCameraView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="410dp"
         android:visibility="visible"
+        app:show_fps="true"
         tools:layout_editor_absoluteX="600dp"
-        tools:layout_editor_absoluteY="480dp"
-        app:show_fps="true"/>
+        tools:layout_editor_absoluteY="480dp" />
 
     <Button
         android:id="@+id/startRecButton"

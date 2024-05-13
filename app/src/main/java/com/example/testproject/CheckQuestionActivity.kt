@@ -105,6 +105,8 @@ class CheckQuestionActivity : CameraActivity() {
             if (markerIds.rows() > 0) {
                 for (i in 0 until markerCorners.size) {
                     val corners = markerCorners[i]
+                    val id = markerIds.get(i, 0)[0].toString()
+                    val sliced_id = id.slice(0..id.length-3)
                        // val corners2 = corners.row(1)
                     if (corners.rows() >= 1) {
 

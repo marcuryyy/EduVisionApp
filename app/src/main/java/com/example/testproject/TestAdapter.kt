@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.R
@@ -31,7 +32,7 @@ class TestAdapter(var TestsInAdapter: List<String>, var context: Context) : Recy
         holder.test_name.text = TestsInAdapter[position]
 
         holder.btn.setOnClickListener {
-            val intent = Intent(context, CheckQuestionActivity::class.java)
+            val intent = Intent(context, SelectClassActivity::class.java)
             context.startActivity(intent)
         }
     }
