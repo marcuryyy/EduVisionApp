@@ -20,7 +20,6 @@
         android:ems="10"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
-        android:inputType="text"
         android:text="Мои классы"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/ClassList"
@@ -32,8 +31,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ClassList"
-        android:layout_width="410dp"
-        android:layout_height="736dp"
+        android:layout_width="408dp"
+        android:layout_height="705dp"
         app:layout_constraintBottom_toTopOf="@+id/add_class"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
