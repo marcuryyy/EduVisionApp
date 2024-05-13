@@ -31,6 +31,7 @@ class ClassesAdapter(var ClassesInAdapter: List<String>, var context: Context) :
         holder.class_lbl.text = ClassesInAdapter[position]
         holder.info_button.setOnClickListener{
             val intent = Intent(context, ClassInfoPage::class.java)
+            intent.putExtra("class_name", ClassesInAdapter[position])
             context.startActivity(intent)
         }
     }

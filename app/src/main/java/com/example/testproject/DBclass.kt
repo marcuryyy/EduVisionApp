@@ -28,5 +28,10 @@ class DBclass(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
 
         db.close()
     }
+    fun getClassId(class_title: String): Boolean {
+        val db = this.readableDatabase
 
+        val result = db.rawQuery("SELECT * FROM classes WHERE class_label = '$class_title'", null)
+        return result.moveToFirst()
+    }
     }
