@@ -7,9 +7,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.testproject.R
 
 class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +30,7 @@ class AuthActivity : AppCompatActivity() {
             if(login == "" || password == "")
                 Toast.makeText(this, "Не все поля заполнены", Toast.LENGTH_LONG).show()
             else {
-                val db = DBhelper(this, null)
+                val db = DBuser(this, null)
                 val isAuth = db.getUser(login, password)
 
                 if(isAuth) {
