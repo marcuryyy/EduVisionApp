@@ -24,7 +24,7 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="157dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Информация"
         app:layout_constraintBottom_toBottomOf="parent"

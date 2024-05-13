@@ -45,6 +45,7 @@ class MyClasses : AppCompatActivity() {
             val intent = Intent(this, MyTestsActivity::class.java)
             startActivity(intent)
         }
+        
     }
 
     private fun fetchDataFromSQLite(): List<String> {
@@ -65,5 +66,7 @@ class MyClasses : AppCompatActivity() {
         cursor.close()
         return items
     }
+
+
 
 }
