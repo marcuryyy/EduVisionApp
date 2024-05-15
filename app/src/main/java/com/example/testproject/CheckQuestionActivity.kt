@@ -29,7 +29,8 @@ class CheckQuestionActivity : CameraActivity() {
         System.loadLibrary("opencv_java4")
     }
     private lateinit var cameraBridgeViewBase: CameraBridgeViewBase
-
+    private var id_map: MutableMap<String, String> = mutableMapOf()
+    val bundle = Bundle()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_question)
@@ -39,12 +40,16 @@ class CheckQuestionActivity : CameraActivity() {
 
         cameraBridgeViewBase = findViewById(R.id.camera_view)
         val results_button: Button = findViewById(R.id.results_button)
+        //val jsonString = Gson().toJson(test)
         cameraBridgeViewBase.setCvCameraViewListener(MyCameraListener())
         cameraBridgeViewBase.enableView()
 
 
         results_button.setOnClickListener{
             val intent = Intent(this, ResultsActivity::class.java)
+            bundle.putStringArrayList("keys", ArrayList(id_map.keys))
+            bundle.putStringArrayList("values", ArrayList(id_map.values.map { it.toString() }))
+            intent.putExtras(bundle)
             startActivity(intent)
         }
     }
@@ -137,7 +142,7 @@ class CheckQuestionActivity : CameraActivity() {
                         } else if (topLeftX < bottomRightX && topLeftY > bottomRightY) {
                             text_to_put = "left"
                         }
-
+                        id_map[sliced_id.toString()] = text_to_put
                         Imgproc.putText(
                             rgbaMat,
                             text_to_put,
@@ -148,7 +153,9 @@ class CheckQuestionActivity : CameraActivity() {
                         )
                     }
                 }
+                println(id_map)
                 }
+
                 //Objdetect.drawDetectedMarkers(rgbaMat, markerCorners, markerIds)
             return rgbaMat
             }
