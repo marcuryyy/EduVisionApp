@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:windowTranslucentStatus="true"
     android:windowTranslucentNavigation="true"
     android:fitsSystemWindows="true"
@@ -13,11 +13,16 @@
 
     <TextView
         android:id="@+id/add_class_label"
-        android:layout_width="239dp"
-        android:layout_height="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="800dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Добавление класса"
+        android:textSize="25sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,27 +33,35 @@
 
     <EditText
         android:id="@+id/class_name"
-        android:layout_width="377dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="108dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginBottom="700dp"
+        android:textSize="20sp"
         android:ems="10"
         android:hint="Название класса"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_class_label" />
 
     <Button
         android:id="@+id/button_create_class"
-        android:layout_width="261dp"
-        android:layout_height="54dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="810dp"
+        android:layout_marginBottom="20dp"
         android:text="Создать класс"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_class_label"
-        app:layout_constraintVertical_bias="0.973" />
+        app:layout_constraintVertical_bias="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

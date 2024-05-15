@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:windowTranslucentStatus="true"
     android:windowTranslucentNavigation="true"
     android:fitsSystemWindows="true"
@@ -14,15 +14,15 @@
     <org.opencv.android.JavaCameraView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="271dp"
+        android:layout_height="match_parent"
         android:visibility="visible"
         app:show_fps="true"
-        tools:layout_editor_absoluteX="600dp"
-        tools:layout_editor_absoluteY="480dp" />
+        />
 
     <Button
         android:id="@+id/results_button"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="350dp"
         android:text="Button" />
-</LinearLayout>
+</FrameLayout>

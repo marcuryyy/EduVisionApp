@@ -3,12 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:windowTranslucentStatus="true"
+    android:windowTranslucentNavigation="true"
+    android:fitsSystemWindows="true">
 
     <TextView
         android:id="@+id/select_class_label"
-        android:layout_width="178dp"
-        android:layout_height="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="850dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
         android:text="Выберите класс"
         android:gravity="center"
         android:textSize='20sp'
@@ -21,13 +28,16 @@
 
     <ListView
         android:id="@+id/class_list_for_tests"
-        android:layout_width="414dp"
-        android:layout_height="733dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_class_label"
-        app:layout_constraintVertical_bias="0.122" />
+        app:layout_constraintVertical_bias="0.694" />
 </androidx.constraintlayout.widget.ConstraintLayout>

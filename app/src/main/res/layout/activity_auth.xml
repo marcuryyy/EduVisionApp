@@ -4,23 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:windowTranslucentStatus="true"
     android:windowTranslucentNavigation="true"
     android:fitsSystemWindows="true"
+    android:screenOrientation="portrait"
     tools:context=".AuthActivity">
 
 
     <TextView
         android:id="@+id/textRegistration"
-        android:layout_width="239dp"
-        android:layout_height="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="840dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Авторизация"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="25sp"
         android:textStyle="bold"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,9 +36,13 @@
 
     <EditText
         android:id="@+id/editName_auth"
-        android:layout_width="377dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="44dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        android:layout_marginBottom="770dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:textSize='20sp'
         android:ems="10"
         android:hint="Логин"
         android:inputType="text"
@@ -43,44 +54,56 @@
 
     <EditText
         android:id="@+id/editPassword_auth"
-        android:layout_width="377dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
         android:ems="10"
         android:hint="Пароль"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/button_auth"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
+        android:textSize='20sp'
         app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editName_auth"
-        app:layout_constraintVertical_bias="0.035" />
+        app:layout_constraintTop_toBottomOf="@+id/editName_auth" />
 
     <Button
         android:id="@+id/button_auth"
-        android:layout_width="261dp"
-        android:layout_height="54dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="740dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:text="Авторизоваться"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize='15sp'
+        app:layout_constraintBottom_toTopOf="@+id/to_reg"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textRegistration"
-        app:layout_constraintVertical_bias="0.897" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/to_reg"
-        android:layout_width="261dp"
-        android:layout_height="54dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="830dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="5dp"
         android:backgroundTint="#bd98d9"
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="У меня нет аккаунта"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.988" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
