@@ -153,7 +153,6 @@ class CheckQuestionActivity : CameraActivity() {
                         )
                     }
                 }
-                println(id_map)
                 }
 
                 //Objdetect.drawDetectedMarkers(rgbaMat, markerCorners, markerIds)
