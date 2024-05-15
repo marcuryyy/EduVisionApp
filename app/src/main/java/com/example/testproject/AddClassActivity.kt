@@ -17,7 +17,6 @@ import com.example.testproject.R
 class AddClassActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_add_class)
         val className: EditText = findViewById(R.id.class_name)
         val add_button: Button = findViewById(R.id.button_create_class)

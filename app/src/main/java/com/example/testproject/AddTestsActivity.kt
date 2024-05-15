@@ -17,7 +17,6 @@ import com.example.testproject.R
 class AddTestsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_add_tests)
         val testNameText: EditText = findViewById(R.id.test_name)
         val add_button: Button = findViewById(R.id.button_create_test)

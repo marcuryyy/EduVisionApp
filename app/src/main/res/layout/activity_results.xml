@@ -1,17 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/Results_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="хуй"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="Результаты"
+        android:textSize="30sp"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/StudentsAnsCorrect"
+        android:layout_width="329dp"
+        android:layout_height="188dp"
+        android:layout_marginTop="100dp"
+        android:background="#8D1EE9A2"
+        android:gravity="center"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/StudentsAnsIncorrect"
+        android:layout_width="329dp"
+        android:layout_height="188dp"
+        android:layout_marginTop="100dp"
+        android:background="#8DE91E3C"
+        android:gravity="center"
+        android:textSize="20sp" />
+</LinearLayout>
