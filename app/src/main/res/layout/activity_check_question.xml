@@ -14,15 +14,18 @@
     <org.opencv.android.JavaCameraView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="415dp"
         android:visibility="visible"
-        app:show_fps="true"
-        />
+        app:show_fps="true" />
 
     <Button
         android:id="@+id/results_button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="350dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="#80000000"
         android:text="Button" />
 </FrameLayout>
