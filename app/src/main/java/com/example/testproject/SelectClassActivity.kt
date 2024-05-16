@@ -2,8 +2,11 @@ package com.example.testproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
@@ -19,6 +22,22 @@ class SelectClassActivity : AppCompatActivity() {
 
         list_view.setOnItemClickListener{adapterView, view, i, l ->
             val intent = Intent(this, CheckQuestionActivity::class.java)
+            val selectedFromList: String = list_view.getItemAtPosition(i).toString()
+
+            val db = DBclass(this, null)
+            val returned_bundle: Bundle = db.getClassId(selectedFromList)
+            val class_id: String = returned_bundle.getString("class_id").toString()
+            db.close()
+
+            val student_db = DBstudent(this, null)
+            val student_list: MutableMap<String, String> = student_db.getStudents(class_id)
+            student_db.close()
+
+            val bundle = Bundle()
+            bundle.putStringArrayList("aruco_id", ArrayList(student_list.keys))
+            bundle.putStringArrayList("student_name", ArrayList(student_list.values.map { it.toString() }))
+            intent.putExtras(bundle)
+
             startActivity(intent)
         }
     }

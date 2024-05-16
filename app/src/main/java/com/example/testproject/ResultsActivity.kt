@@ -11,22 +11,27 @@ class ResultsActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
 
+
         val students_ans_correct: TextView = findViewById(R.id.StudentsAnsCorrect)
         val students_ans_incorrect: TextView = findViewById(R.id.StudentsAnsIncorrect)
 
         val keys = intent.getStringArrayListExtra("keys") ?: return
         val values = intent.getStringArrayListExtra("values") ?: return
+        val aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
+        val student_names = intent.getStringArrayListExtra("student_name") ?: return
+
         val answer_results = keys.zip(values).toMap()
-        val student_list_dict: Map<String, String> = mapOf("1" to "John Doe") // брать из базы
+        val student_list_dict: Map<String, String> = aruco_ids.zip(student_names).toMap()
+
         val right_answers: List<String> = listOf("up","down") // брать из базы
 
-        for (name in answer_results.keys){
-            val student_id = student_list_dict[name]
+        for (aruco_id in answer_results.keys){
+            val student_name = student_list_dict[aruco_id]
 
-            if (answer_results[student_id] in right_answers){
-                students_ans_correct.setText(students_ans_correct.text.toString() + "\n" + name)
+            if (answer_results[aruco_id] in right_answers){
+                students_ans_correct.setText(students_ans_correct.text.toString() + "\n" + student_name)
             } else {
-                students_ans_incorrect.setText(students_ans_incorrect.text.toString() + "\n" + name)
+                students_ans_incorrect.setText(students_ans_incorrect.text.toString() + "\n" + student_name)
             }
 
         }

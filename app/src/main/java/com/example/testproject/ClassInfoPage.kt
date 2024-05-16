@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 class ClassInfoPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_class_info)
 
         val list_view: ListView = findViewById(R.id.listView)
@@ -25,8 +24,10 @@ class ClassInfoPage : AppCompatActivity() {
         val class_title: TextView = findViewById(R.id.class_title)
 
         class_title.text = intent.getStringExtra("class_name")
-
-        val classes_from_database = fetchDataFromSQLite(class_title.text.toString())
+        val class_db = DBclass(this, null)
+        val returned_bundle: Bundle = class_db.getClassId(class_title.text.toString())
+        val class_id: String = returned_bundle.getString("class_id").toString()
+        val classes_from_database = fetchDataFromSQLite(class_id)
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, classes_from_database)
         list_view.adapter = adapter
@@ -34,7 +35,9 @@ class ClassInfoPage : AppCompatActivity() {
         button.setOnClickListener{
             val text = student_name.text.toString().trim() + " " + student_id.text.toString().trim()
             val db = DBstudent(this, null)
-            db.addStudent(StudentCreator(class_title.text.toString(), student_name.text.toString().trim(), student_id.text.toString().trim()))
+
+            class_db.close()
+            db.addStudent(StudentCreator(class_id, student_name.text.toString().trim(), student_id.text.toString().trim()))
             if(text != "")
                 adapter.add(text)
         }

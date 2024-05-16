@@ -4,13 +4,14 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.Bundle
 import java.sql.SQLData
 
 class DBclass(val context: Context, val factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, "ClassStorage", factory, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val query = "CREATE TABLE classes (id INT PRIMARY KEY, class_label TEXT)"
+        val query = "CREATE TABLE classes (id INTEGER PRIMARY KEY AUTOINCREMENT, class_label TEXT)"
         db!!.execSQL(query)
     }
 
@@ -28,10 +29,13 @@ class DBclass(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
 
         db.close()
     }
-    fun getClassId(class_title: String): Boolean {
+    fun getClassId(class_title: String): Bundle {
         val db = this.readableDatabase
-
+        val student_info = Bundle()
         val result = db.rawQuery("SELECT * FROM classes WHERE class_label = '$class_title'", null)
-        return result.moveToFirst()
+        if (result.moveToFirst()){
+            student_info.putString("class_id", result.getInt(result.getColumnIndexOrThrow("id")).toString())
+        }
+        return student_info
     }
     }

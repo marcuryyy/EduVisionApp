@@ -23,10 +23,24 @@ class DBstudent(val context: Context, val factory: SQLiteDatabase.CursorFactory?
         values.put("class_id", student.class_id)
         values.put("name", student.student_name)
         values.put("aruco", student.aruco_id)
-
         val db = this.writableDatabase
         db.insert("students", null, values)
-
         db.close()
+    }
+
+    fun getStudents(class_id: String): MutableMap<String, String>{
+        val db = this.readableDatabase
+        val student_list_dict: MutableMap<String, String> = mutableMapOf()
+        val result = db.rawQuery("SELECT * FROM students WHERE class_id='$class_id'", null)
+        if(result.moveToFirst()){
+            do {
+                val student_name: String = result.getString(result.getColumnIndexOrThrow("name"))
+                val aruco_id: String = result.getString(result.getColumnIndexOrThrow("aruco"))
+
+                student_list_dict[aruco_id] = student_name
+            } while (result.moveToNext())
+        }
+        result.close()
+        return student_list_dict
     }
 }

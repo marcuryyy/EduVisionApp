@@ -40,16 +40,22 @@ class CheckQuestionActivity : CameraActivity() {
 
         cameraBridgeViewBase = findViewById(R.id.camera_view)
         val results_button: Button = findViewById(R.id.results_button)
-        //val jsonString = Gson().toJson(test)
         cameraBridgeViewBase.setCvCameraViewListener(MyCameraListener())
         cameraBridgeViewBase.enableView()
 
+        val aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
+        val student_names = intent.getStringArrayListExtra("student_name") ?: return
+
 
         results_button.setOnClickListener{
-            val intent = Intent(this, ResultsActivity::class.java)
+            bundle.putStringArrayList("aruco_id", aruco_ids)
+            bundle.putStringArrayList("student_name", student_names)
             bundle.putStringArrayList("keys", ArrayList(id_map.keys))
             bundle.putStringArrayList("values", ArrayList(id_map.values.map { it.toString() }))
+            val intent = Intent(this, ResultsActivity::class.java)
+
             intent.putExtras(bundle)
+
             startActivity(intent)
         }
     }

@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_auth)
 
         val userLogin: EditText = findViewById(R.id.editName_auth)
