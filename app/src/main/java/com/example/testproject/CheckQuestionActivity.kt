@@ -45,6 +45,7 @@ class CheckQuestionActivity : CameraActivity() {
 
         val aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
         val student_names = intent.getStringArrayListExtra("student_name") ?: return
+        val test_id = intent.getStringExtra("test_id")
 
 
         results_button.setOnClickListener{
@@ -52,6 +53,7 @@ class CheckQuestionActivity : CameraActivity() {
             bundle.putStringArrayList("student_name", student_names)
             bundle.putStringArrayList("keys", ArrayList(id_map.keys))
             bundle.putStringArrayList("values", ArrayList(id_map.values.map { it.toString() }))
+            bundle.putString("test_id", test_id)
             val intent = Intent(this, ResultsActivity::class.java)
 
             intent.putExtras(bundle)

@@ -10,8 +10,9 @@ class ResultsActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
-
-
+        val test_id = intent.getStringExtra("test_id")
+        val db_tests = DBtests(this, null)
+        val right_answers: List<String> = db_tests.getTestRightAnswer(test_id.toString())
         val students_ans_correct: TextView = findViewById(R.id.StudentsAnsCorrect)
         val students_ans_incorrect: TextView = findViewById(R.id.StudentsAnsIncorrect)
 
@@ -22,8 +23,6 @@ class ResultsActivity: AppCompatActivity() {
 
         val answer_results = keys.zip(values).toMap()
         val student_list_dict: Map<String, String> = aruco_ids.zip(student_names).toMap()
-
-        val right_answers: List<String> = listOf("up","down") // брать из базы
 
         for (aruco_id in answer_results.keys){
             val student_name = student_list_dict[aruco_id]

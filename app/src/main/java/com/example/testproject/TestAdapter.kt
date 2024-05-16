@@ -2,6 +2,7 @@ package com.example.testproject
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,9 +31,12 @@ class TestAdapter(var TestsInAdapter: List<String>, var context: Context) : Recy
 
     override fun onBindViewHolder(holder: MyViewFolder, position: Int) {
         holder.test_name.text = TestsInAdapter[position]
-
+        val db = DBtests(context, null)
+        val returned_bundle: Bundle = db.getTestId(holder.test_name.text.toString())
+        val test_id: String = returned_bundle.getString("test_id").toString()
         holder.btn.setOnClickListener {
             val intent = Intent(context, SelectClassActivity::class.java)
+            intent.putExtra("test_id", test_id)
             context.startActivity(intent)
         }
     }
