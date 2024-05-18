@@ -6,6 +6,7 @@
     android:windowTranslucentStatus="true"
     android:windowTranslucentNavigation="true"
     android:fitsSystemWindows="true"
+    android:background="@color/mint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
