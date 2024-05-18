@@ -4,27 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:windowTranslucentStatus="true"
-    android:windowTranslucentNavigation="true"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     android:screenOrientation="portrait"
+    android:windowTranslucentNavigation="true"
+    android:windowTranslucentStatus="true"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textRegistration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="830dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="830dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Регистрация"
-        android:textSize="25sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/black"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,83 +34,90 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.039" />
 
-    <EditText
-        android:id="@+id/editName"
-        android:layout_width="385dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_corners"
-        android:ems="10"
-        android:hint="Логин"
-        android:inputType="text"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textSize='25sp'
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRegistration" />
-
-    <EditText
-        android:id="@+id/editPassword"
-        android:layout_width="385dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_corners"
-        android:ems="10"
-        android:hint="Пароль"
-        android:inputType="textPassword"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textSize='25sp'
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
 
     <Button
         android:id="@+id/button_reg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="740dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="276dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
-        android:text="Зарегистрироваться в приложении"
         android:backgroundTint="@color/lightblue"
-        android:textSize='15sp'
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/to_auth"
+        android:gravity="center_horizontal"
+        android:text="Зарегистрироваться"
+        android:textSize='25sp'
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRegistration"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/to_auth" />
 
     <TextView
         android:id="@+id/to_auth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="830dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="5dp"
-        android:textColor="@color/lightblue"
+        android:layout_marginTop="20dp"
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="Уже есть аккаунт"
-        android:textSize="15sp"
+        android:textColor="@color/lightblue"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/rounded_corners"
+            android:ems="10"
+            android:hint="Логин"
+            android:inputType="text"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize='25sp'
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textRegistration" />
+
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/rounded_corners"
+            android:ems="10"
+            android:hint="Пароль"
+            android:inputType="textPassword"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize='25sp'
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editName" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

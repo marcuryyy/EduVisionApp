@@ -10,4 +10,5 @@
 
 
     <style name="Theme.TestProject" parent="Base.Theme.TestProject" />
+
 </resources>

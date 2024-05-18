@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +17,7 @@ class AuthActivity : AppCompatActivity() {
         val userLogin: EditText = findViewById(R.id.editName_auth)
         val userPass: EditText = findViewById(R.id.editPassword_auth)
         val ButtonEndAuth: Button = findViewById(R.id.button_auth)
-        val linkToReg: Button = findViewById(R.id.to_reg)
+        val linkToReg: TextView = findViewById(R.id.to_reg)
 
         linkToReg.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
