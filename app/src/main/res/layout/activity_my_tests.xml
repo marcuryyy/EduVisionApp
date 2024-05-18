@@ -9,6 +9,7 @@
     android:windowTranslucentStatus="true"
     android:windowTranslucentNavigation="true"
     android:fitsSystemWindows="true"
+    android:theme="@style/Theme.TestProject"
     android:screenOrientation="portrait"
     tools:context=".MyTestsActivity">
 
@@ -34,13 +35,13 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.494" />
+        app:layout_constraintVertical_bias="0.995" />
 
     <Button
         android:id="@+id/add_test_button"
@@ -52,6 +53,8 @@
         android:layout_marginBottom="5dp"
         android:text="Добавить вопрос"
         android:textSize="15sp"
+        android:backgroundTint="@color/lightblue"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/my_classes_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
 
@@ -28,8 +29,8 @@ class MyClasses : AppCompatActivity() {
         setContentView(R.layout.activity_my_classes)
 
         val itemList = fetchDataFromSQLite() // Function to fetch data from SQLite
-        val add_class_button: Button = findViewById(R.id.add_class)
-        val my_tests_button: Button = findViewById(R.id.my_tests_button)
+        val add_class_button: ImageButton = findViewById(R.id.add_class)
+        val my_tests_button: ImageButton = findViewById(R.id.my_tests_button)
 
         recyclerView = findViewById(R.id.ClassList)
         recyclerView.layoutManager = LinearLayoutManager(this)
