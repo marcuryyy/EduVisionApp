@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 class SelectClassActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_select_class)
         val list_view: ListView = findViewById(R.id.class_list_for_tests)
         val itemList = fetchDataFromSQLite()

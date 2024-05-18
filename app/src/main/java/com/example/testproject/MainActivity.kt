@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         val userLogin: EditText = findViewById(R.id.editName)
         val userPass: EditText = findViewById(R.id.editPassword)
         val ButtonEndReg: Button = findViewById(R.id.button_reg)
-        val linkToAuth: Button = findViewById(R.id.to_auth)
+        val linkToAuth: TextView = findViewById(R.id.to_auth)
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         if(sharedPref.getString("username", "") != ""){
             val intent = Intent(this, MyClasses::class.java)
