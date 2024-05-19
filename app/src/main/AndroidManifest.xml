@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TestProject"
+        android:theme="@style/Base.Theme.TestProject"
         tools:targetApi="31">
         <activity
             android:name=".CheckQuestionActivity"
@@ -23,7 +23,7 @@
             android:name=".AddTestsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MyTestsActivity"
             android:exported="false"

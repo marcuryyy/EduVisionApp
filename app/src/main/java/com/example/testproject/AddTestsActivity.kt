@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.testproject.R
 
 
-class AddTestsActivity : AppCompatActivity() {
+class AddTestsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_tests)
@@ -26,6 +27,7 @@ class AddTestsActivity : AppCompatActivity() {
         val checkbox_two: CheckBox = findViewById(R.id.checkBoxVar2)
         val checkbox_three: CheckBox = findViewById(R.id.checkBoxVar3)
         val checkbox_four: CheckBox = findViewById(R.id.checkBoxVar4)
+        val back_button: TextView = findViewById(R.id.backButton)
 
         add_button.setOnClickListener {
             val testName: String = testNameText.text.toString()
@@ -49,5 +51,10 @@ class AddTestsActivity : AppCompatActivity() {
                 startActivity(intent)
             } else Toast.makeText(this, "Нет названия теста!", Toast.LENGTH_LONG).show()
         }
+
+        back_button.setOnClickListener{
+            onBackPressed()
+        }
+
     }
 }

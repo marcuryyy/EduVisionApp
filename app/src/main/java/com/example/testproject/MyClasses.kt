@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.R
 
-class MyClasses : AppCompatActivity() {
+class MyClasses : BaseActivity()  {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ClassesAdapter
@@ -28,7 +28,7 @@ class MyClasses : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_classes)
 
-        val itemList = fetchDataFromSQLite() // Function to fetch data from SQLite
+        val itemList = fetchDataFromSQLite()
         val add_class_button: ImageButton = findViewById(R.id.add_class)
         val my_tests_button: ImageButton = findViewById(R.id.my_tests_button)
 
@@ -50,8 +50,6 @@ class MyClasses : AppCompatActivity() {
     }
 
     private fun fetchDataFromSQLite(): List<String> {
-        // Perform SQLite query to fetch data
-        // For example:
         val db = DBclass(this, null)
         val readableDB = db.readableDatabase
         val cursor = readableDB.rawQuery("SELECT * FROM classes", null)

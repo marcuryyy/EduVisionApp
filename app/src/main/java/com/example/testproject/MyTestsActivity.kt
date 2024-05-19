@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.R
 
-class MyTestsActivity : AppCompatActivity() {
+class MyTestsActivity : BaseActivity()  {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TestAdapter
@@ -23,8 +24,8 @@ class MyTestsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_my_tests)
 
         val itemList = fetchDataFromSQLite()
-        val my_classes_link: Button = findViewById(R.id.my_classes_button)
-        val add_test_button: Button = findViewById(R.id.add_test_button)
+        val my_classes_link: ImageButton = findViewById(R.id.my_classes_button)
+        val add_test_button: ImageButton = findViewById(R.id.add_test_button)
 
         recyclerView = findViewById(R.id.my_tests_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -44,8 +45,6 @@ class MyTestsActivity : AppCompatActivity() {
     }
 
     private fun fetchDataFromSQLite(): List<String> {
-        // Perform SQLite query to fetch data
-        // For example:
         val db = DBtests(this, null)
         val readableDB = db.readableDatabase
         val cursor = readableDB.rawQuery("SELECT * FROM tests", null)

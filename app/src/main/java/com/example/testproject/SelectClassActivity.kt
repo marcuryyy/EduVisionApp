@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
-class SelectClassActivity : AppCompatActivity() {
+class SelectClassActivity : BaseActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_class)
@@ -21,6 +21,7 @@ class SelectClassActivity : AppCompatActivity() {
         list_view.adapter = adapter
 
         list_view.setOnItemClickListener{adapterView, view, i, l ->
+
             val intent = Intent(this, CheckQuestionActivity::class.java)
             val selectedFromList: String = list_view.getItemAtPosition(i).toString()
 
@@ -42,6 +43,7 @@ class SelectClassActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
     private fun fetchDataFromSQLite(): List<String> {
 
         val db = DBclass(this, null)

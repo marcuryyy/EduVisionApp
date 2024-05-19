@@ -9,14 +9,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <EditText
+    <TextView
         android:id="@+id/test_name"
         android:layout_width="409dp"
         android:layout_height="59dp"
         android:textSize='20sp'
         android:ems="10"
-        android:inputType="text"
         android:text="Name"
+        android:paddingTop="15dp"
+        android:paddingStart="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -26,15 +27,17 @@
 
     <Button
         android:id="@+id/test_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Информация"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Выбрать"
+        app:cornerRadius="10dp"
         android:textSize='15sp'
+        android:backgroundTint="@color/lightblue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintHorizontal_bias="0.939"
         app:layout_constraintStart_toStartOf="@+id/test_name"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.454" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

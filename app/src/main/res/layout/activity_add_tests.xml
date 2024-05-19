@@ -7,7 +7,6 @@
     android:layout_height="wrap_content"
     android:windowTranslucentStatus="true"
     android:windowTranslucentNavigation="true"
-    android:fitsSystemWindows="true"
     tools:context=".AddTestsActivity">
 
 
@@ -20,7 +19,9 @@
         android:layout_marginTop="810dp"
         android:layout_marginBottom="20dp"
         android:text="Создать вопрос"
+        android:backgroundTint="@color/lightblue"
         android:textSize="20sp"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,12 +30,12 @@
 
     <TextView
         android:id="@+id/add_test_label"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="700dp"
-        android:layout_marginTop="1dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="700dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Создание вопроса"
@@ -72,6 +73,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="10dp"
+        android:background="@drawable/rounded_corners"
+        android:padding="10dp"
         android:ems="10"
         android:hint="Вопрос"
         android:inputType="text"
@@ -90,6 +93,8 @@
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="50dp"
         android:layout_marginStart="10dp"
+        android:background="@drawable/rounded_corners"
+        android:padding="10dp"
         android:ems="10"
         android:hint="Вариант 1"
         android:inputType="text"
@@ -124,6 +129,8 @@
         android:layout_marginTop="350dp"
         android:layout_marginBottom="480dp"
         android:ems="10"
+        android:background="@drawable/rounded_corners"
+        android:padding="10dp"
         android:hint="Вариант 2"
         android:inputType="text"
         android:textSize="17sp"
@@ -156,6 +163,8 @@
         android:layout_marginTop="420dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="410dp"
+        android:background="@drawable/rounded_corners"
+        android:padding="10dp"
         android:ems="10"
         android:hint="Вариант 3"
         android:inputType="text"
@@ -188,6 +197,8 @@
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="Вариант 4"
+        android:background="@drawable/rounded_corners"
+        android:padding="10dp"
         android:inputType="text"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -206,5 +217,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_variants_label" />
 
+    <TextView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="3dp"
+        android:text="Назад"
+        android:textColor="@color/lightblue"
+        app:layout_constraintEnd_toStartOf="@+id/add_test_label"
+        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
