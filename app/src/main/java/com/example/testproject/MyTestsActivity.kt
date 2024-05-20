@@ -35,10 +35,12 @@ class MyTestsActivity : BaseActivity()  {
         my_classes_link.setOnClickListener {
             val intent = Intent(this, MyClasses::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         }
         add_test_button.setOnClickListener {
             val intent = Intent(this, AddTestsActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
 

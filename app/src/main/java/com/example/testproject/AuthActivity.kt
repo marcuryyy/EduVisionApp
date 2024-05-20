@@ -21,6 +21,7 @@ class AuthActivity : BaseActivity()  {
 
         linkToReg.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("Source", "Authentication")
             startActivity(intent)
         }
 

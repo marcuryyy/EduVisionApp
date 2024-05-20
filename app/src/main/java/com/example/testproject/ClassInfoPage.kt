@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -23,34 +24,37 @@ class ClassInfoPage : BaseActivity() {
         val student_id: EditText = findViewById(R.id.addStudentIDcell)
         val button: Button = findViewById(R.id.addStudentButton)
         val class_title: TextView = findViewById(R.id.class_title)
-        val root_layout: View = findViewById(R.id.rootlayout)
         class_title.text = intent.getStringExtra("class_name")
         val class_db = DBclass(this, null)
         val returned_bundle: Bundle = class_db.getClassId(class_title.text.toString())
         val class_id: String = returned_bundle.getString("class_id").toString()
         val classes_from_database = fetchDataFromSQLite(class_id)
-
+        println(classes_from_database)
+        class_db.close()
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, classes_from_database)
         list_view.adapter = adapter
-        root_layout.setOnTouchListener(OnTouchListener { v, event -> // Скрываем клавиатуру при касании пустого места на экране
-            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(v.windowToken, 0)
-
-
-            // Вызываем performClick() для обработки нажатия
-            v.performClick()
-            false
-        })
 
         button.setOnClickListener{
-            val text = student_name.text.toString().trim() + " " + student_id.text.toString().trim()
             val db = DBstudent(this, null)
-            class_db.close()
-            db.addStudent(StudentCreator(class_id, student_name.text.toString().trim(), student_id.text.toString().trim()))
-            if(text != "")
-                adapter.add(text)
-            student_name.text.clear()
-            student_id.text.clear()
+            if(db.findStudent(student_name.text.toString().trim(), student_id.text.toString().trim())){
+                Toast.makeText(this, "Такой ученик либо id уже существует!", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val text = "ФИО: " + student_name.text.toString().trim() +
+                      "\nID: " + student_id.text.toString().trim()
+
+                db.addStudent(
+                    StudentCreator(
+                        class_id,
+                        student_name.text.toString().trim(),
+                        student_id.text.toString().trim()
+                    )
+                )
+                if (text != "")
+                    adapter.add(text)
+                student_name.text.clear()
+                student_id.text.clear()
+            }
         }
         }
     private fun fetchDataFromSQLite(class_title:String): List<String> {
@@ -65,7 +69,7 @@ class ClassInfoPage : BaseActivity() {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow("aruco"))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
                 Log.d("Student", "ID: $id, Name: $name")
-                items.add(name.toString().trim() + " " + id.toString().trim())
+                items.add("ФИО: " + name.toString().trim() + "\nID: " + id.toString().trim())
             } while (cursor.moveToNext())
         }
         cursor.close()

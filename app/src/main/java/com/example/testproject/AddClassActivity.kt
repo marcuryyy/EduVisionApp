@@ -24,14 +24,20 @@ class AddClassActivity : BaseActivity()  {
             val class_label: String = className.text.toString()
             if(class_label != "") {
                 val db = DBclass(this, null)
-                db.addClass(ClassCreator(class_label))
-                val intent = Intent(this, MyClasses::class.java)
-                startActivity(intent)
+                if(db.findClass(class_label)){
+                    Toast.makeText(this, "Такой класс уже существует!", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    db.addClass(ClassCreator(class_label))
+                    val intent = Intent(this, MyClasses::class.java)
+                    startActivity(intent)
+                }
             } else Toast.makeText(this, "Нет названия класса!", Toast.LENGTH_LONG).show()
         }
 
         back_button.setOnClickListener{
             onBackPressed()
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         }
     }
 

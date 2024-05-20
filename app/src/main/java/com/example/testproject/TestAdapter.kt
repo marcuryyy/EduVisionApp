@@ -1,5 +1,6 @@
 package com.example.testproject
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -37,7 +38,11 @@ class TestAdapter(var TestsInAdapter: List<String>, var context: Context) : Recy
         holder.btn.setOnClickListener {
             val intent = Intent(context, SelectClassActivity::class.java)
             intent.putExtra("test_id", test_id)
-            context.startActivity(intent)
+            if (context is Activity){
+                val activity = context as Activity
+                activity.startActivity(intent)
+                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            }
         }
     }
 

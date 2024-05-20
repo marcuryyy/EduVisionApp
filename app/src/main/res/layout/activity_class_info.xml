@@ -31,6 +31,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Имя ученика"
+            android:background="@drawable/rounded_corners"
+            android:padding="5dp"
             android:inputType="text"
             android:textSize="20sp" />
 
@@ -41,6 +43,8 @@
             android:layout_marginStart="42dp"
             android:ems="10"
             android:hint="ID"
+            android:background="@drawable/rounded_corners"
+            android:padding="5dp"
             android:inputType="text"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="256dp"
@@ -54,8 +58,10 @@
         android:layout_marginStart="120dp"
         android:layout_marginTop="136dp"
         android:layout_marginEnd="120dp"
+        android:backgroundTint="@color/lightblue"
         android:text="Добавить"
         android:textSize="20sp"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"

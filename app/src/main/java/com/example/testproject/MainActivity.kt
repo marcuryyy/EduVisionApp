@@ -19,9 +19,11 @@ class MainActivity : BaseActivity()  {
         val ButtonEndReg: Button = findViewById(R.id.button_reg)
         val linkToAuth: TextView = findViewById(R.id.to_auth)
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        if(sharedPref.getString("username", "") != ""){
-            val intent = Intent(this, MyClasses::class.java)
-            startActivity(intent)
+        if(intent.getStringExtra("Source")!="Authentication") {
+            if (sharedPref.getString("username", "") != "") {
+                val intent = Intent(this, MyClasses::class.java)
+                startActivity(intent)
+            }
         }
         val editor = sharedPref.edit()
 

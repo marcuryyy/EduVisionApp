@@ -1,5 +1,6 @@
 package com.example.testproject
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -33,7 +34,11 @@ class ClassesAdapter(var ClassesInAdapter: List<String>, var context: Context) :
         holder.info_button.setOnClickListener{
             val intent = Intent(context, ClassInfoPage::class.java)
             intent.putExtra("class_name", ClassesInAdapter[position])
-            context.startActivity(intent)
+            if (context is Activity){
+                val activity = context as Activity
+                activity.startActivity(intent)
+                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            }
         }
     }
 
