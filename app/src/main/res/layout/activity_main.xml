@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:screenOrientation="portrait"
@@ -12,14 +12,13 @@
     android:windowTranslucentStatus="true"
     tools:context=".MainActivity">
 
+
     <TextView
         android:id="@+id/textRegistration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="80dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="830dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Регистрация"
@@ -27,33 +26,32 @@
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.039" />
-
+        app:layout_constraintVertical_bias="0.776" />
 
     <Button
         android:id="@+id/button_reg"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="65dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="276dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/lightblue"
-        android:gravity="center_horizontal"
-        android:text="Зарегистрироваться"
-        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="Зарегестрироваться"
         android:textAllCaps="false"
-        android:textSize='25sp'
+        android:textColor="@color/white"
+        android:textSize='20sp'
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/to_auth" />
+        app:layout_constraintTop_toBottomOf="@+id/to_auth"
+        app:layout_constraintVertical_bias="0.061" />
 
     <TextView
         android:id="@+id/to_auth"
@@ -83,17 +81,18 @@
         <EditText
             android:id="@+id/editName"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="5dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/rounded_corners"
             android:ems="10"
+            android:gravity="center_vertical"
             android:hint="Логин"
             android:inputType="text"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textSize='25sp'
+            android:textSize='20sp'
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -103,17 +102,18 @@
         <EditText
             android:id="@+id/editPassword"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/rounded_corners"
             android:ems="10"
+            android:gravity="center_vertical"
             android:hint="Пароль"
             android:inputType="textPassword"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textSize='25sp'
+            android:textSize='20sp'
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
