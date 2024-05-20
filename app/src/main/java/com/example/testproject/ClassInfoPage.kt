@@ -35,8 +35,8 @@ class ClassInfoPage : BaseActivity() {
                 Toast.makeText(this, "Такой ученик либо id уже существует!", Toast.LENGTH_SHORT).show()
             }
             else {
-                val text = "ФИО: " + student_name.text.toString().trim() +
-                      "\nID: " + student_id.text.toString().trim()
+                val text = "Ученик: " + student_name.text.toString().trim() +
+                      "\nНомер карточки: " + student_id.text.toString().trim()
 
                 db.addStudent(
                     StudentCreator(
@@ -63,8 +63,7 @@ class ClassInfoPage : BaseActivity() {
             do {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow("aruco"))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-                Log.d("Student", "ID: $id, Name: $name")
-                items.add("ФИО: " + name.toString().trim() + "\nID: " + id.toString().trim())
+                items.add("Ученик: " + name.toString().trim() + "\nНомер карточки: " + id.toString().trim())
             } while (cursor.moveToNext())
         }
         cursor.close()

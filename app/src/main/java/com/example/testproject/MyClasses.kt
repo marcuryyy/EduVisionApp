@@ -45,7 +45,7 @@ class MyClasses : BaseActivity()  {
         }
 
         my_tests_button.setOnClickListener {
-            val intent = Intent(this, MyTestsActivity::class.java)
+            val intent = Intent(this, MyFoldersActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }

@@ -21,7 +21,7 @@ class AddTestsActivity : BaseActivity() {
         val checkbox_three: CheckBox = findViewById(R.id.checkBoxVar3)
         val checkbox_four: CheckBox = findViewById(R.id.checkBoxVar4)
         val back_button: TextView = findViewById(R.id.backButton)
-
+        val folder_name = intent.getStringExtra("folder_name").toString()
         add_button.setOnClickListener {
             val testName: String = testNameText.text.toString()
             if(testName != "") {
@@ -39,8 +39,9 @@ class AddTestsActivity : BaseActivity() {
                 }
 
                 val db = DBtests(this, null)
-                db.addTest(TestCreator(testName, right_answer))
+                db.addTest(TestCreator(folder_name, testName, right_answer))
                 val intent = Intent(this, MyTestsActivity::class.java)
+                intent.putExtra("folder_name", folder_name)
                 startActivity(intent)
             } else Toast.makeText(this, "Нет названия теста!", Toast.LENGTH_LONG).show()
         }

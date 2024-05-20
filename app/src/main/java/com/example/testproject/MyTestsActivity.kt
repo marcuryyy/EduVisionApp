@@ -3,6 +3,7 @@ package com.example.testproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,13 +16,18 @@ class MyTestsActivity : BaseActivity()  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_tests)
 
-        val itemList = fetchDataFromSQLite()
         val my_classes_link: ImageButton = findViewById(R.id.my_classes_button)
         val add_test_button: ImageButton = findViewById(R.id.add_test_button)
-
+        val folder_name = intent.getStringExtra("folder_name").toString()
+        val folder_db = DBfolders(this, null)
+        val returned_bundle: Bundle = folder_db.getFolderId(folder_name)
+        val folder_id: String = returned_bundle.getString("folder_id").toString()
+        val folders_from_database = fetchDataFromSQLite(folder_id)
+        println(folder_id)
+        folder_db.close()
         recyclerView = findViewById(R.id.my_tests_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TestAdapter(itemList, this)
+        adapter = TestAdapter(folders_from_database, this)
         recyclerView.adapter = adapter
 
         my_classes_link.setOnClickListener {
@@ -31,6 +37,7 @@ class MyTestsActivity : BaseActivity()  {
         }
         add_test_button.setOnClickListener {
             val intent = Intent(this, AddTestsActivity::class.java)
+            intent.putExtra("folder_name", folder_name)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
@@ -38,16 +45,16 @@ class MyTestsActivity : BaseActivity()  {
 
     }
 
-    private fun fetchDataFromSQLite(): List<String> {
+    private fun fetchDataFromSQLite(folder_name:String): List<String> {
+
         val db = DBtests(this, null)
         val readableDB = db.readableDatabase
-        val cursor = readableDB.rawQuery("SELECT * FROM tests", null)
+        val cursor = readableDB.rawQuery("SELECT * FROM tests WHERE folder_id = '$folder_name'", null)
 
         val items = mutableListOf<String>()
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                val question_text_index = cursor.getColumnIndex("question_text")
-                val question_text = if (question_text_index >= 0) cursor.getString(question_text_index) else ""
+                val question_text = cursor.getString(cursor.getColumnIndexOrThrow("question_text"))
                 items.add(question_text)
             } while (cursor.moveToNext())
         }

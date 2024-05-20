@@ -10,7 +10,7 @@ class DBtests(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
     SQLiteOpenHelper(context, "TestStorage", factory, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val query = "CREATE TABLE tests (id INTEGER PRIMARY KEY AUTOINCREMENT, question_text TEXT, right_answer TEXT)"
+        val query = "CREATE TABLE tests (id INTEGER PRIMARY KEY AUTOINCREMENT, folder_id TEXT, question_text TEXT, right_answer TEXT)"
         db!!.execSQL(query)
     }
 
@@ -21,6 +21,7 @@ class DBtests(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
 
     fun addTest(test_example: TestCreator){
         val values = ContentValues()
+        values.put("folder_id", test_example.folder_id)
         values.put("question_text", test_example.question_text)
         values.put("right_answer", test_example.right_answer)
 
