@@ -2,13 +2,8 @@ package com.example.testproject
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 
 class SelectClassActivity : BaseActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {

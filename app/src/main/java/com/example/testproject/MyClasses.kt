@@ -1,18 +1,15 @@
 package com.example.testproject
 
-import android.app.Activity
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResult
-
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testproject.R
+
 
 class MyClasses : BaseActivity()  {
 
@@ -21,12 +18,16 @@ class MyClasses : BaseActivity()  {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
-        finishAffinity() // Closes all activities in the task
+        finishAffinity()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_classes)
+        if (!hasCameraPermission()) {
+            requestCameraPermission()
+        } else {
+        }
 
         val itemList = fetchDataFromSQLite()
         val add_class_button: ImageButton = findViewById(R.id.add_class)
@@ -66,6 +67,13 @@ class MyClasses : BaseActivity()  {
         }
         cursor.close()
         return items
+    }
+    private fun hasCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 101)
     }
 
 

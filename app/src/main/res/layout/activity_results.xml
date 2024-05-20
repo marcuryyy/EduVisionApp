@@ -11,27 +11,62 @@
         android:id="@+id/Results_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="30dp"
+        android:gravity="center"
         android:text="Результаты"
+        android:fontFamily="sans-serif-black"
         android:textSize="30sp"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/StudentsAnsCorrect"
-        android:layout_width="329dp"
-        android:layout_height="188dp"
-        android:layout_marginTop="100dp"
-        android:background="#8D1EE9A2"
+        android:id="@+id/answers_correct_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
         android:gravity="center"
-        android:textSize="20sp" />
+        android:text="Ответили правильно:" />
+
+    <ListView
+        android:id="@+id/StudentsAnsCorrect"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:background="@drawable/rounded_corners"/>
 
     <TextView
-        android:id="@+id/StudentsAnsIncorrect"
-        android:layout_width="329dp"
-        android:layout_height="188dp"
-        android:layout_marginTop="100dp"
-        android:background="#8DE91E3C"
+        android:id="@+id/answers_incorrect_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:text="Ответили неправильно:" />
+
+    <ListView
+        android:id="@+id/StudentsAnsIncorrect"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:background="@drawable/rounded_corners"
+        />
+
+    <Button
+        android:id="@+id/Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/lightblue"
+        android:text="Отлично"
+        app:cornerRadius="10dp"/>
+
 </LinearLayout>

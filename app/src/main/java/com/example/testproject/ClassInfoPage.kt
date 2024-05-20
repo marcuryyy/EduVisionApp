@@ -2,16 +2,12 @@ package com.example.testproject
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.View.OnTouchListener
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 
 
 class ClassInfoPage : BaseActivity() {
@@ -29,7 +25,6 @@ class ClassInfoPage : BaseActivity() {
         val returned_bundle: Bundle = class_db.getClassId(class_title.text.toString())
         val class_id: String = returned_bundle.getString("class_id").toString()
         val classes_from_database = fetchDataFromSQLite(class_id)
-        println(classes_from_database)
         class_db.close()
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, classes_from_database)
         list_view.adapter = adapter
