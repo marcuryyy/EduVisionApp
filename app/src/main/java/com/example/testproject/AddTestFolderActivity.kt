@@ -15,7 +15,6 @@ class AddTestFolderActivity : BaseActivity()  {
         val folderName: EditText = findViewById(R.id.folder_name)
         val add_button: Button = findViewById(R.id.button_create_folder)
         val back_button: TextView = findViewById(R.id.backButton)
-
         add_button.setOnClickListener {
             val folder_name: String = folderName.text.toString()
             if(folder_name != "") {
