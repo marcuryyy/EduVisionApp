@@ -1,13 +1,12 @@
 package com.example.testproject
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 class ClassInfoPage : BaseActivity() {
@@ -15,7 +14,8 @@ class ClassInfoPage : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_class_info)
 
-        val list_view: ListView = findViewById(R.id.listView)
+        val list_view: RecyclerView = findViewById(R.id.listView)
+
         val student_name: EditText = findViewById(R.id.addStudentCell)
         val student_id: EditText = findViewById(R.id.addStudentIDcell)
         val button: Button = findViewById(R.id.addStudentButton)
@@ -24,9 +24,10 @@ class ClassInfoPage : BaseActivity() {
         val class_db = DBclass(this, null)
         val returned_bundle: Bundle = class_db.getClassId(class_title.text.toString())
         val class_id: String = returned_bundle.getString("class_id").toString()
-        val classes_from_database = fetchDataFromSQLite(class_id)
+        val class_students = fetchDataFromSQLite(class_id)
         class_db.close()
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, classes_from_database)
+        list_view.layoutManager = LinearLayoutManager(this)
+        val adapter = StudentAdapter(class_students, this)
         list_view.adapter = adapter
 
         button.setOnClickListener{
@@ -35,9 +36,6 @@ class ClassInfoPage : BaseActivity() {
                 Toast.makeText(this, "Такой ученик либо id уже существует!", Toast.LENGTH_SHORT).show()
             }
             else {
-                val text = "Ученик: " + student_name.text.toString().trim() +
-                      "\nНомер карточки: " + student_id.text.toString().trim()
-
                 db.addStudent(
                     StudentCreator(
                         class_id,
@@ -45,14 +43,16 @@ class ClassInfoPage : BaseActivity() {
                         student_id.text.toString().trim()
                     )
                 )
-                if (text != "")
-                    adapter.add(text)
+                class_students.add("Ученик: " + student_name.text.toString().trim() + "\nID:" + student_id.text.toString().trim())
+                adapter.notifyDataSetChanged()
                 student_name.text.clear()
                 student_id.text.clear()
+
             }
         }
+
         }
-    private fun fetchDataFromSQLite(class_title:String): List<String> {
+    private fun fetchDataFromSQLite(class_title:String): MutableList<String> {
 
         val db = DBstudent(this, null)
         val readableDB = db.readableDatabase
@@ -63,7 +63,7 @@ class ClassInfoPage : BaseActivity() {
             do {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow("aruco"))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-                items.add("Ученик: " + name.toString().trim() + "\nНомер карточки: " + id.toString().trim())
+                items.add("Ученик: " + name + "\nID:" + id)
             } while (cursor.moveToNext())
         }
         cursor.close()

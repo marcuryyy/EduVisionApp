@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class MainActivity : BaseActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +35,11 @@ class MainActivity : BaseActivity()  {
             val login = userLogin.text.toString().trim()
             val password = userPass.text.toString().trim()
 
-            if(login == "" || password == "")
-                Toast.makeText(this, "Не все поля заполнены", Toast.LENGTH_SHORT).show()
+            if(login == "" || password == ""){
+                val bottomSheetDialog = BottomSheetDialog(this)
+                bottomSheetDialog.setContentView(R.layout.wrong_registration_layout)
+                bottomSheetDialog.show()
+            }
             else {
                 editor.putString("username", login)
                 editor.apply()

@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class AuthActivity : BaseActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +27,13 @@ class AuthActivity : BaseActivity()  {
         ButtonEndAuth.setOnClickListener {
             val login = userLogin.text.toString().trim()
             val password = userPass.text.toString().trim()
+            val bottomSheetDialog = BottomSheetDialog(this)
+            bottomSheetDialog.setContentView(R.layout.wrong_auth_layout)
             if(login == "" || password == "")
-                Toast.makeText(this, "Не все поля заполнены", Toast.LENGTH_LONG).show()
+                bottomSheetDialog.show()
             else {
                 val db = DBuser(this, null)
                 val isAuth = db.getUser(login, password)
-
                 if(isAuth) {
                     Toast.makeText(this, "Успешно!", Toast.LENGTH_LONG).show()
                     userLogin.text.clear()
@@ -41,7 +43,7 @@ class AuthActivity : BaseActivity()  {
                     intent.putExtra("SOURCE", "RegistrationActivity")
                     startActivity(intent)
                 } else
-                    Toast.makeText(this, "Не все поля заполнены либо нет такого пользователя!", Toast.LENGTH_LONG).show()
+                    bottomSheetDialog.show()
 
 
             }
