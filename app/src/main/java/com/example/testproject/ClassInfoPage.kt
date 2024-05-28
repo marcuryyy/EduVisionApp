@@ -64,7 +64,7 @@ class ClassInfoPage : BaseActivity() {
         val items = mutableListOf<String>()
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow("aruco")).toString()
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("aruco")).toString().trimStart('0')
                 val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
                 items.add("Ученик: " + name + "\nID:" + id)
             } while (cursor.moveToNext())
