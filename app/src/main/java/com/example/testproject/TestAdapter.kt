@@ -1,5 +1,6 @@
 package com.example.testproject
 
+import NotificationPopup
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -45,10 +46,13 @@ class TestAdapter(var TestsInAdapter: MutableList<String>, var context: Context)
             }
         }
         holder.del_btn.setOnClickListener{
-            val writeable_db = db.writableDatabase
-            writeable_db.delete("tests", "question_text = ?", arrayOf(TestsInAdapter[position]))
-            TestsInAdapter.removeAt(position)
-            notifyItemRemoved(position)
+            val notificationPopup = NotificationPopup(context) {
+                val writeable_db = db.writableDatabase
+                writeable_db.delete("tests", "question_text = ?", arrayOf(TestsInAdapter[position]))
+                TestsInAdapter.removeAt(position)
+                notifyItemRemoved(position)
+            }
+            notificationPopup.show()
         }
     }
 
