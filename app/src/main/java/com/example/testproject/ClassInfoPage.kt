@@ -1,6 +1,7 @@
 package com.example.testproject
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -34,7 +35,7 @@ class ClassInfoPage : BaseActivity() {
             val db = DBstudent(this, null)
             val student_name: String = student_name_label.text.toString().trim()
             val student_id: String = student_id_label.text.toString().trim().trimStart('0')
-            if(db.findStudent(student_name, student_id)){
+            if(db.findStudent(class_id, student_id)){
                 Toast.makeText(this, "Такой ученик либо id уже существует!", Toast.LENGTH_SHORT).show()
             }
             else {

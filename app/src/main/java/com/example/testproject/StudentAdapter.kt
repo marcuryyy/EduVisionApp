@@ -31,6 +31,7 @@ class StudentAdapter(var StudentInAdapter: MutableList<String>, var context: Con
     }
 
     override fun onBindViewHolder(holder: MyViewFolder, position: Int) {
+        println(position)
         val student_name = StudentInAdapter[position].split(":")[1]
         val sliced_name = student_name.substring(0, student_name.length-2).trim()
         holder.student_name.text = StudentInAdapter[position]
@@ -44,6 +45,6 @@ class StudentAdapter(var StudentInAdapter: MutableList<String>, var context: Con
             }
             notificationPopup.show()
         }
-        }
+    }
 
 }
