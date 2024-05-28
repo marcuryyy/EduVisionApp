@@ -8,15 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class TestAdapter(var TestsInAdapter: List<String>, var context: Context) : RecyclerView.Adapter<TestAdapter.MyViewFolder>() {
+class TestAdapter(var TestsInAdapter: MutableList<String>, var context: Context) : RecyclerView.Adapter<TestAdapter.MyViewFolder>() {
 
     class MyViewFolder(view: View): RecyclerView.ViewHolder(view) {
         var test_name: TextView = view.findViewById(R.id.test_name)
-        val btn: Button = view.findViewById(R.id.test_info)
+        val btn: ImageButton = view.findViewById(R.id.test_info)
+        val del_btn: ImageButton = view.findViewById(R.id.del_test)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewFolder {
@@ -41,6 +43,12 @@ class TestAdapter(var TestsInAdapter: List<String>, var context: Context) : Recy
                 activity.startActivity(intent)
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
+        }
+        holder.del_btn.setOnClickListener{
+            val writeable_db = db.writableDatabase
+            writeable_db.delete("tests", "question_text = ?", arrayOf(TestsInAdapter[position]))
+            TestsInAdapter.removeAt(position)
+            notifyItemRemoved(position)
         }
     }
 

@@ -44,9 +44,9 @@ class DBstudent(val context: Context, val factory: SQLiteDatabase.CursorFactory?
         return student_list_dict
     }
 
-    fun findStudent(student_name: String, aruco_id: String): Boolean{
+    fun findStudent(class_id: String, aruco_id: String): Boolean{
         val db = this.readableDatabase
-        val result = db.rawQuery("SELECT * FROM students WHERE name='$student_name' OR aruco='$aruco_id'", null)
+        val result = db.rawQuery("SELECT * FROM students WHERE aruco='$aruco_id' AND class_id='$class_id'", null)
         return result.moveToFirst()
     }
 }
