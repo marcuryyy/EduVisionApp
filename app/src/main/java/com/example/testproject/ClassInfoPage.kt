@@ -32,7 +32,7 @@ class ClassInfoPage : BaseActivity() {
 
         button.setOnClickListener{
             val db = DBstudent(this, null)
-            if(db.findStudent(student_name.text.toString().trim(), student_id.text.toString().trim())){
+            if(db.findStudent(class_id, student_id.text.toString().trim())){
                 Toast.makeText(this, "Такой ученик либо id уже существует!", Toast.LENGTH_SHORT).show()
             }
             else {

@@ -1,6 +1,8 @@
 package com.example.testproject
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -17,7 +19,8 @@ class AuthActivity : BaseActivity()  {
         val userPass: EditText = findViewById(R.id.editPassword_auth)
         val ButtonEndAuth: Button = findViewById(R.id.button_auth)
         val linkToReg: TextView = findViewById(R.id.to_reg)
-
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
         linkToReg.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("Source", "Authentication")
@@ -32,6 +35,8 @@ class AuthActivity : BaseActivity()  {
             if(login == "" || password == "")
                 bottomSheetDialog.show()
             else {
+                editor.putBoolean("authorized", true)
+                editor.apply()
                 val db = DBuser(this, null)
                 val isAuth = db.getUser(login, password)
                 if(isAuth) {

@@ -50,7 +50,7 @@ class MyTestsActivity : BaseActivity()  {
 
     }
 
-    private fun fetchDataFromSQLite(folder_name:String): List<String> {
+    private fun fetchDataFromSQLite(folder_name:String): MutableList<String> {
 
         val db = DBtests(this, null)
         val readableDB = db.readableDatabase

@@ -20,7 +20,7 @@ class MainActivity : BaseActivity()  {
         val linkToAuth: TextView = findViewById(R.id.to_auth)
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         if(intent.getStringExtra("Source")!="Authentication") {
-            if (sharedPref.getString("username", "") != "") {
+            if ((sharedPref.getString("username", "") != "") && (sharedPref.getBoolean("authorized", false) == true)) {
                 val intent = Intent(this, MyClasses::class.java)
                 startActivity(intent)
             }

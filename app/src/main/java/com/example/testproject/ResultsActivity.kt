@@ -2,6 +2,7 @@ package com.example.testproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
@@ -42,14 +43,16 @@ class ResultsActivity: BaseActivity()  {
         }
 
         for (aruco_id in answer_results.keys){
-            val student_name = student_list_dict[aruco_id]
-            println(student_name)
-            if (answer_results[aruco_id] in right_answers){
-                adapterCorrectAnswers.add(student_name.toString())
-            } else {
-                adapterIncorrectAnswers.add(student_name.toString())
+            if(student_list_dict.size > 0) {
+                val student_name = student_list_dict[aruco_id]
+                if (student_name != null) {
+                    if (answer_results[aruco_id] in right_answers) {
+                        adapterCorrectAnswers.add(student_name.toString())
+                    } else {
+                        adapterIncorrectAnswers.add(student_name.toString())
+                    }
+                }
             }
-
 
         }
     }

@@ -11,33 +11,51 @@
 
     <TextView
         android:id="@+id/test_name"
-        android:layout_width="409dp"
-        android:layout_height="59dp"
-        android:textSize='20sp'
+        android:layout_width="267dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="35dp"
         android:ems="10"
-        android:text="Name"
-        android:paddingTop="15dp"
         android:paddingStart="5dp"
+        android:paddingTop="15dp"
+        android:text="Name"
+        android:textSize='20sp'
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/del_test"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
+    <ImageButton
         android:id="@+id/test_info"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icons8_play_90"
         android:text="Выбрать"
-        app:cornerRadius="10dp"
         android:textSize='15sp'
-        android:backgroundTint="@color/lightblue"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.939"
+        app:layout_constraintHorizontal_bias="0.955"
         app:layout_constraintStart_toStartOf="@+id/test_name"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.454" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/del_test"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="76dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icons8_delete_96"
+        android:text="Выбрать"
+        android:textSize='15sp'
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
