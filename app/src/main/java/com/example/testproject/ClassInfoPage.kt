@@ -16,8 +16,8 @@ class ClassInfoPage : BaseActivity() {
 
         val list_view: RecyclerView = findViewById(R.id.listView)
 
-        val student_name: EditText = findViewById(R.id.addStudentCell)
-        val student_id: EditText = findViewById(R.id.addStudentIDcell)
+        val student_name_label: EditText = findViewById(R.id.addStudentCell)
+        val student_id_label: EditText = findViewById(R.id.addStudentIDcell)
         val button: Button = findViewById(R.id.addStudentButton)
         val class_title: TextView = findViewById(R.id.class_title)
         class_title.text = intent.getStringExtra("class_name")
@@ -32,21 +32,23 @@ class ClassInfoPage : BaseActivity() {
 
         button.setOnClickListener{
             val db = DBstudent(this, null)
-            if(db.findStudent(student_name.text.toString().trim(), student_id.text.toString().trim())){
+            val student_name: String = student_name_label.text.toString().trim()
+            val student_id: String = student_id_label.text.toString().trim().trimStart('0')
+            if(db.findStudent(student_name, student_id)){
                 Toast.makeText(this, "Такой ученик либо id уже существует!", Toast.LENGTH_SHORT).show()
             }
             else {
                 db.addStudent(
                     StudentCreator(
                         class_id,
-                        student_name.text.toString().trim(),
-                        student_id.text.toString().trim()
+                        student_name,
+                        student_id
                     )
                 )
-                class_students.add("Ученик: " + student_name.text.toString().trim() + "\nID:" + student_id.text.toString().trim())
+                class_students.add("Ученик: " + student_name + "\nID:" + student_id)
                 adapter.notifyDataSetChanged()
-                student_name.text.clear()
-                student_id.text.clear()
+                student_name_label.text.clear()
+                student_id_label.text.clear()
 
             }
         }
@@ -61,7 +63,7 @@ class ClassInfoPage : BaseActivity() {
         val items = mutableListOf<String>()
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow("aruco"))
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("aruco")).toString()
                 val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
                 items.add("Ученик: " + name + "\nID:" + id)
             } while (cursor.moveToNext())
@@ -69,7 +71,4 @@ class ClassInfoPage : BaseActivity() {
         cursor.close()
         return items
     }
-
-
-
     }
