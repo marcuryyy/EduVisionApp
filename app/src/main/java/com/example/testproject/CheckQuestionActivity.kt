@@ -1,6 +1,7 @@
 package com.example.testproject
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -25,17 +26,19 @@ class CheckQuestionActivity : CameraActivity() {
     private lateinit var cameraBridgeViewBase: CameraBridgeViewBase
     private var id_map: MutableMap<String, String> = mutableMapOf()
     val bundle = Bundle()
+    private lateinit var student_names: ArrayList<String>
+    private lateinit var aruco_ids: ArrayList<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_question)
         if (hasCameraPermission()) {
             cameraBridgeViewBase = findViewById(R.id.camera_view)
             val results_button: Button = findViewById(R.id.results_button)
-            cameraBridgeViewBase.setCvCameraViewListener(MyCameraListener())
+            cameraBridgeViewBase.setCvCameraViewListener(MyCameraListener(this))
             cameraBridgeViewBase.enableView()
 
-            val aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
-            val student_names = intent.getStringArrayListExtra("student_name") ?: return
+            aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
+            student_names = intent.getStringArrayListExtra("student_name") ?: return
             val test_id = intent.getStringExtra("test_id")
             results_button.setOnClickListener{
                 bundle.putStringArrayList("aruco_id", aruco_ids)
@@ -63,13 +66,14 @@ class CheckQuestionActivity : CameraActivity() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
-    private inner class MyCameraListener : CameraBridgeViewBase.CvCameraViewListener2 {
+    private inner class MyCameraListener(private val context: Context) : CameraBridgeViewBase.CvCameraViewListener2 {
         private var text_to_put: String = ""
+        val test_id = intent.getStringExtra("test_id")
+        val db_tests = DBtests(context, null)
+        val right_answers: List<String> = db_tests.getTestRightAnswer(test_id.toString())
 
         override fun onCameraViewStarted(width: Int, height: Int) {
-            println("zxc")
-            val desiredSize = Size(1920.0, 1080.0)
-            cameraBridgeViewBase.setMaxFrameSize(desiredSize.width.toInt(), desiredSize.height.toInt())
+
         }
 
         override fun onCameraViewStopped() {
@@ -81,8 +85,8 @@ class CheckQuestionActivity : CameraActivity() {
 
             val rgbaMat = inputFrame?.rgba() ?: return Mat()
 
-
             val Aruco = ArucoDetector(Objdetect.getPredefinedDictionary(DICT_5X5_100))
+            val student_list_dict: Map<String, String> = aruco_ids.zip(student_names).toMap()
 
             val grayMat = Mat()
             Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY)
@@ -114,15 +118,34 @@ class CheckQuestionActivity : CameraActivity() {
                         } else if (topLeftX < bottomRightX && topLeftY > bottomRightY) {
                             text_to_put = "left"
                         }
-                        id_map[sliced_id.toString()] = text_to_put
-                        Imgproc.putText(
-                            rgbaMat,
-                            text_to_put,
-                            Point(topLeftX, topLeftY),
-                            Imgproc.FONT_HERSHEY_SIMPLEX,
-                            2.0,
-                            Scalar(0.0, 255.0, 0.0)
-                        )
+                        id_map[sliced_id] = text_to_put
+                        val answer_results = id_map.keys.zip(id_map.values).toMap()
+                        for (aruco_id in answer_results.keys){
+                            if(student_list_dict.size > 0) {
+                                val student_name = student_list_dict[aruco_id]
+                                if (student_name != null) {
+                                    if (answer_results[aruco_id] in right_answers) {
+                                        Imgproc.circle(
+                                            rgbaMat,
+                                            Point(topLeftX, topLeftY),
+                                            10,
+                                            Scalar(0.0,255.0,0.0),
+                                            -1
+                                        )
+                                    }
+                                    else {
+                                        Imgproc.circle(
+                                            rgbaMat,
+                                            Point(topLeftX, topLeftY),
+                                            10,
+                                            Scalar(255.0,0.0,0.0),
+                                            -1
+                                        )
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
                 }

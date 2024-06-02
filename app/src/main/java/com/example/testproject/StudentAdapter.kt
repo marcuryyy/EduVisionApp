@@ -31,17 +31,17 @@ class StudentAdapter(var StudentInAdapter: MutableList<String>, var context: Con
     }
 
     override fun onBindViewHolder(holder: MyViewFolder, position: Int) {
-        println(position)
         val student_name = StudentInAdapter[position].split(":")[1]
         val sliced_name = student_name.substring(0, student_name.length-2).trim()
         holder.student_name.text = StudentInAdapter[position]
         holder.delete_button.setOnClickListener{
+            println(position)
             val notificationPopup = NotificationPopup(context) {
                 val db = DBstudent(context, null)
                 val writeable_db = db.writableDatabase
                 writeable_db.delete("students", "name = ?", arrayOf(sliced_name))
                 StudentInAdapter.removeAt(position)
-                notifyItemRemoved(position)
+                notifyDataSetChanged()
             }
             notificationPopup.show()
         }
