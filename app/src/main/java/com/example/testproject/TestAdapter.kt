@@ -50,7 +50,7 @@ class TestAdapter(var TestsInAdapter: MutableList<String>, var context: Context)
                 val writeable_db = db.writableDatabase
                 writeable_db.delete("tests", "question_text = ?", arrayOf(TestsInAdapter[position]))
                 TestsInAdapter.removeAt(position)
-                notifyItemRemoved(position)
+                notifyDataSetChanged()
             }
             notificationPopup.show()
         }
