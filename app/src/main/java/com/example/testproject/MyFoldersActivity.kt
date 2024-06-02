@@ -23,6 +23,7 @@ class MyFoldersActivity : BaseActivity()  {
         val itemList = fetchDataFromSQLite()
         val add_folder_button: ImageButton = findViewById(R.id.add_folder_button)
         val my_classes_button: ImageButton = findViewById(R.id.my_classes_button)
+        val settings_button: ImageButton = findViewById(R.id.settings_button_folder)
 
         recyclerView = findViewById(R.id.my_folders_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -39,6 +40,11 @@ class MyFoldersActivity : BaseActivity()  {
             val intent = Intent(this, MyClasses::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        settings_button.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
     }

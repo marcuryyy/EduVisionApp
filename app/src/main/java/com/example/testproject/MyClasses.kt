@@ -3,6 +3,7 @@ package com.example.testproject
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.Image
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.core.app.ActivityCompat
@@ -32,7 +33,7 @@ class MyClasses : BaseActivity()  {
         val itemList = fetchDataFromSQLite()
         val add_class_button: ImageButton = findViewById(R.id.add_class)
         val my_tests_button: ImageButton = findViewById(R.id.my_tests_button)
-
+        val settings_button: ImageButton = findViewById(R.id.settings_button_classes)
         recyclerView = findViewById(R.id.ClassList)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = ClassesAdapter(itemList, this)
@@ -48,6 +49,11 @@ class MyClasses : BaseActivity()  {
             val intent = Intent(this, MyFoldersActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        settings_button.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
         
     }

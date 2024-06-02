@@ -35,6 +35,7 @@ class AuthActivity : BaseActivity()  {
             if(login == "" || password == "")
                 bottomSheetDialog.show()
             else {
+                editor.remove("authorized")
                 editor.putBoolean("authorized", true)
                 editor.apply()
                 val db = DBuser(this, null)

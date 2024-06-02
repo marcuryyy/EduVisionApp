@@ -88,7 +88,7 @@
             android:src="@drawable/icons8_exam_96_lightblue" />
 
         <ImageButton
-            android:id="@+id/two"
+            android:id="@+id/settings_button_folder"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"

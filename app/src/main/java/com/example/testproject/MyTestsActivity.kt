@@ -2,6 +2,7 @@ package com.example.testproject
 
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
@@ -24,6 +25,7 @@ class MyTestsActivity : BaseActivity()  {
         val folder_id: String = returned_bundle.getString("folder_id").toString()
         val folders_from_database = fetchDataFromSQLite(folder_id)
         val folder_btn: ImageButton = findViewById(R.id.my_tests_button)
+        val settings_button: ImageButton = findViewById(R.id.settings_button_tests)
         println(folder_id)
         folder_db.close()
         recyclerView = findViewById(R.id.my_tests_list)
@@ -44,6 +46,11 @@ class MyTestsActivity : BaseActivity()  {
         }
         folder_btn.setOnClickListener{
             val intent = Intent(this, MyFoldersActivity::class.java)
+            startActivity(intent)
+        }
+
+        settings_button.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 

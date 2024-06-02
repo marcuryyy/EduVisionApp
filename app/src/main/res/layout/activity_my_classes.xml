@@ -74,7 +74,7 @@
             android:src="@drawable/icons8_exam_96" />
 
         <ImageButton
-            android:id="@+id/two"
+            android:id="@+id/settings_button_classes"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
