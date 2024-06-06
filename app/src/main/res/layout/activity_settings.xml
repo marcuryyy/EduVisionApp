@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:background="@drawable/imagebutton_click_effect"
             android:scaleType="fitCenter"
-            android:src="@drawable/icons8_exam_96" />
+            android:src="@drawable/icons8_opened_folder_50" />
 
         <ImageButton
             android:id="@+id/settings_button"

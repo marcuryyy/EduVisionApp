@@ -4,12 +4,14 @@ import NotificationPopup
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -18,7 +20,7 @@ class StudentAdapter(var StudentInAdapter: MutableList<String>, var context: Con
 
     class MyViewFolder(view: View): RecyclerView.ViewHolder(view) {
         var student_name: TextView = view.findViewById(R.id.student_name)
-        val delete_button: Button = view.findViewById(R.id.del_button)
+        val delete_button: ImageButton = view.findViewById(R.id.del_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewFolder {

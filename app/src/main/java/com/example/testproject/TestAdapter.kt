@@ -42,7 +42,6 @@ class TestAdapter(var TestsInAdapter: MutableList<String>, var context: Context)
             if (context is Activity){
                 val activity = context as Activity
                 activity.startActivity(intent)
-                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
         }
         holder.del_btn.setOnClickListener{

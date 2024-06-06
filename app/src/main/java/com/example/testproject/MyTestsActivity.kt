@@ -36,13 +36,11 @@ class MyTestsActivity : BaseActivity()  {
         my_classes_link.setOnClickListener {
             val intent = Intent(this, MyClasses::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         }
         add_test_button.setOnClickListener {
             val intent = Intent(this, AddTestsActivity::class.java)
             intent.putExtra("folder_name", folder_name)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
         folder_btn.setOnClickListener{
             val intent = Intent(this, MyFoldersActivity::class.java)

@@ -22,17 +22,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/del_button"
-        android:layout_width="110dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="10dp"
-        android:backgroundTint="@color/lightblue"
-        android:text="Удалить"
+        android:layout_width="89dp"
+        android:layout_height="49dp"
+        android:layout_marginEnd="4dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icons8_delete_96"
         android:textSize="15sp"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

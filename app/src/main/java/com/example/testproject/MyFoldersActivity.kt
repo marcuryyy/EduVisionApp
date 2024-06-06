@@ -33,13 +33,11 @@ class MyFoldersActivity : BaseActivity()  {
         add_folder_button.setOnClickListener {
             val intent = Intent(this, AddTestFolderActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         my_classes_button.setOnClickListener {
             val intent = Intent(this, MyClasses::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         settings_button.setOnClickListener{
