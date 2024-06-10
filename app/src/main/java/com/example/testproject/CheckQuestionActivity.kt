@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.hardware.Camera
 import android.os.Bundle
 import android.widget.Button
 import androidx.core.content.ContextCompat
@@ -36,6 +37,15 @@ class CheckQuestionActivity : CameraActivity() {
             val results_button: Button = findViewById(R.id.results_button)
             cameraBridgeViewBase.setCvCameraViewListener(MyCameraListener(this))
             cameraBridgeViewBase.enableView()
+            var camera = Camera.open()
+            val parameters = camera?.parameters
+            val supportedFpsRanges = parameters?.supportedPreviewFpsRange
+            if (supportedFpsRanges != null && supportedFpsRanges.isNotEmpty()) {
+                val chosenFpsRange = supportedFpsRanges[supportedFpsRanges.size - 1] // Выбираем последний доступный диапазон FPS
+                println(supportedFpsRanges)
+                parameters.setPreviewFpsRange(chosenFpsRange[0], chosenFpsRange[1])
+                camera?.parameters = parameters
+            }
 
             aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
             student_names = intent.getStringArrayListExtra("student_name") ?: return
@@ -85,6 +95,7 @@ class CheckQuestionActivity : CameraActivity() {
 
             val rgbaMat = inputFrame?.rgba() ?: return Mat()
 
+
             val Aruco = ArucoDetector(Objdetect.getPredefinedDictionary(DICT_5X5_100))
             val student_list_dict: Map<String, String> = aruco_ids.zip(student_names).toMap()
 
@@ -94,9 +105,10 @@ class CheckQuestionActivity : CameraActivity() {
 
             val markerCorners = ArrayList<Mat>()
             val markerIds = Mat()
-
+            var colorToDraw: Scalar
+            val positionsToDrawOn: MutableList<Point> = mutableListOf()
             Aruco.detectMarkers(grayMat, markerCorners, markerIds)
-
+            var step: Int = 0
             if (markerIds.rows() > 0) {
                 for (i in 0 until markerCorners.size) {
                     val corners = markerCorners[i]
@@ -108,7 +120,7 @@ class CheckQuestionActivity : CameraActivity() {
                         val topLeftY = corners.get(0, 0)[1]
                         val bottomRightX = corners.get(0, 2)[0]
                         val bottomRightY = corners.get(0, 2)[1]
-
+                        positionsToDrawOn += Point(topLeftX, topLeftY)
                         if (topLeftX < bottomRightX && topLeftY < bottomRightY) {
                             text_to_put = "up"
                         } else if (topLeftX > bottomRightX && topLeftY < bottomRightY) {
@@ -119,38 +131,37 @@ class CheckQuestionActivity : CameraActivity() {
                             text_to_put = "left"
                         }
                         id_map[sliced_id] = text_to_put
-                        val answer_results = id_map.keys.zip(id_map.values).toMap()
-                        for (aruco_id in answer_results.keys){
-                            if(student_list_dict.size > 0) {
-                                val student_name = student_list_dict[aruco_id]
-                                if (student_name != null) {
-                                    if (answer_results[aruco_id] in right_answers) {
-                                        Imgproc.circle(
-                                            rgbaMat,
-                                            Point(topLeftX, topLeftY),
-                                            10,
-                                            Scalar(0.0,255.0,0.0),
-                                            -1
-                                        )
-                                    }
-                                    else {
-                                        Imgproc.circle(
-                                            rgbaMat,
-                                            Point(topLeftX, topLeftY),
-                                            10,
-                                            Scalar(255.0,0.0,0.0),
-                                            -1
-                                        )
-                                    }
-                                }
-                            }
 
-                        }
+
                     }
                 }
+                val answer_results = id_map.keys.zip(id_map.values).toMap()
+
+                for (aruco_id in answer_results.keys) {
+                    if (student_list_dict.size > 0 && step < positionsToDrawOn.size) {
+                        val student_name = student_list_dict[aruco_id]
+                        if (student_name != null) {
+                            if (answer_results[aruco_id] in right_answers) {
+                                colorToDraw = Scalar(0.0, 255.0, 0.0)
+                            } else {
+                                colorToDraw = Scalar(255.0, 0.0, 0.0)
+                            }
+                            Imgproc.circle(
+                                rgbaMat,
+                                positionsToDrawOn[step],
+                                10,
+                                colorToDraw,
+                                -1
+                            )
+                            step += 1
+                        }
+
+                    }
+
                 }
-            return rgbaMat
             }
+            return rgbaMat
+        }
 
 
         }
