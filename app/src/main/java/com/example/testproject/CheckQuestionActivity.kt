@@ -131,10 +131,19 @@ class CheckQuestionActivity : AppCompatActivity() {
                 val id = db_tests.getTestId(questionList[questionNum])
                 right_answers = db_tests.getTestRightAnswer(id.getString("test_id").toString())
             }
+            if (questionNum + 1 == questionList.size){
+                results_button.visibility = View.VISIBLE
+            }
         }
         prev_button.setOnClickListener{
             val idMapCopy = id_map.toMutableMap()
-            questionResults[questionNum] = idMapCopy
+            if (questionNum < questionResults.size){
+                questionResults[questionNum] = idMapCopy
+            }
+            else{
+                questionResults += idMapCopy
+            }
+            results_button.visibility = View.GONE
             if (questionNum - 1 >= 0) {
                 questionNum--
                 val id = db_tests.getTestId(questionList[questionNum])
