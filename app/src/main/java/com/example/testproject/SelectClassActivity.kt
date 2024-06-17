@@ -12,11 +12,15 @@ class SelectClassActivity : BaseActivity()  {
         val list_view: ListView = findViewById(R.id.class_list_for_tests)
         val itemList = fetchDataFromSQLite()
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, itemList)
+        val questionList = intent.getStringArrayListExtra("questionsArray")
         val test_id = intent.getStringExtra("test_id")
         list_view.adapter = adapter
 
         list_view.setOnItemClickListener{adapterView, view, i, l ->
-
+            val bundle = Bundle()
+            if (intent.getBooleanExtra("allTests", false) == true) {
+                bundle.putBoolean("allTests", true)
+            }
             val intent = Intent(this, CheckQuestionActivity::class.java)
             val selectedFromList: String = list_view.getItemAtPosition(i).toString()
 
@@ -29,10 +33,13 @@ class SelectClassActivity : BaseActivity()  {
             val student_list: MutableMap<String, String> = student_db.getStudents(class_id)
             student_db.close()
 
-            val bundle = Bundle()
+
             bundle.putStringArrayList("aruco_id", ArrayList(student_list.keys))
             bundle.putStringArrayList("student_name", ArrayList(student_list.values.map { it.toString() }))
             bundle.putString("test_id", test_id)
+            bundle.putStringArrayList("questionsArray", questionList)
+
+
             intent.putExtras(bundle)
 
             startActivity(intent)

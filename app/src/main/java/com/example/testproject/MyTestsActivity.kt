@@ -5,9 +5,13 @@ import android.content.Intent
 import android.media.Image
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
+
+
 
 class MyTestsActivity : BaseActivity()  {
 
@@ -26,7 +30,7 @@ class MyTestsActivity : BaseActivity()  {
         val folders_from_database = fetchDataFromSQLite(folder_id)
         val folder_btn: ImageButton = findViewById(R.id.my_tests_button)
         val settings_button: ImageButton = findViewById(R.id.settings_button_tests)
-        println(folder_id)
+        val runAllTestsButton: Button = findViewById(R.id.runAllTestsButton)
         folder_db.close()
         recyclerView = findViewById(R.id.my_tests_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -52,16 +56,23 @@ class MyTestsActivity : BaseActivity()  {
             startActivity(intent)
         }
 
+        runAllTestsButton.setOnClickListener{
+            val intent = Intent(this, SelectClassActivity::class.java)
+            intent.putExtra("allTests", true)
+            intent.putStringArrayListExtra("questionsArray", folders_from_database)
+            startActivity(intent)
+        }
+
 
     }
 
-    private fun fetchDataFromSQLite(folder_name:String): MutableList<String> {
+    private fun fetchDataFromSQLite(folder_name:String): ArrayList<String> {
 
         val db = DBtests(this, null)
         val readableDB = db.readableDatabase
         val cursor = readableDB.rawQuery("SELECT * FROM tests WHERE folder_id = '$folder_name'", null)
 
-        val items = mutableListOf<String>()
+        val items = ArrayList<String>()
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 val question_text = cursor.getString(cursor.getColumnIndexOrThrow("question_text"))

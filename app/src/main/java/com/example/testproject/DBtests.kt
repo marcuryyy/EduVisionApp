@@ -49,4 +49,13 @@ class DBtests(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
         return test_info
     }
 
+    fun getTestText(test_id: String): String {
+        val db = this.readableDatabase
+        var test_text = ""
+        val result = db.rawQuery("SELECT * FROM tests WHERE id = '$test_id'", null)
+        if (result.moveToFirst()){
+            test_text = result.getString(result.getColumnIndexOrThrow("question_text"))
+        }
+        return test_text
+    }
 }

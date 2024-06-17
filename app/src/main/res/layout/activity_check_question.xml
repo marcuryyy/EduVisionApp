@@ -11,17 +11,48 @@
     android:fitsSystemWindows="true"
     tools:context=".CheckQuestionActivity">
 
-    <org.opencv.android.JavaCameraView
-        android:id="@+id/camera_view"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        app:show_fps="true" />
+        />
+
+    <com.example.testproject.OverlayView
+        android:id="@+id/overlayView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/questionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:text="TextView"
+        android:layout_gravity="center_horizontal"/>
 
     <Button
         android:id="@+id/results_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="5dp"
         android:text="Проверить" />
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:text="Следующий"
+        android:visibility="gone"
+        android:layout_gravity="end|bottom"/>
+
+    <Button
+        android:id="@+id/prev_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="Предыдущий"
+        android:visibility="gone"
+        android:layout_gravity="bottom"/>
 </FrameLayout>
