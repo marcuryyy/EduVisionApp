@@ -21,7 +21,7 @@ class ClassInfoPage : BaseActivity() {
         val student_id_label: EditText = findViewById(R.id.addStudentIDcell)
         val button: Button = findViewById(R.id.addStudentButton)
         val class_title: TextView = findViewById(R.id.class_title)
-        class_title.text = intent.getStringExtra("class_name")
+        class_title.text = "Ученики " + intent.getStringExtra("class_name")
         val class_db = DBclass(this, null)
         val returned_bundle: Bundle = class_db.getClassId(class_title.text.toString())
         val class_id: String = returned_bundle.getString("class_id").toString()
