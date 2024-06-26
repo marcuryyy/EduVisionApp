@@ -17,12 +17,13 @@
         android:id="@+id/my_tests_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="80dp"
         android:ems="10"
-        android:fontFamily="sans-serif-black"
-        android:gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="left"
+        android:paddingStart="10dp"
         android:text="Мои тесты"
-        android:textSize="25sp"
+        android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,31 +33,26 @@
         android:id="@+id/my_tests_list"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="150dp"
-        android:padding="5dp"
         android:background="@drawable/listview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_tests_label"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.002" />
 
     <ImageButton
         android:id="@+id/add_test_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/more"
         android:background="@null"
+        android:src="@drawable/more"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_tests_list"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintVertical_bias="0.258" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -101,13 +97,22 @@
         android:id="@+id/runAllTestsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Запустить все тесты"
         android:backgroundTint="@color/lightblue"
+        android:text="Запустить все тесты"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_test_button"
-        app:layout_constraintVertical_bias="0.908" />
+        app:layout_constraintVertical_bias="0.613" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_tests_label" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
