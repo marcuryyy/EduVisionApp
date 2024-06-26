@@ -73,11 +73,11 @@ class CheckQuestionActivity : AppCompatActivity() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         val questionText: TextView = findViewById(R.id.questionText)
-        questionText.text = questionList[questionNum]
         aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
         student_names = intent.getStringArrayListExtra("student_name") ?: return
         val test_id = intent.getStringExtra("test_id")
         if(intent.getBooleanExtra("allTests", false) == true){
+            questionText.text = questionList[questionNum]
             val id = db_tests.getTestId(questionList[questionNum])
             right_answers = db_tests.getTestRightAnswer(id.getString("test_id").toString())
             next_button.visibility = View.VISIBLE
@@ -87,6 +87,7 @@ class CheckQuestionActivity : AppCompatActivity() {
             results_button.visibility = View.VISIBLE
             questionList += db_tests.getTestText(test_id.toString())
             right_answers = db_tests.getTestRightAnswer(test_id.toString())
+            questionText.text = questionList[questionNum]
         }
 
 
