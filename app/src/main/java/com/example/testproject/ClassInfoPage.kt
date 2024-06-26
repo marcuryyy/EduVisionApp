@@ -16,14 +16,17 @@ class ClassInfoPage : BaseActivity() {
         setContentView(R.layout.activity_class_info)
 
         val list_view: RecyclerView = findViewById(R.id.listView)
-
+        val class_db = DBclass(this, null)
         val student_name_label: EditText = findViewById(R.id.addStudentCell)
         val student_id_label: EditText = findViewById(R.id.addStudentIDcell)
         val button: Button = findViewById(R.id.addStudentButton)
         val class_title: TextView = findViewById(R.id.class_title)
-        class_title.text = "Ученики " + intent.getStringExtra("class_name")
-        val class_db = DBclass(this, null)
-        val returned_bundle: Bundle = class_db.getClassId(class_title.text.toString())
+
+        val class_name = intent.getStringExtra("class_name")
+        val returned_bundle: Bundle = class_db.getClassId(class_name.toString())
+        class_title.text = "Ученики " + class_name
+
+
         val class_id: String = returned_bundle.getString("class_id").toString()
         val class_students = fetchDataFromSQLite(class_id)
         class_db.close()
