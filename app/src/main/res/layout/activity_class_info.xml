@@ -5,11 +5,6 @@
     android:id="@+id/rootlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:screenOrientation="portrait"
-    android:windowTranslucentNavigation="true"
-    android:windowTranslucentStatus="true"
     tools:context=".ClassInfoPage">
 
     <LinearLayout
@@ -66,14 +61,15 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="616dp"
+        android:layout_height="0dp"
         android:background="@drawable/listview"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/class_title"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHeight_percent="0.6"/>
 
     <TextView
         android:id="@+id/class_title"
