@@ -53,6 +53,7 @@ class CheckQuestionActivity : AppCompatActivity() {
     private lateinit var questionList: ArrayList<String>
     private lateinit var db_tests: DBtests
     private var questionResults: ArrayList<MutableMap<String, String>> = ArrayList()
+
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1001
         private const val TAG = "CameraXApp"
@@ -71,7 +72,8 @@ class CheckQuestionActivity : AppCompatActivity() {
         requestCameraPermission()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
-
+        val questionText: TextView = findViewById(R.id.questionText)
+        questionText.text = questionList[questionNum]
         aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
         student_names = intent.getStringArrayListExtra("student_name") ?: return
         val test_id = intent.getStringExtra("test_id")
@@ -135,6 +137,7 @@ class CheckQuestionActivity : AppCompatActivity() {
             if (questionNum + 1 == questionList.size){
                 results_button.visibility = View.VISIBLE
             }
+            questionText.text = questionList[questionNum]
         }
         prev_button.setOnClickListener{
             val idMapCopy = id_map.toMutableMap()
@@ -150,6 +153,7 @@ class CheckQuestionActivity : AppCompatActivity() {
                 val id = db_tests.getTestId(questionList[questionNum])
                 right_answers = db_tests.getTestRightAnswer(id.getString("test_id").toString())
             }
+            questionText.text = questionList[questionNum]
         }
     }
 
@@ -187,6 +191,7 @@ class CheckQuestionActivity : AppCompatActivity() {
                 .also {
                     it.setAnalyzer(cameraExecutor, FpsAnalyzer {
                         runOnUiThread {
+
                         }
                     })
                 }
@@ -216,11 +221,9 @@ class CheckQuestionActivity : AppCompatActivity() {
 
 
     private inner class FpsAnalyzer(private val listener: (Double) -> Unit) : ImageAnalysis.Analyzer {
-        private var lastFrameTime = 0L
-        private var frameCount = 0
         private var text_to_put: String = ""
 
-        var questionText: TextView = findViewById(R.id.questionText)
+
 
         fun ImageProxy.yuvToRgba(): Mat {
             val rgbaMat = Mat()
@@ -291,23 +294,6 @@ class CheckQuestionActivity : AppCompatActivity() {
         override fun analyze(imageProxy: ImageProxy) {
             val overlayView: OverlayView = findViewById(R.id.overlayView)
             overlayView.invalidate()
-            runOnUiThread {
-                questionText.text = questionList[questionNum]
-            }
-            val currentTime = System.currentTimeMillis()
-
-            if (lastFrameTime != 0L) {
-                frameCount++
-                val timeElapsed = currentTime - lastFrameTime
-                if (timeElapsed >= 1000) {
-                    val fps = frameCount * 1000.0 / timeElapsed
-                    listener(fps)
-                    frameCount = 0
-                    lastFrameTime = currentTime
-                }
-            } else {
-                lastFrameTime = currentTime
-            }
 
             val rgbaMat = imageProxy.yuvToRgba()
 
