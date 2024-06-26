@@ -30,13 +30,15 @@ class ClassInfoPage : BaseActivity() {
         list_view.layoutManager = LinearLayoutManager(this)
         val adapter = StudentAdapter(class_students, this)
         list_view.adapter = adapter
-
         button.setOnClickListener{
             val db = DBstudent(this, null)
             val student_name: String = student_name_label.text.toString().trim()
             val student_id: String = student_id_label.text.toString().trim().trimStart('0')
             if(db.findStudent(class_id, student_id)){
                 Toast.makeText(this, "Такой ученик либо id уже существует!", Toast.LENGTH_SHORT).show()
+            }
+            else if(student_name == "" || student_id == ""){
+                Toast.makeText(this, "Данные ученика не до конца заполнены!", Toast.LENGTH_SHORT).show()
             }
             else {
                 db.addStudent(

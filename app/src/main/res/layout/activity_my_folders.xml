@@ -32,14 +32,15 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_folders_list"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
         android:background="@drawable/listview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_folders_label"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHeight_percent="0.5"/>
 
     <ImageButton
         android:id="@+id/add_folder_button"

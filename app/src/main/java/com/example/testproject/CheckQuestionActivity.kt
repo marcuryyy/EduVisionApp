@@ -82,6 +82,7 @@ class CheckQuestionActivity : AppCompatActivity() {
             prev_button.visibility = View.VISIBLE
         }
         else{
+            results_button.visibility = View.VISIBLE
             questionList += db_tests.getTestText(test_id.toString())
             right_answers = db_tests.getTestRightAnswer(test_id.toString())
         }
