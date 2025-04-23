@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -15,14 +16,13 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import androidx.lifecycle.ViewModel
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.forms.submitForm
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.*
-import java.security.KeyStore.TrustedCertificateEntry
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.textfield.TextInputLayout
 
 
 class MainActivity : BaseActivity()  {
@@ -32,6 +32,8 @@ class MainActivity : BaseActivity()  {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 101)
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,8 +42,14 @@ class MainActivity : BaseActivity()  {
         val userEmail: EditText = findViewById(R.id.editEmail)
         val userLogin: EditText = findViewById(R.id.editName)
         val userPass: EditText = findViewById(R.id.editPassword)
+        val confirmation_field: TextInputLayout = findViewById(R.id.confirmationCodeLayout)
+        val confirm_button: Button = findViewById(R.id.button_confirm_code)
+        val timer_text: TextView = findViewById(R.id.timer_text)
+
+
         val ButtonEndReg: Button = findViewById(R.id.button_reg)
         val linkToAuth: TextView = findViewById(R.id.to_auth)
+
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         if(intent.getStringExtra("Source")!="Authentication") {
             if ((sharedPref.getString("username", "") != "") && (sharedPref.getBoolean("authorized", false) == true)) {
@@ -49,20 +57,24 @@ class MainActivity : BaseActivity()  {
                 startActivity(intent)
             }
         }
+
         val editor = sharedPref.edit()
-        val client = HttpClient(CIO)
         requestInternetPermission()
+
         linkToAuth.setOnClickListener {
             val intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
         }
+
         ButtonEndReg.setOnClickListener {
             val login = userLogin.text.toString().trim() // 123
             val password = userPass.text.toString().trim() //123aA123
             val email = userEmail.text.toString().trim() // a@a.com
+
             println(email)
             println(password)
             println(login)
+
             if(login == "" || password == "" || email == ""){
                 val bottomSheetDialog = BottomSheetDialog(this)
                 bottomSheetDialog.setContentView(R.layout.wrong_registration_layout)
@@ -100,103 +112,136 @@ class MainActivity : BaseActivity()  {
 
             }
 
+            confirmation_field.visibility = View.VISIBLE // Показываем поле для ввода кода
+
         }
+
+        confirm_button.setOnClickListener {
+            change_confirmation_button_state(confirm_button)
+            val email = userEmail.text.toString().trim()
+
+            lifecycleScope.launch {
+                sendVerificationCode(
+                    apiUrl = "https://araka-project.onrender.com",
+                    email = email,
+                    startTimer = { startResendTimer(timer_text, confirm_button) } // possible problems
+                )
+            }
+
+        }
+
     }
     // https://araka-project.onrender.com
 
-}
 
 
-fun validateEmail(email: String): Boolean {
+
+    fun validateEmail(email: String): Boolean {
         val regex = Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
         return regex.matches(email)
     }
 
 
 
-@Serializable
-data class RegisterRequest(
-    val login: String,
-    val email: String,
-    val password: String
-)
+    @Serializable
+    data class RegisterRequest(
+        val login: String,
+        val email: String,
+        val password: String
+    )
 
-suspend fun registerUser(apiUrl: String, login: String, email: String, password: String) {
-    val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json() // Включаем JSON-сериализацию
+    suspend fun registerUser(apiUrl: String, login: String, email: String, password: String) {
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json() // Включаем JSON-сериализацию
+            }
+        }
+
+        try {
+            println("$apiUrl/auth/register")
+
+            val response = client.post("$apiUrl/auth/register/") {
+                contentType(ContentType.Application.Json)
+                setBody(RegisterRequest(login, email, password)) // Используем data class
+            }
+
+            println("Status: ${response.status}")
+            println("Response: ${response.bodyAsText()}")
+
+        } finally {
+            client.close()
         }
     }
 
-    try {
-        println("$apiUrl/auth/register")
-        val response = client.post("$apiUrl/auth/register/") {
-            contentType(ContentType.Application.Json)
-            setBody(RegisterRequest(login, email, password)) // Используем data class
-        }
-        println("Status: ${response.status}")
-        println("Response: ${response.bodyAsText()}")
+    @Serializable
+    data class VerificationRequest(val email: String)
 
-    } finally {
-        client.close()
-    }
-}
 
-@Serializable
-data class VerificationRequest(val email: String)
-
-// Функция отправки кода подтверждения
-suspend fun sendVerificationCode(
-    apiUrl: String,
-    email: String,
-    onError: (String) -> Unit,
-    onSuccess: () -> Unit,
-    startTimer: () -> Unit
-) {
-    // Проверка на пустую почту
-    if (email.isBlank()) {
-        onError("Пожалуйста, заполните почту")
-        return
-    }
-
-    val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json()
-        }
-    }
-
-    try {
-        val response: HttpResponse = client.post("$apiUrl/registration/send-code") {
-            contentType(ContentType.Application.Json)
-            setBody(VerificationRequest(email))
+    // Функция отправки кода подтверждения
+    suspend fun sendVerificationCode(
+        apiUrl: String,
+        email: String,
+        startTimer: () -> Unit
+    ) {
+        // Проверка на пустую почту
+        if (email.isBlank()) {
+            println("Пожалуйста, заполните почту")
+            return
         }
 
-        println("Код отправлен: ${response.bodyAsText()}")
-        onSuccess()
-        startTimer() // Запускаем таймер
-    } catch (e: Exception) {
-        println("Ошибка при отправке кода: ${e.message}")
-        onError("Ошибка при отправке кода. Пожалуйста, попробуйте снова.")
-    } finally {
-        client.close()
-    }
-}
-
-// Функция таймера (60 секунд)
-fun startResendTimer(
-    scope: CoroutineScope,
-    onTick: (Int) -> Unit,
-    onFinish: () -> Unit
-): Job {
-    var timeLeft = 60
-    return scope.launch {
-        while (timeLeft > 0) {
-            delay(1000)
-            timeLeft--
-            onTick(timeLeft)
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
         }
-        onFinish()
+
+        try {
+            val response: HttpResponse = client.post("$apiUrl/registration/send-code") {
+                contentType(ContentType.Application.Json)
+                setBody(VerificationRequest(email))
+            }
+
+            println("Код отправлен: ${response.bodyAsText()}")
+
+            startTimer() // Запускаем таймер
+
+        } catch (e: Exception) {
+            println("Ошибка при отправке кода: ${e.message}")
+        } finally {
+            client.close()
+        }
     }
+
+
+    // Функция таймера (60 секунд)
+    fun startResendTimer(timer_text: TextView, confirm_button: Button): () -> Unit {
+        var timeLeft = 60
+        return {
+            // Периодический цикл, который будет уменьшать timeLeft каждую секунду
+            while (timeLeft > 0) {
+                // Пауза на 1 секунду (имитация, без асинхронности)
+                Thread.sleep(1000)  // Блокирует текущий поток на 1 секунду
+                timeLeft--
+                timer_text.text = "Осталось: $timeLeft сек."
+            }
+            // Вызываем функцию, когда таймер завершится
+            change_confirmation_button_state(confirm_button)
+        }
+    }
+
+
+    fun change_confirmation_button_state(confirm_button: Button): Unit {
+        if(confirm_button.isEnabled){
+            confirm_button.isEnabled = false
+            confirm_button.alpha = 0.5f
+        }
+        else{
+            confirm_button.isEnabled = true
+            confirm_button.alpha = 1.0f
+        }
+
+    }
+
 }
 
 
