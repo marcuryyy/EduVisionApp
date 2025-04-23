@@ -280,7 +280,7 @@ public class JavaCamera2View extends CameraBridgeViewBase {
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             android.util.Size[] sizes = map.getOutputSizes(ImageReader.class);
             List<android.util.Size> sizes_list = Arrays.asList(sizes);
-            Size frameSize = calculateCameraFrameSize(sizes_list, new JavaCameraSizeAccessor(), width, height);
+            Size frameSize = calculateCameraFrameSize(sizes_list, new JavaCameraSizeAccessor(), 1440, 1080);
             Log.i(LOGTAG, "Selected preview size to " + Integer.valueOf((int)frameSize.width) + "x" + Integer.valueOf((int)frameSize.height));
             assert(!(frameSize.width == 0 || frameSize.height == 0));
             if (mPreviewSize.getWidth() == frameSize.width && mPreviewSize.getHeight() == frameSize.height)

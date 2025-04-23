@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:textSize="40dp"
         android:text="TextView"
+        android:textColor="@color/white"
         android:layout_gravity="center_horizontal"/>
 
     <Button

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
-        <color android:color="@color/grey" /> <!-- Цвет, который вы хотите использовать при нажатии -->
+        <color android:color="@color/grey" />
     </item>
     <item>
-        <color android:color="@color/transparent_grey" /> <!-- Прозрачный цвет для обычного состояния кнопки -->
+        <color android:color="@color/transparent_grey" />
     </item>
 </selector>

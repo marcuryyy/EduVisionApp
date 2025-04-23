@@ -88,7 +88,7 @@
             android:background="@drawable/rounded_corners"
             android:ems="10"
             android:gravity="center_vertical"
-            android:hint="Логин"
+            android:hint="Почта"
             android:inputType="text"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
