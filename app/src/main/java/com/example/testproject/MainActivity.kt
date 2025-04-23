@@ -21,6 +21,8 @@ import io.ktor.client.request.forms.submitForm
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
+import kotlinx.coroutines.*
+import java.security.KeyStore.TrustedCertificateEntry
 
 
 class MainActivity : BaseActivity()  {
@@ -35,6 +37,7 @@ class MainActivity : BaseActivity()  {
 
         setContentView(R.layout.activity_main)
 
+        val userEmail: EditText = findViewById(R.id.editEmail)
         val userLogin: EditText = findViewById(R.id.editName)
         val userPass: EditText = findViewById(R.id.editPassword)
         val ButtonEndReg: Button = findViewById(R.id.button_reg)
@@ -54,16 +57,19 @@ class MainActivity : BaseActivity()  {
             startActivity(intent)
         }
         ButtonEndReg.setOnClickListener {
-            val login = userLogin.text.toString().trim()
-            val password = userPass.text.toString().trim()
-
-            if(login == "" || password == ""){
+            val login = userLogin.text.toString().trim() // 123
+            val password = userPass.text.toString().trim() //123aA123
+            val email = userEmail.text.toString().trim() // a@a.com
+            println(email)
+            println(password)
+            println(login)
+            if(login == "" || password == "" || email == ""){
                 val bottomSheetDialog = BottomSheetDialog(this)
                 bottomSheetDialog.setContentView(R.layout.wrong_registration_layout)
                 bottomSheetDialog.show()
             }
             else {
-                if(validateEmail(login)) {
+                if(validateEmail(email)) {
                     editor.putString("username", login)
                     editor.apply()
                     val user = User(login, password)
@@ -73,9 +79,9 @@ class MainActivity : BaseActivity()  {
                     runBlocking { // Создает блокирующую корутину
                         registerUser( // Вызов suspend-функции
                             apiUrl = "https://araka-project.onrender.com",
-                            login = "user123",
-                            email = "user@example.com",
-                            password = "password123"
+                            login = login,
+                            email = email,
+                            password = password
                         )
                     }
 
@@ -134,8 +140,65 @@ suspend fun registerUser(apiUrl: String, login: String, email: String, password:
     } finally {
         client.close()
     }
-
-
 }
+
+@Serializable
+data class VerificationRequest(val email: String)
+
+// Функция отправки кода подтверждения
+suspend fun sendVerificationCode(
+    apiUrl: String,
+    email: String,
+    onError: (String) -> Unit,
+    onSuccess: () -> Unit,
+    startTimer: () -> Unit
+) {
+    // Проверка на пустую почту
+    if (email.isBlank()) {
+        onError("Пожалуйста, заполните почту")
+        return
+    }
+
+    val client = HttpClient(CIO) {
+        install(ContentNegotiation) {
+            json()
+        }
+    }
+
+    try {
+        val response: HttpResponse = client.post("$apiUrl/registration/send-code") {
+            contentType(ContentType.Application.Json)
+            setBody(VerificationRequest(email))
+        }
+
+        println("Код отправлен: ${response.bodyAsText()}")
+        onSuccess()
+        startTimer() // Запускаем таймер
+    } catch (e: Exception) {
+        println("Ошибка при отправке кода: ${e.message}")
+        onError("Ошибка при отправке кода. Пожалуйста, попробуйте снова.")
+    } finally {
+        client.close()
+    }
+}
+
+// Функция таймера (60 секунд)
+fun startResendTimer(
+    scope: CoroutineScope,
+    onTick: (Int) -> Unit,
+    onFinish: () -> Unit
+): Job {
+    var timeLeft = 60
+    return scope.launch {
+        while (timeLeft > 0) {
+            delay(1000)
+            timeLeft--
+            onTick(timeLeft)
+        }
+        onFinish()
+    }
+}
+
+
 
 
