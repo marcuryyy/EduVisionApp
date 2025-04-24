@@ -91,14 +91,14 @@ class AuthActivity : BaseActivity()  {
 
         }
 
-        forgotPassBtn.setOnClickListener{ // also should move to CodeConfirmActivity
-            lifecycleScope.launch { sendResetPassRequest(
-                apiUrl = "https://araka-project.onrender.com",
-                loginOrEmail = userLoginOrEmail.text.toString().trim(),
-                startTimer = startResendTimer(timer_text, requestNewCodeButton) // should start in CodeConfirmActivity
-            ) }
-
-        }
+//        forgotPassBtn.setOnClickListener{ // also should move to CodeConfirmActivity
+//            lifecycleScope.launch { sendResetPassRequest(
+//                apiUrl = "https://araka-project.onrender.com",
+//                loginOrEmail = userLoginOrEmail.text.toString().trim(),
+//                startTimer = startResendTimer(timer_text, requestNewCodeButton) // should start in CodeConfirmActivity
+//            ) }
+//
+//        }
     }
 
 
@@ -146,7 +146,7 @@ class AuthActivity : BaseActivity()  {
                 }
 
                 timer_text.visibility = View.INVISIBLE
-                changeActiveState(requestNewCodeButton) // not implemented
+                //changeActiveState(requestNewCodeButton) // not implemented
             }
         }
     }

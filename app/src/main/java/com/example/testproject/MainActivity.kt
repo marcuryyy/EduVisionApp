@@ -61,9 +61,6 @@ class MainActivity : BaseActivity()  {
         val userEmail: EditText = findViewById(R.id.editEmail)
         val userLogin: EditText = findViewById(R.id.editName)
         val userPass: EditText = findViewById(R.id.editPassword)
-        val confirmation_field: TextInputLayout = findViewById(R.id.confirmationCodeLayout)
-        val confirm_button: Button = findViewById(R.id.button_confirm_code)
-        val timer_text: TextView = findViewById(R.id.timer_text)
 
 
         val ButtonEndReg: Button = findViewById(R.id.button_reg)
@@ -102,6 +99,7 @@ class MainActivity : BaseActivity()  {
             else {
                 if(validateEmail(email)) {
                     editor.putString("username", login)
+                    editor.putString("email", email)
                     editor.apply()
                     val user = User(login, password)
 
@@ -113,8 +111,6 @@ class MainActivity : BaseActivity()  {
                             login = login,
                             email = email,
                             password = password,
-                            regButton = ButtonEndReg,
-                            timer_text = timer_text
                         )
                     }
                 }
@@ -124,24 +120,6 @@ class MainActivity : BaseActivity()  {
 
             }
 
-            confirmation_field.visibility = View.VISIBLE // Показываем поле для ввода кода
-            confirm_button.setOnClickListener {
-                val code = confirmation_field.editText?.text.toString().trim()
-
-                if (code.isBlank()) {
-                    Toast.makeText(this, "Введите код подтверждения", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                lifecycleScope.launch {
-                    verifyCode(
-                        context = this@MainActivity,
-                        apiUrl = "https://araka-project.onrender.com",
-                        email = email,
-                        code = code
-                    )
-                }
-            }
 
         }
 
@@ -161,8 +139,6 @@ class MainActivity : BaseActivity()  {
 
 
     suspend fun registerUser(
-        timer_text: TextView,
-        regButton: Button,
         apiUrl: String,
         login: String,
         email: String,
@@ -186,13 +162,12 @@ class MainActivity : BaseActivity()  {
             println("Status: ${response.status}")
             println("Response: ${response.bodyAsText()}")
             if(response.status.isSuccess()){
-                change_reg_button_state(regButton)
 
                 lifecycleScope.launch {
                     sendVerificationCode(
+                        context = this@MainActivity,
                         apiUrl = "https://araka-project.onrender.com",
                         email = email,
-                        startTimer = startResendTimer(timer_text, regButton)
                     )
                 }
             }
@@ -204,7 +179,7 @@ class MainActivity : BaseActivity()  {
 
 
     // Функция отправки кода подтверждения
-    suspend fun sendVerificationCode(apiUrl: String, email: String, startTimer: () -> Unit) {
+    suspend fun sendVerificationCode(context: Context, apiUrl: String, email: String) {
         // Проверка на пустую почту
         if (email.isBlank()) {
             println("Пожалуйста, заполните почту")
@@ -218,14 +193,18 @@ class MainActivity : BaseActivity()  {
         }
 
         try {
+
             val response: HttpResponse = client.post("$apiUrl/registration/send-code") {
                 contentType(ContentType.Application.Json)
                 setBody(VerificationRequest(email))
             }
-
+            withContext(Dispatchers.Main) {
+                val intent = Intent(context, CodeConfirmActivity::class.java)
+                client.close()
+                context.startActivity(intent)
+            }
             println("Код отправлен: ${response.bodyAsText()}")
 
-            startTimer() // Запускаем таймер
 
         } catch (e: Exception) {
             println("Ошибка при отправке кода: ${e.message}")
@@ -233,80 +212,8 @@ class MainActivity : BaseActivity()  {
             client.close()
         }
     }
-
-
-    // Функция таймера (60 секунд)
-    fun startResendTimer(timer_text: TextView, regButton: Button): () -> Unit {
-        var timeLeft = 7
-
-        timer_text.visibility = View.VISIBLE
-        return {
-            lifecycleScope.launch {
-                while (timeLeft > 0) {
-                    delay(1000)
-                    timeLeft--
-                    timer_text.text = "Осталось: $timeLeft сек."
-                }
-                // Вызываем функцию, когда таймер завершится
-                timer_text.visibility = View.INVISIBLE
-                change_reg_button_state(regButton)
-            }
-        }
-    }
-
-
-    fun change_reg_button_state(regButton: Button): Unit {
-        if(regButton.isEnabled){
-            regButton.isEnabled = false
-            regButton.alpha = 0.5f
-        }
-        else{
-            regButton.isEnabled = true
-            regButton.alpha = 1.0f
-        }
-
-    }
-
 }
 
-
-// Функция проверки кода
-suspend fun verifyCode(
-    context: Context,
-    apiUrl: String,
-    email: String,
-    code: String,
-) {
-    val client = HttpClient(CIO) {
-        install(ContentNegotiation) { json() }
-    }
-
-    try {
-        val response = client.post("$apiUrl/auth/registration/verify-code") {
-            contentType(ContentType.Application.Json)
-            setBody(VerifyCodeRequest(email, code))
-        }
-
-        if (response.status.isSuccess()) {
-            // Переход на AuthActivity в UI-потоке
-            withContext(Dispatchers.Main) {
-                val intent = Intent(context, AuthActivity::class.java)
-                client.close()
-                context.startActivity(intent)
-            }
-        } else {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Неверный код подтверждения", Toast.LENGTH_SHORT).show()
-            }
-        }
-    } catch (e: Exception) {
-        withContext(Dispatchers.Main) {
-            Toast.makeText(context, "Ошибка сети: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    } finally {
-        client.close()
-    }
-}
 
 
 
