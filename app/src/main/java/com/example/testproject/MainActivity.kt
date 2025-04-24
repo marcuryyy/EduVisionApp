@@ -1,6 +1,7 @@
 package com.example.testproject
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -88,23 +89,16 @@ class MainActivity : BaseActivity()  {
 
                     val db = DBuser(this, null)
                     db.addUser(user)
-                    runBlocking { // Создает блокирующую корутину
+                    lifecycleScope.launch { // Создает блокирующую корутину
                         registerUser( // Вызов suspend-функции
                             apiUrl = "https://araka-project.onrender.com",
                             login = login,
                             email = email,
-                            password = password
+                            password = password,
+                            regButton = ButtonEndReg,
+                            timer_text = timer_text
                         )
                     }
-
-//                    Toast.makeText(this, "Успешно!", Toast.LENGTH_SHORT).show()
-//
-//                    val intent = Intent(this, AuthActivity::class.java)
-//                    startActivity(intent)
-//
-//                    userLogin.text.clear()
-//                    userPass.text.clear()
-
                 }
                 else {
                     Toast.makeText(this, "Введите корректный адрес почты!", Toast.LENGTH_SHORT).show()
@@ -113,19 +107,22 @@ class MainActivity : BaseActivity()  {
             }
 
             confirmation_field.visibility = View.VISIBLE // Показываем поле для ввода кода
+            confirm_button.setOnClickListener {
+                val code = confirmation_field.editText?.text.toString().trim()
 
-        }
+                if (code.isBlank()) {
+                    Toast.makeText(this, "Введите код подтверждения", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
 
-        confirm_button.setOnClickListener {
-            change_confirmation_button_state(confirm_button)
-            val email = userEmail.text.toString().trim()
-
-            lifecycleScope.launch {
-                sendVerificationCode(
-                    apiUrl = "https://araka-project.onrender.com",
-                    email = email,
-                    startTimer = { startResendTimer(timer_text, confirm_button) } // possible problems
-                )
+                lifecycleScope.launch {
+                    verifyCode(
+                        context = this@MainActivity,
+                        apiUrl = "https://araka-project.onrender.com",
+                        email = email,
+                        code = code
+                    )
+                }
             }
 
         }
@@ -150,7 +147,15 @@ class MainActivity : BaseActivity()  {
         val password: String
     )
 
-    suspend fun registerUser(apiUrl: String, login: String, email: String, password: String) {
+    suspend fun registerUser(
+        timer_text: TextView,
+        regButton: Button,
+        apiUrl: String,
+        login: String,
+        email: String,
+        password: String
+    ) {
+
         val client = HttpClient(CIO) {
             install(ContentNegotiation) {
                 json() // Включаем JSON-сериализацию
@@ -167,6 +172,17 @@ class MainActivity : BaseActivity()  {
 
             println("Status: ${response.status}")
             println("Response: ${response.bodyAsText()}")
+            if(response.status.isSuccess()){
+                change_reg_button_state(regButton)
+
+                lifecycleScope.launch {
+                    sendVerificationCode(
+                        apiUrl = "https://araka-project.onrender.com",
+                        email = email,
+                        startTimer = startResendTimer(timer_text, regButton)
+                    )
+                }
+            }
 
         } finally {
             client.close()
@@ -214,35 +230,81 @@ class MainActivity : BaseActivity()  {
 
 
     // Функция таймера (60 секунд)
-    fun startResendTimer(timer_text: TextView, confirm_button: Button): () -> Unit {
-        var timeLeft = 60
+    fun startResendTimer(timer_text: TextView, regButton: Button): () -> Unit {
+        var timeLeft = 7
+
+        timer_text.visibility = View.VISIBLE
         return {
-            // Периодический цикл, который будет уменьшать timeLeft каждую секунду
-            while (timeLeft > 0) {
-                // Пауза на 1 секунду (имитация, без асинхронности)
-                Thread.sleep(1000)  // Блокирует текущий поток на 1 секунду
-                timeLeft--
-                timer_text.text = "Осталось: $timeLeft сек."
+            lifecycleScope.launch {
+                while (timeLeft > 0) {
+                    delay(1000)
+                    timeLeft--
+                    timer_text.text = "Осталось: $timeLeft сек."
+                }
+                // Вызываем функцию, когда таймер завершится
+                timer_text.visibility = View.INVISIBLE
+                change_reg_button_state(regButton)
             }
-            // Вызываем функцию, когда таймер завершится
-            change_confirmation_button_state(confirm_button)
         }
     }
 
 
-    fun change_confirmation_button_state(confirm_button: Button): Unit {
-        if(confirm_button.isEnabled){
-            confirm_button.isEnabled = false
-            confirm_button.alpha = 0.5f
+    fun change_reg_button_state(regButton: Button): Unit {
+        if(regButton.isEnabled){
+            regButton.isEnabled = false
+            regButton.alpha = 0.5f
         }
         else{
-            confirm_button.isEnabled = true
-            confirm_button.alpha = 1.0f
+            regButton.isEnabled = true
+            regButton.alpha = 1.0f
         }
 
     }
 
 }
+    @Serializable
+    data class VerifyCodeRequest(
+        val email: String,
+        val code: String
+    )
+
+    // Функция проверки кода
+    suspend fun verifyCode(
+        context: Context,
+        apiUrl: String,
+        email: String,
+        code: String,
+    ) {
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) { json() }
+        }
+
+        try {
+            val response = client.post("$apiUrl/auth/registration/verify-code") {
+                contentType(ContentType.Application.Json)
+                setBody(VerifyCodeRequest(email, code))
+            }
+
+            if (response.status.isSuccess()) {
+                // Переход на AuthActivity в UI-потоке
+                withContext(Dispatchers.Main) {
+                    val intent = Intent(context, AuthActivity::class.java)
+                    client.close()
+                    context.startActivity(intent)
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Неверный код подтверждения", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Ошибка сети: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        } finally {
+            client.close()
+        }
+    }
 
 
 

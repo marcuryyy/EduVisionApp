@@ -90,8 +90,8 @@ suspend fun AuthUser(apiUrl: String, loginOrEmail: String, password: String) {
     }
 
     try {
-        println("$apiUrl/auth/register")
-        val response = client.post("$apiUrl/auth/register/") {
+        println("$apiUrl/auth/login")
+        val response = client.post("$apiUrl/auth/login/") {
             contentType(ContentType.Application.Json)
             setBody(AuthRequest(loginOrEmail, password)) // Используем data class
         }
