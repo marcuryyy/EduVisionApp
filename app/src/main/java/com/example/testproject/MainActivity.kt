@@ -26,6 +26,24 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
 
 
+@Serializable
+data class VerifyCodeRequest(
+    val email: String,
+    val code: String
+)
+
+@Serializable
+data class RegisterRequest(
+    val login: String,
+    val email: String,
+    val password: String
+)
+
+@Serializable
+data class VerificationRequest(val email: String)
+
+
+
 class MainActivity : BaseActivity()  {
     private fun requestInternetPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_WIFI_STATE), 101)
@@ -140,12 +158,7 @@ class MainActivity : BaseActivity()  {
 
 
 
-    @Serializable
-    data class RegisterRequest(
-        val login: String,
-        val email: String,
-        val password: String
-    )
+
 
     suspend fun registerUser(
         timer_text: TextView,
@@ -189,16 +202,9 @@ class MainActivity : BaseActivity()  {
         }
     }
 
-    @Serializable
-    data class VerificationRequest(val email: String)
-
 
     // Функция отправки кода подтверждения
-    suspend fun sendVerificationCode(
-        apiUrl: String,
-        email: String,
-        startTimer: () -> Unit
-    ) {
+    suspend fun sendVerificationCode(apiUrl: String, email: String, startTimer: () -> Unit) {
         // Проверка на пустую почту
         if (email.isBlank()) {
             println("Пожалуйста, заполните почту")
@@ -262,49 +268,45 @@ class MainActivity : BaseActivity()  {
     }
 
 }
-    @Serializable
-    data class VerifyCodeRequest(
-        val email: String,
-        val code: String
-    )
 
-    // Функция проверки кода
-    suspend fun verifyCode(
-        context: Context,
-        apiUrl: String,
-        email: String,
-        code: String,
-    ) {
-        val client = HttpClient(CIO) {
-            install(ContentNegotiation) { json() }
-        }
 
-        try {
-            val response = client.post("$apiUrl/auth/registration/verify-code") {
-                contentType(ContentType.Application.Json)
-                setBody(VerifyCodeRequest(email, code))
-            }
-
-            if (response.status.isSuccess()) {
-                // Переход на AuthActivity в UI-потоке
-                withContext(Dispatchers.Main) {
-                    val intent = Intent(context, AuthActivity::class.java)
-                    client.close()
-                    context.startActivity(intent)
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Неверный код подтверждения", Toast.LENGTH_SHORT).show()
-                }
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Ошибка сети: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        } finally {
-            client.close()
-        }
+// Функция проверки кода
+suspend fun verifyCode(
+    context: Context,
+    apiUrl: String,
+    email: String,
+    code: String,
+) {
+    val client = HttpClient(CIO) {
+        install(ContentNegotiation) { json() }
     }
+
+    try {
+        val response = client.post("$apiUrl/auth/registration/verify-code") {
+            contentType(ContentType.Application.Json)
+            setBody(VerifyCodeRequest(email, code))
+        }
+
+        if (response.status.isSuccess()) {
+            // Переход на AuthActivity в UI-потоке
+            withContext(Dispatchers.Main) {
+                val intent = Intent(context, AuthActivity::class.java)
+                client.close()
+                context.startActivity(intent)
+            }
+        } else {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Неверный код подтверждения", Toast.LENGTH_SHORT).show()
+            }
+        }
+    } catch (e: Exception) {
+        withContext(Dispatchers.Main) {
+            Toast.makeText(context, "Ошибка сети: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    } finally {
+        client.close()
+    }
+}
 
 
 
