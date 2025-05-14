@@ -32,7 +32,7 @@ data class AuthRequest(
 
 @Serializable
 data class ResetPassRequest(
-    val loginOrEmail: String
+    val email: String
 )
 
 class AuthActivity : BaseActivity()  {
@@ -49,9 +49,23 @@ class AuthActivity : BaseActivity()  {
 
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
+
         linkToReg.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("Source", "Authentication")
+            startActivity(intent)
+        }
+
+        forgotPassBtn.setOnClickListener{
+            val intent = Intent(this, CodeConfirmActivity::class.java)
+            lifecycleScope.launch {
+                val login = userLoginOrEmail.text.toString().trim()
+                println(login)
+                sendResetPassRequest(
+                    apiUrl = "https://araka-project.onrender.com",
+                    loginOrEmail = login,
+                )
+            }
             startActivity(intent)
         }
 
@@ -102,7 +116,7 @@ class AuthActivity : BaseActivity()  {
     }
 
 
-    suspend fun sendResetPassRequest(apiUrl: String, loginOrEmail: String, startTimer: () -> Unit) {
+    suspend fun sendResetPassRequest(apiUrl: String, loginOrEmail: String) {
 
         if (loginOrEmail.isBlank()) {
             println("Пожалуйста, заполните почту/логин")
@@ -123,7 +137,7 @@ class AuthActivity : BaseActivity()  {
 
             println("Код отправлен: ${response.bodyAsText()}")
 
-            startTimer()
+           // startTimer()
 
         } catch (e: Exception) {
             println("Ошибка при отправке кода: ${e.message}")
@@ -131,25 +145,25 @@ class AuthActivity : BaseActivity()  {
             client.close()
         }
     }
-
-    fun startResendTimer(timer_text: TextView, requestNewCodeButton: Button): () -> Unit {
-        var timeLeft = 7
-
-        timer_text.visibility = View.VISIBLE
-        return {
-
-            lifecycleScope.launch {
-                while (timeLeft > 0) {
-                    delay(1000)
-                    timeLeft--
-                    timer_text.text = "Осталось: $timeLeft сек."
-                }
-
-                timer_text.visibility = View.INVISIBLE
-                //changeActiveState(requestNewCodeButton) // not implemented
-            }
-        }
-    }
+//
+//    fun startResendTimer(timer_text: TextView, requestNewCodeButton: Button): () -> Unit {
+//        var timeLeft = 7
+//
+//        timer_text.visibility = View.VISIBLE
+//        return {
+//
+//            lifecycleScope.launch {
+//                while (timeLeft > 0) {
+//                    delay(1000)
+//                    timeLeft--
+//                    timer_text.text = "Осталось: $timeLeft сек."
+//                }
+//
+//                timer_text.visibility = View.INVISIBLE
+//                //changeActiveState(requestNewCodeButton) // not implemented
+//            }
+//        }
+//    }
 
     suspend fun AuthUser(apiUrl: String, loginOrEmail: String, password: String) {
         val client = HttpClient(CIO) {
