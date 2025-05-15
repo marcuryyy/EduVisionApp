@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
@@ -18,16 +19,31 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
+import androidx.core.content.edit
 
 @Serializable
 data class AuthRequest(
     val loginOrEmail: String,
     val password: String
+)
+
+@Serializable
+data class AuthResponse(
+    val token: String,
+    val user: UserData
+)
+
+@Serializable
+data class UserData(
+    val id: Long,
+    val login: String
+   // val email: String
 )
 
 @Serializable
@@ -49,6 +65,7 @@ class AuthActivity : BaseActivity()  {
 
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
+
         linkToReg.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("Source", "Authentication")
@@ -58,34 +75,23 @@ class AuthActivity : BaseActivity()  {
         ButtonEndAuth.setOnClickListener {
             val login = userLoginOrEmail.text.toString().trim()
             val password = userPass.text.toString().trim()
+
             val bottomSheetDialog = BottomSheetDialog(this)
             bottomSheetDialog.setContentView(R.layout.wrong_auth_layout)
+
             if(login == "" || password == "")
                 bottomSheetDialog.show()
             else {
                 editor.remove("authorized")
                 editor.putBoolean("authorized", true)
                 editor.apply()
-                runBlocking { // Создает блокирующую корутину
-                    AuthUser( // Вызов suspend-функции
+                runBlocking {
+                    AuthUser(
                         apiUrl = "https://araka-project.onrender.com",
                         loginOrEmail = login,
                         password = password
                     )
                 }
-                //  val db = DBuser(this, null)
-//                val isAuth = db.getUser(login, password)
-//                if(isAuth) {
-//                    Toast.makeText(this, "Успешно!", Toast.LENGTH_LONG).show()
-//                    userLogin.text.clear()
-//                    userPass.text.clear()
-//
-//                    val intent = Intent(this, MyClasses::class.java)
-//                    intent.putExtra("SOURCE", "RegistrationActivity")
-//                    startActivity(intent)
-//                } else
-//                    bottomSheetDialog.show()
-
 
             }
 
@@ -154,7 +160,7 @@ class AuthActivity : BaseActivity()  {
     suspend fun AuthUser(apiUrl: String, loginOrEmail: String, password: String) {
         val client = HttpClient(CIO) {
             install(ContentNegotiation) {
-                json() // Включаем JSON-сериализацию
+                json()
             }
         }
 
@@ -162,10 +168,26 @@ class AuthActivity : BaseActivity()  {
             println("$apiUrl/auth/login")
             val response = client.post("$apiUrl/auth/login/") {
                 contentType(ContentType.Application.Json)
-                setBody(AuthRequest(loginOrEmail, password)) // Используем data class
+                setBody(AuthRequest(loginOrEmail, password))
             }
-            println("Status: ${response.status}")
-            println("Response: ${response.bodyAsText()}")
+
+            if (response.status.isSuccess()) {
+                val authResponse = response.body<AuthResponse>()
+
+                println("token ${authResponse.token}")
+
+                val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+                sharedPref.edit() {
+                    putString("token", authResponse.token)
+                    putLong("user_id", authResponse.user.id)
+                }
+
+                val intent = Intent(this, MyClasses::class.java)
+                startActivity(intent)
+
+            }
+
+
 
         } finally {
             client.close()

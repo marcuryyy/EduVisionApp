@@ -1,69 +1,104 @@
 package com.example.testproject
 
-import android.Manifest
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.ImageButton
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+@Serializable
+data class Survey(
+    val id: Int,
+    val title: String,
+    val createdAt: String,
+    val questionCount: Int
+)
+
+@Serializable
+data class SurveysRequest(
+    val Authorization: String
+)
 
 
-class MyFoldersActivity : BaseActivity()  {
+class MyFoldersActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: FoldersAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_folders)
 
-        val itemList = fetchDataFromSQLite()
         val add_folder_button: ImageButton = findViewById(R.id.add_folder_button)
         val my_classes_button: ImageButton = findViewById(R.id.my_classes_button)
         val settings_button: ImageButton = findViewById(R.id.settings_button_folder)
 
         recyclerView = findViewById(R.id.my_folders_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = FoldersAdapter(itemList, this)
-        recyclerView.adapter = adapter
+
+        lifecycleScope.launch {
+            val surveys = fetchDataFromAPI()
+            val adapter = SurveysAdapter(surveys, this@MyFoldersActivity)
+            recyclerView.adapter = adapter
+        }
+
 
         add_folder_button.setOnClickListener {
-            val intent = Intent(this, AddTestFolderActivity::class.java)
-            startActivity(intent)
+            val nextIntent = Intent(this, AddTestFolderActivity::class.java)
+            startActivity(nextIntent)
         }
 
         my_classes_button.setOnClickListener {
-            val intent = Intent(this, MyClasses::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, MyClasses::class.java))
         }
 
-        settings_button.setOnClickListener{
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
+        settings_button.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
-
     }
 
-    private fun fetchDataFromSQLite(): List<String> {
-        val db = DBfolders(this, null)
-        val readableDB = db.readableDatabase
-        val cursor = readableDB.rawQuery("SELECT * FROM folders", null)
+    suspend fun fetchDataFromAPI(): List<Survey> {
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "")
+        println("---------")
+        println(token)
 
-        val items = mutableListOf<String>()
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                val folder_name_index = cursor.getColumnIndex("folder_name")
-                val folder_name = if (folder_name_index >= 0) cursor.getString(folder_name_index) else ""
-                items.add(folder_name)
-            } while (cursor.moveToNext())
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
         }
-        cursor.close()
-        return items
+
+        try {
+            val response = client.get("https://araka-project.onrender.com/api/surveys/user/my") {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+            }
+
+            val surveys = response.body<List<Survey>>()
+
+            return surveys
+        }
+        finally {
+            client.close()
+        }
     }
-
-
-
 }
+
