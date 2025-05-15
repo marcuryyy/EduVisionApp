@@ -154,7 +154,7 @@ class MainActivity : BaseActivity()  {
         try {
             println("$apiUrl/auth/register")
 
-            val response = client.post("$apiUrl/auth/register/") {
+            val response = client.post("$apiUrl/auth/register") {
                 contentType(ContentType.Application.Json)
                 setBody(RegisterRequest(login, email, password)) // Используем data class
             }
@@ -194,7 +194,7 @@ class MainActivity : BaseActivity()  {
 
         try {
 
-            val response: HttpResponse = client.post("$apiUrl/registration/send-code") {
+            val response: HttpResponse = client.post("$apiUrl/auth/registration/send-code") {
                 contentType(ContentType.Application.Json)
                 setBody(VerificationRequest(email))
             }
