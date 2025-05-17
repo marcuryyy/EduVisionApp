@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MyClasses : BaseActivity()  {
@@ -33,8 +34,27 @@ class MyClasses : BaseActivity()  {
 
         val itemList = fetchDataFromSQLite()
         val add_class_button: Button = findViewById(R.id.add_class)
-        val my_tests_button: ImageButton = findViewById(R.id.my_tests_button)
-        val settings_button: ImageButton = findViewById(R.id.settings_button_classes)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_classes -> {
+                    // Мы уже на этой странице, можно ничего не делать
+                    true
+                }
+                R.id.nav_tests -> {
+                    startActivity(Intent(this, MyTestsActivity::class.java))
+                    true
+                }
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+
+        bottomNav.selectedItemId = R.id.nav_classes
+
         recyclerView = findViewById(R.id.ClassList)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = ClassesAdapter(itemList, this)
@@ -45,15 +65,6 @@ class MyClasses : BaseActivity()  {
             startActivity(intent)
         }
 
-        my_tests_button.setOnClickListener {
-            val intent = Intent(this, MyFoldersActivity::class.java)
-            startActivity(intent)
-        }
-
-        settings_button.setOnClickListener{
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
         
     }
 

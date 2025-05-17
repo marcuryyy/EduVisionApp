@@ -1,119 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:windowTranslucentStatus="true"
-    android:windowTranslucentNavigation="true"
-    android:fitsSystemWindows="true"
-    android:theme="@style/Theme.TestProject"
-    android:screenOrientation="portrait"
+    android:background="@android:color/white"
+    android:padding="16dp"
     tools:context=".MyTestsActivity">
 
+    <!-- Заголовок страницы -->
     <TextView
         android:id="@+id/my_tests_label"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:ems="10"
-        android:fontFamily="@font/inter_bold"
-        android:gravity="left"
-        android:paddingStart="10dp"
+        android:layout_marginTop="16dp"
         android:text="Мои тесты"
-        android:textSize="48sp"
+        android:textColor="#1E88E5"
+        android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_tests_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/listview"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_tests_label"
-        app:layout_constraintVertical_bias="0.002"
-        app:layout_constraintHeight_percent="0.5"/>
-
-    <ImageButton
-        android:id="@+id/add_test_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:src="@drawable/more"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_tests_list"
-        app:layout_constraintVertical_bias="0.258" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageButton
-            android:id="@+id/my_classes_button"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/imagebutton_click_effect"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icons8_people_96" />
-
-        <ImageButton
-            android:id="@+id/my_tests_button"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/imagebutton_click_effect"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icons8_exam_96_lightblue" />
-
-        <ImageButton
-            android:id="@+id/settings_button_tests"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/imagebutton_click_effect"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icons8_settings_96" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/runAllTestsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/lightblue"
-        android:text="Запустить все тесты"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_test_button"
-        app:layout_constraintVertical_bias="0.613" />
-
+    <!-- Разделитель -->
     <View
         android:id="@+id/divider4"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
+        android:layout_marginTop="8dp"
+        android:background="#E0E0E0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_tests_label" />
+
+    <!-- Список тестов -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_tests_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_test_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+    <!-- Кнопка добавления теста -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_test_button"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Добавить тест"
+        android:textColor="@android:color/white"
+        app:icon="@android:drawable/ic_menu_add"
+        app:iconTint="@android:color/white"
+        app:cornerRadius="12dp"
+        app:backgroundTint="#1E88E5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_tests_list"
+        app:layout_constraintBottom_toTopOf="@+id/runAllTestsButton" />
+
+    <!-- Кнопка запуска всех тестов -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/runAllTestsButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Запустить все тесты"
+        android:textColor="@android:color/white"
+        app:icon="@android:drawable/ic_menu_view"
+        app:iconTint="@android:color/white"
+        app:cornerRadius="12dp"
+        app:backgroundTint="#4CAF50"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_test_button" />
+
+    <!-- Нижняя навигация -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:elevation="8dp"
+        app:itemIconTint="#1E88E5"
+        app:itemTextColor="#1E88E5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

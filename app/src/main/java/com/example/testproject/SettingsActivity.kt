@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,8 +15,26 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val accountExit: Button = findViewById(R.id.exitFromAccount)
-        val classes_button: ImageButton = findViewById(R.id.my_classes_button_settings)
-        val folders_button: ImageButton = findViewById(R.id.my_tests_button_settings)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_classes -> {
+                    startActivity(Intent(this, MyClasses::class.java))
+                    true
+                }
+                R.id.nav_tests -> {
+                    startActivity(Intent(this, MyTestsActivity::class.java))
+                    true
+                }
+                R.id.nav_settings -> {
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // Чтобы текущий пункт был выделен
+        bottomNav.selectedItemId = R.id.nav_settings
 
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
@@ -26,16 +45,6 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
 
-        }
-
-        folders_button.setOnClickListener{
-            val intent = Intent(this, MyFoldersActivity::class.java)
-            startActivity(intent)
-        }
-
-        classes_button.setOnClickListener{
-            val intent = Intent(this, MyClasses::class.java)
-            startActivity(intent)
         }
 
     }
