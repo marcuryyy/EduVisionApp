@@ -200,6 +200,7 @@ class MainActivity : BaseActivity()  {
             }
             withContext(Dispatchers.Main) {
                 val intent = Intent(context, CodeConfirmActivity::class.java)
+                intent.putExtra("source", "registration")
                 client.close()
                 context.startActivity(intent)
             }

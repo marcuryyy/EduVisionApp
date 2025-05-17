@@ -29,7 +29,6 @@ import kotlinx.serialization.Serializable
 
 class CodeConfirmActivity : BaseActivity() {
     private var timerJob: Job? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirm_code)
@@ -40,6 +39,7 @@ class CodeConfirmActivity : BaseActivity() {
         val resend_code_text: TextView = findViewById(R.id.resend_code_text)
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val email = sharedPref.getString("email", "").toString()
+
         println(email)
         // Запускаем таймер сразу
         startResendTimer(timer_text)
@@ -113,24 +113,53 @@ class CodeConfirmActivity : BaseActivity() {
         val client = HttpClient(CIO) {
             install(ContentNegotiation) { json() }
         }
+        val source = intent.getStringExtra("source")
+        println(source)
+        println(email)
 
         try {
-            val response = client.post("$apiUrl/auth/registration/verify-code") {
-                contentType(ContentType.Application.Json)
-                setBody(VerifyCodeRequest(email, code))
+
+            if (source == "registration") {
+
+                val response = client.post("$apiUrl/auth/registration/verify-code") {
+                    contentType(ContentType.Application.Json)
+                    setBody(VerifyCodeRequest(email, code))
+                }
+
+                if (response.status.isSuccess()){
+                    withContext(Dispatchers.Main) {
+                        val intent = Intent(context, AuthActivity::class.java)
+                        client.close()
+                        context.startActivity(intent)
+                    }
+                }  else {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Неверный код подтверждения", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }else if (source == "auth_forgot_password") {
+
+                val response = client.post("$apiUrl/auth/login/verify-reset-code") {
+                    contentType(ContentType.Application.Json)
+                    setBody(VerifyCodeRequest(email, code))
+                }
+                println(response.bodyAsText())
+                if (response.status.isSuccess()) {
+                    withContext(Dispatchers.Main) {
+                        val intent = Intent(context, ResetPasswordActivity::class.java)
+                        intent.putExtra("email", email)
+                        intent.putExtra("code", code)
+                        client.close()
+                        context.startActivity(intent)
+                    }
+                }   else {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(context, "Неверный код подтверждения", Toast.LENGTH_SHORT).show()
+                        }
+                }
             }
 
-            if (response.status.isSuccess()) {
-                withContext(Dispatchers.Main) {
-                    val intent = Intent(context, AuthActivity::class.java)
-                    client.close()
-                    context.startActivity(intent)
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Неверный код подтверждения", Toast.LENGTH_SHORT).show()
-                }
-            }
+
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, "Ошибка сети: ${e.message}", Toast.LENGTH_SHORT).show()

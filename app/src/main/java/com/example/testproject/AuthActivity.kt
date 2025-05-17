@@ -74,9 +74,9 @@ class AuthActivity : BaseActivity()  {
 
         forgotPassBtn.setOnClickListener{
             val intent = Intent(this, CodeConfirmActivity::class.java)
+            intent.putExtra("source", "auth_forgot_password")
             lifecycleScope.launch {
                 val login = userLoginOrEmail.text.toString().trim()
-                println(login)
                 sendResetPassRequest(
                     apiUrl = "https://araka-project.onrender.com",
                     loginOrEmail = login,
