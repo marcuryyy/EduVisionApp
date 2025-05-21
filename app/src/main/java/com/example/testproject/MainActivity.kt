@@ -193,17 +193,18 @@ class MainActivity : BaseActivity()  {
         }
 
         try {
-
-            val response: HttpResponse = client.post("$apiUrl/auth/registration/send-code") {
-                contentType(ContentType.Application.Json)
-                setBody(VerificationRequest(email))
-            }
             withContext(Dispatchers.Main) {
                 val intent = Intent(context, CodeConfirmActivity::class.java)
                 intent.putExtra("source", "registration")
                 client.close()
                 context.startActivity(intent)
             }
+
+            val response: HttpResponse = client.post("$apiUrl/auth/registration/send-code") {
+                contentType(ContentType.Application.Json)
+                setBody(VerificationRequest(email))
+            }
+
             println("Код отправлен: ${response.bodyAsText()}")
 
 

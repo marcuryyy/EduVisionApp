@@ -33,7 +33,7 @@ class MyTestsActivity : BaseActivity()  {
                     startActivity(Intent(this, MyClasses::class.java))
                     true
                 }
-                R.id.nav_tests -> {
+                R.id.nav_folders -> {
                     true
                 }
                 R.id.nav_settings -> {
@@ -45,7 +45,7 @@ class MyTestsActivity : BaseActivity()  {
         }
 
         // Чтобы текущий пункт был выделен
-        bottomNav.selectedItemId = R.id.nav_tests
+        bottomNav.selectedItemId = R.id.nav_folders
         val runAllTestsButton: Button = findViewById(R.id.runAllTestsButton)
         folder_db.close()
         recyclerView = findViewById(R.id.my_tests_list)

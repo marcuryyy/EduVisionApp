@@ -41,8 +41,8 @@ class MyClasses : BaseActivity()  {
                     // Мы уже на этой странице, можно ничего не делать
                     true
                 }
-                R.id.nav_tests -> {
-                    startActivity(Intent(this, MyTestsActivity::class.java))
+                R.id.nav_folders -> {
+                    startActivity(Intent(this, MyFoldersActivity::class.java))
                     true
                 }
                 R.id.nav_settings -> {

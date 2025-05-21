@@ -7,15 +7,15 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:padding="16dp"
-    tools:context=".MyFoldersActivity">
+    tools:context=".MyTestsActivity">
 
     <!-- Заголовок страницы -->
     <TextView
-        android:id="@+id/my_folders_label"
+        android:id="@+id/my_tests_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Мои папки"
+        android:text="Мои тесты"
         android:textColor="#1E88E5"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -25,45 +25,63 @@
 
     <!-- Разделитель -->
     <View
-        android:id="@+id/divider3"
+        android:id="@+id/divider4"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="#E0E0E0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_folders_label" />
+        app:layout_constraintTop_toBottomOf="@+id/my_tests_label" />
 
-    <!-- Список папок -->
+    <!-- Список тестов -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_folders_list"
+        android:id="@+id/my_tests_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:clipToPadding="false"
-        android:paddingBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_folder_button"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_test_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+        app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
-    <!-- Кнопка добавления папки -->
+    <!-- Кнопка добавления теста -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/add_folder_button"
+        android:id="@+id/add_test_button"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Добавить папку"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Добавить тест"
         android:textColor="@android:color/white"
         app:icon="@android:drawable/ic_menu_add"
         app:iconTint="@android:color/white"
         app:cornerRadius="12dp"
         app:backgroundTint="#1E88E5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_tests_list"
+        app:layout_constraintBottom_toTopOf="@+id/runAllTestsButton" />
+
+    <!-- Кнопка запуска всех тестов -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/runAllTestsButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Запустить все тесты"
+        android:textColor="@android:color/white"
+        app:icon="@android:drawable/ic_menu_view"
+        app:iconTint="@android:color/white"
+        app:cornerRadius="12dp"
+        app:backgroundTint="#4CAF50"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_folders_list" />
+        app:layout_constraintTop_toBottomOf="@+id/add_test_button" />
 
     <!-- Нижняя навигация -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

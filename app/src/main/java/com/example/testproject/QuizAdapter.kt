@@ -10,28 +10,28 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class SurveysAdapter(
+class QuizAdapter(
     private var surveys: List<Survey>,
     private val context: Context
-) : RecyclerView.Adapter<SurveysAdapter.SurveyViewHolder>() {
+) : RecyclerView.Adapter<QuizAdapter.QuizViewHolder>() {
 
-    class SurveyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class QuizViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.folder_name)
         val infoButton: ImageButton = view.findViewById(R.id.button)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SurveyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.folder_layout, parent, false)
-        return SurveyViewHolder(view)
+        return QuizViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SurveyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QuizViewHolder, position: Int) {
         val survey = surveys[position]
         holder.titleTextView.text = survey.title
 
         holder.infoButton.setOnClickListener {
-            val intent = Intent(context, QuizActivity::class.java).apply {
+            val intent = Intent(context, MyTestsActivity::class.java).apply {
                 putExtra("survey_title", survey.title)
             }
             context.startActivity(intent)

@@ -1,12 +1,10 @@
 package com.example.testproject
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,38 +14,21 @@ import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.*
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-
-@Serializable
-data class Survey(
-    val id: Int,
-    val title: String,
-    val createdAt: String,
-    val questionCount: Int
-)
-
-@Serializable
-data class SurveysRequest(
-    val Authorization: String
-)
 
 
-class MyFoldersActivity : BaseActivity() {
+
+class QuizActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_folders)
+        setContentView(R.layout.activity_quizes)
 
-        val add_folder_button: Button = findViewById(R.id.add_folder_button)
+        val add_folder_button: Button = findViewById(R.id.add_test_button)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -68,12 +49,12 @@ class MyFoldersActivity : BaseActivity() {
 
         bottomNav.selectedItemId = R.id.nav_folders
 
-        recyclerView = findViewById(R.id.my_folders_list)
+        recyclerView = findViewById(R.id.my_tests_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
             val surveys = fetchDataFromAPI()
-            val adapter = SurveysAdapter(surveys, this@MyFoldersActivity)
+            val adapter = QuizAdapter(surveys, this@QuizActivity)
             recyclerView.adapter = adapter
         }
 
@@ -99,15 +80,13 @@ class MyFoldersActivity : BaseActivity() {
 
         try {
             val response = client.get("https://araka-project.onrender.com/api/surveys/user/my") {
-
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }
             }
 
-
             val surveys = response.body<List<Survey>>()
-            println(response)
+
             return surveys
         }
         finally {

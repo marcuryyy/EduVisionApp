@@ -15,7 +15,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Мои тесты"
+        android:text="Вопросы"
         android:textColor="#1E88E5"
         android:textSize="28sp"
         android:textStyle="bold"
