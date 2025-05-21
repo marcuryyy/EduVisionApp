@@ -33,11 +33,6 @@ data class Survey(
     val questionCount: Int
 )
 
-@Serializable
-data class SurveysRequest(
-    val Authorization: String
-)
-
 
 class MyFoldersActivity : BaseActivity() {
 

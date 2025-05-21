@@ -135,9 +135,6 @@ class MainActivity : BaseActivity()  {
     }
 
 
-
-
-
     suspend fun registerUser(
         apiUrl: String,
         login: String,
@@ -156,7 +153,7 @@ class MainActivity : BaseActivity()  {
 
             val response = client.post("$apiUrl/auth/register") {
                 contentType(ContentType.Application.Json)
-                setBody(RegisterRequest(login, email, password)) // Используем data class
+                setBody(RegisterRequest(login, email, password))
             }
 
             println("Status: ${response.status}")

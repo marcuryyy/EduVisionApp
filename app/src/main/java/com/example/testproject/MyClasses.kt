@@ -1,23 +1,41 @@
 package com.example.testproject
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.Image
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testproject.MyFoldersActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpHeaders
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+data class Class(
+    val id: Int,
+    val title: String
+)
 
 
 class MyClasses : BaseActivity()  {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ClassesAdapter
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
@@ -32,13 +50,22 @@ class MyClasses : BaseActivity()  {
         } else {
         }
 
-        val itemList = fetchDataFromSQLite()
+
+        recyclerView = findViewById(R.id.ClassList)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+
+        lifecycleScope.launch {
+            val classes = fetchClasses()
+            val adapter = ClassesAdapter(classes, this@MyClasses)
+            recyclerView.adapter = adapter
+        }
+
         val add_class_button: Button = findViewById(R.id.add_class)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_classes -> {
-                    // Мы уже на этой странице, можно ничего не делать
                     true
                 }
                 R.id.nav_folders -> {
@@ -55,11 +82,6 @@ class MyClasses : BaseActivity()  {
 
         bottomNav.selectedItemId = R.id.nav_classes
 
-        recyclerView = findViewById(R.id.ClassList)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = ClassesAdapter(itemList, this)
-        recyclerView.adapter = adapter
-
         add_class_button.setOnClickListener {
             val intent = Intent(this, AddClassActivity::class.java)
             startActivity(intent)
@@ -68,22 +90,36 @@ class MyClasses : BaseActivity()  {
         
     }
 
-    private fun fetchDataFromSQLite(): List<String> {
-        val db = DBclass(this, null)
-        val readableDB = db.readableDatabase
-        val cursor = readableDB.rawQuery("SELECT * FROM classes", null)
+    suspend fun fetchClasses(): List<Class> {
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "")
 
-        val items = mutableListOf<String>()
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                val class_name_index = cursor.getColumnIndex("class_label")
-                val class_name = if (class_name_index >= 0) cursor.getString(class_name_index) else ""
-                items.add(class_name)
-            } while (cursor.moveToNext())
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
         }
-        cursor.close()
-        return items
+
+        try {
+            val response = client.get("https://araka-project.onrender.com/api/classes/user/my") {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+            }
+
+            println(response.bodyAsText())
+
+
+            val classes = response.body<List<Class>>()
+
+            return classes
+        }
+        finally {
+            client.close()
+        }
+
     }
+
     private fun hasCameraPermission(): Boolean {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }

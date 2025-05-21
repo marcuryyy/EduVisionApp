@@ -40,8 +40,4 @@ class SurveysAdapter(
 
     override fun getItemCount(): Int = surveys.size
 
-    fun updateData(newSurveys: List<Survey>) {
-        surveys = newSurveys
-        notifyDataSetChanged()
-    }
 }
