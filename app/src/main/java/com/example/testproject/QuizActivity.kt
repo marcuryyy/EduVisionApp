@@ -23,8 +23,8 @@ import kotlinx.serialization.Serializable
 data class Survey(
     val id: Int,
     val title: String,
-    val createdAt: String,
-    val questionCount: Int
+    val created_at: String,
+  //  val questionCount: Int
 )
 
 class QuizActivity : BaseActivity() {

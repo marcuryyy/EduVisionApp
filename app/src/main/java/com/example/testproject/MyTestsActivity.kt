@@ -1,31 +1,75 @@
 package com.example.testproject
 
-
+import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import io.ktor.client.*
+import io.ktor.client.call.body
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
-
-class MyTestsActivity : BaseActivity()  {
+class MyTestsActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TestAdapter
+    private val client = HttpClient(CIO) {
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+            })
+        }
+    }
+
+    @Serializable
+    data class Option(
+        val id: Int,
+        val text: String,
+        val isCorrect: Boolean
+    )
+
+    @Serializable
+    data class Question(
+        val id: Int,
+        val text: String,
+        val file_url: String? = null,
+        val file_type: String? = null,
+        val correct_option_id: Int,
+        val options: List<Option>
+    )
+
+    @Serializable
+    data class TestResponse(
+        val id: Int,
+        val title: String,
+        val createdAt: String,
+        val questions: List<Question>
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_tests)
 
         val add_test_button: Button = findViewById(R.id.add_test_button)
-        val folder_name = intent.getStringExtra("folder_name").toString()
-        val folder_db = DBfolders(this, null)
-        val returned_bundle: Bundle = folder_db.getFolderId(folder_name)
-        val folder_id: String = returned_bundle.getString("folder_id").toString()
-        val folders_from_database = fetchDataFromSQLite(folder_id)
+        val runAllTestsButton: Button = findViewById(R.id.runAllTestsButton)
+        val quiz_id: Int = intent.getIntExtra("quiz_id", -1)
+
+        recyclerView = findViewById(R.id.my_tests_list)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        loadTestsFromApi(quiz_id)
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -33,9 +77,7 @@ class MyTestsActivity : BaseActivity()  {
                     startActivity(Intent(this, MyClasses::class.java))
                     true
                 }
-                R.id.nav_folders -> {
-                    true
-                }
+                R.id.nav_folders -> true
                 R.id.nav_settings -> {
                     startActivity(Intent(this, SettingsActivity::class.java))
                     true
@@ -43,48 +85,51 @@ class MyTestsActivity : BaseActivity()  {
                 else -> false
             }
         }
-
-        // Чтобы текущий пункт был выделен
         bottomNav.selectedItemId = R.id.nav_folders
-        val runAllTestsButton: Button = findViewById(R.id.runAllTestsButton)
-        folder_db.close()
-        recyclerView = findViewById(R.id.my_tests_list)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TestAdapter(folders_from_database, this)
-        recyclerView.adapter = adapter
-
 
         add_test_button.setOnClickListener {
             val intent = Intent(this, AddTestsActivity::class.java)
-            intent.putExtra("folder_name", folder_name)
+            intent.putExtra("quiz_id", quiz_id)
             startActivity(intent)
         }
 
-
-        runAllTestsButton.setOnClickListener{
-            val intent = Intent(this, SelectClassActivity::class.java)
-            intent.putExtra("allTests", true)
-            intent.putStringArrayListExtra("questionsArray", folders_from_database)
-            startActivity(intent)
+        runAllTestsButton.setOnClickListener {
+            // TODO
         }
-
-
     }
 
-    private fun fetchDataFromSQLite(folder_name:String): ArrayList<String> {
+    private fun loadTestsFromApi(quizId: Int) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val questions = fetchQuestionsFromApi(quizId)
+                val questionTexts = questions.map { it.text }
+                adapter = TestAdapter(ArrayList(questionTexts), this@MyTestsActivity)
+                recyclerView.adapter = adapter
+            } catch (e: Exception) {
+                Log.e("MyTestsActivity", "Error loading tests: ${e.message}")
 
-        val db = DBtests(this, null)
-        val readableDB = db.readableDatabase
-        val cursor = readableDB.rawQuery("SELECT * FROM tests WHERE folder_id = '$folder_name'", null)
-
-        val items = ArrayList<String>()
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                val question_text = cursor.getString(cursor.getColumnIndexOrThrow("question_text"))
-                items.add(question_text)
-            } while (cursor.moveToNext())
+            }
         }
-        cursor.close()
-        return items
+    }
+
+    private suspend fun fetchQuestionsFromApi(quizId: Int): List<Question> {
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "") ?: ""
+
+        return withContext(Dispatchers.IO) {
+            val response = client.get("https://araka-project.onrender.com/api/surveys/$quizId") {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+            }
+            val testResponse = response.body<TestResponse>()
+
+            testResponse.questions
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        client.close()
     }
 }

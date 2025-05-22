@@ -23,12 +23,12 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-@Serializable
-data class Question(
-    val text: String,
-    val correct_option: Int,
-    val options: List<String>
-)
+//@Serializable
+//data class Question(
+//    val text: String,
+//    val correct_option: Int,
+//    val options: List<String>
+//)
 @Serializable
 data class AddQuizRequest(
     val user_id: Int,
@@ -117,7 +117,6 @@ class AddQuizActivity : BaseActivity()  {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }
             }
-            println(response.bodyAsText())
             val quizes = response.body<List<Folder>>()
             var titles: List<String> = quizes.map { it.name }
 
