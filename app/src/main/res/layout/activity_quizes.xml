@@ -15,7 +15,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Мои тесты"
+        android:text="Мои опросы"
         android:textColor="#1E88E5"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -54,7 +54,7 @@
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Добавить тест"
+        android:text="Добавить опрос"
         android:textColor="@android:color/white"
         app:icon="@android:drawable/ic_menu_add"
         app:iconTint="@android:color/white"
@@ -63,25 +63,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_tests_list"
-        app:layout_constraintBottom_toTopOf="@+id/runAllTestsButton" />
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation" />
 
-    <!-- Кнопка запуска всех тестов -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/runAllTestsButton"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Запустить все тесты"
-        android:textColor="@android:color/white"
-        app:icon="@android:drawable/ic_menu_view"
-        app:iconTint="@android:color/white"
-        app:cornerRadius="12dp"
-        app:backgroundTint="#4CAF50"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_test_button" />
+<!--    &lt;!&ndash; Кнопка запуска всех тестов &ndash;&gt;-->
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/runAllTestsButton"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="56dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:text="Запустить все тесты"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        app:icon="@android:drawable/ic_menu_view"-->
+<!--        app:iconTint="@android:color/white"-->
+<!--        app:cornerRadius="12dp"-->
+<!--        app:backgroundTint="#4CAF50"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/add_test_button" />-->
 
     <!-- Нижняя навигация -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
