@@ -1,12 +1,9 @@
 package com.example.testproject
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageButton
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,21 +13,19 @@ import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
 @Serializable
-data class Survey(
+data class Folder(
     val id: Int,
-    val title: String,
-    val createdAt: String,
-    val questionCount: Int
+    val user_id: Int,
+    val name: String,
+    val created_at: String,
+    val updated_at: String,
+    val surveys: List<Survey>
 )
 
 
@@ -68,7 +63,7 @@ class MyFoldersActivity : BaseActivity() {
 
         lifecycleScope.launch {
             val surveys = fetchDataFromAPI()
-            val adapter = SurveysAdapter(surveys, this@MyFoldersActivity)
+            val adapter = FoldersAdapter(surveys, this@MyFoldersActivity)
             recyclerView.adapter = adapter
         }
 
@@ -80,7 +75,7 @@ class MyFoldersActivity : BaseActivity() {
 
     }
 
-    suspend fun fetchDataFromAPI(): List<Survey> {
+    suspend fun fetchDataFromAPI(): List<Folder> {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPref.getString("token", "")
         println("---------")
@@ -93,7 +88,7 @@ class MyFoldersActivity : BaseActivity() {
         }
 
         try {
-            val response = client.get("https://araka-project.onrender.com/api/surveys/user/my") {
+            val response = client.get("https://araka-project.onrender.com/api/folders") {
 
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
@@ -101,8 +96,7 @@ class MyFoldersActivity : BaseActivity() {
             }
 
 
-            val surveys = response.body<List<Survey>>()
-            println(response)
+            val surveys = response.body<List<Folder>>()
             return surveys
         }
         finally {

@@ -23,38 +23,45 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-
 @Serializable
-data class AddFolderRequest(
-        val name: String,
-        )
+data class Question(
+    val text: String,
+    val correct_option: Int,
+    val options: List<String>
+)
+@Serializable
+data class AddQuizRequest(
+    val user_id: Int,
+    val title: String,
+    val questions: List<Question>
+)
 
 
-class AddTestFolderActivity : BaseActivity()  {
+
+
+class AddQuizActivity : BaseActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_folder)
+        setContentView(R.layout.activity_add_quiz)
 
-        val folderName: EditText = findViewById(R.id.folder_name)
-        val add_button: Button = findViewById(R.id.button_create_folder)
+        val quiz_textbox: EditText = findViewById(R.id.quiz_name)
+        val add_button: Button = findViewById(R.id.button_create_quiz)
         val back_button: TextView = findViewById(R.id.backButton)
-
+        val folder_id = intent.getIntExtra("folder_id", -1)
         add_button.setOnClickListener {
-            val folder_name: String = folderName.text.toString()
-            if(folder_name != "") {
-                lifecycleScope.launch {
-                    val survey_titles = fetchFolderNames()
-                    if (folder_name in survey_titles) {
-                        Toast.makeText(this@AddTestFolderActivity, "Такая папка уже существует!", Toast.LENGTH_SHORT).show()
-                    }
-                    else {
-                        println("Putting title to db ---")
-                        println(folder_name)
-                        putSurvey(folder_name)
-                    }
+        val quiz_name: String = quiz_textbox.text.toString()
+        if(quiz_name != "") {
+            lifecycleScope.launch {
+                val survey_titles = fetchQuizNames(folder_id)
+                if (quiz_name in survey_titles) {
+                    Toast.makeText(this@AddQuizActivity, "Такой опрос уже существует!", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    putQuiz(quiz_name, folder_id)
                 }
             }
-            else Toast.makeText(this, "Нет названия папки!", Toast.LENGTH_LONG).show()
+        }
+            else Toast.makeText(this, "Нет названия опроса!", Toast.LENGTH_LONG).show()
         }
 
         back_button.setOnClickListener{
@@ -62,7 +69,7 @@ class AddTestFolderActivity : BaseActivity()  {
         }
     }
 
-    suspend fun putSurvey(title: String){
+    suspend fun putQuiz(title: String, folder_id: Int){
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val user_id = sharedPref.getLong("user_id", -1)
         val token = sharedPref.getString("token", "")
@@ -74,30 +81,30 @@ class AddTestFolderActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.post("https://araka-project.onrender.com/api/folders") {
+            val response = client.post("https://araka-project.onrender.com/api/surveys") {
                 contentType(ContentType.Application.Json)
-                setBody(AddFolderRequest(title))
+                setBody(AddQuizRequest(user_id.toInt(), title, emptyList()))
                 headers{
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }
             }
 
-            println("Response after put survey in db")
+            println("Response after put quiz in db")
             println(response.status)
             println(response.bodyAsText())
         }
         finally {
             client.close()
-            val nextIntent = Intent(this, MyFoldersActivity::class.java)
+            val nextIntent = Intent(this, QuizActivity::class.java)
+            nextIntent.putExtra("folder_id", folder_id)
             startActivity(nextIntent)
         }
     }
 
 
-    suspend fun fetchFolderNames(): List<String> {
+    suspend fun fetchQuizNames(folder_id: Int): List<String> {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPref.getString("token", "")
-
         val client = HttpClient(CIO) {
             install(ContentNegotiation) {
                 json()
@@ -105,14 +112,14 @@ class AddTestFolderActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.get("https://araka-project.onrender.com/api/folders") {
+            val response = client.get("https://araka-project.onrender.com/api/folders/$folder_id/surveys") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }
             }
             println(response.bodyAsText())
-            val folders = response.body<List<Folder>>()
-            var titles: List<String> = folders.map { it.name }
+            val quizes = response.body<List<Folder>>()
+            var titles: List<String> = quizes.map { it.name }
 
             println("Getting titles for check ---")
             println(titles)
