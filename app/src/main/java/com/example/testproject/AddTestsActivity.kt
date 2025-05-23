@@ -82,6 +82,7 @@ class AddTestsActivity : BaseActivity() {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val user_id = sharedPref.getLong("user_id", -1)
         val quiz_id = intent.getIntExtra("quiz_id", -1)
+        val quiz_name: String = intent.getStringExtra("survey_title").toString()
         add_button.setOnClickListener {
             val testName: String = testNameText.text.toString()
             if (testName != "") {
@@ -112,14 +113,11 @@ class AddTestsActivity : BaseActivity() {
                         "",
                         options
                     )
-                    putQuestion(quiz_id, testName, user_id.toInt(), listOf(question_to_create))
+                    putQuestion(quiz_id, quiz_name, user_id.toInt(), listOf(question_to_create))
 
                 }
 
-                val db = DBtests(this, null)
 
-                val intent = Intent(this, MyTestsActivity::class.java)
-                startActivity(intent)
             } else Toast.makeText(this, "Нет названия теста!", Toast.LENGTH_LONG).show()
         }
 
@@ -159,7 +157,8 @@ class AddTestsActivity : BaseActivity() {
             println(response.bodyAsText())
         } finally {
             client.close()
-            val nextIntent = Intent(this, MyClasses::class.java)
+            val nextIntent = Intent(this, MyTestsActivity::class.java)
+            nextIntent.putExtra("quiz_id", quiz_id)
             startActivity(nextIntent)
         }
     }

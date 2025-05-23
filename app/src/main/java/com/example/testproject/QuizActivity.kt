@@ -87,7 +87,6 @@ class QuizActivity : BaseActivity() {
         }
 
         try {
-            println("https://araka-project.onrender.com/api/folders/$folder_id/surveys")
             val response = client.get("https://araka-project.onrender.com/api/folders/$folder_id/surveys") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")

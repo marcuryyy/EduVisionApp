@@ -33,8 +33,6 @@ class QuizAdapter(
         holder.infoButton.setOnClickListener {
             val intent = Intent(context, MyTestsActivity::class.java).apply {
                 putExtra("survey_title", survey.title)
-                println("adapter")
-                println(survey.id)
                 putExtra("quiz_id", survey.id)
             }
             context.startActivity(intent)

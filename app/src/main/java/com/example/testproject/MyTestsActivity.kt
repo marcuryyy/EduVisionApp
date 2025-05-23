@@ -64,6 +64,7 @@ class MyTestsActivity : BaseActivity() {
         val add_test_button: Button = findViewById(R.id.add_test_button)
         val runAllTestsButton: Button = findViewById(R.id.runAllTestsButton)
         val quiz_id: Int = intent.getIntExtra("quiz_id", -1)
+        val quiz_name: String = intent.getStringExtra("survey_title").toString()
 
         recyclerView = findViewById(R.id.my_tests_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -90,6 +91,7 @@ class MyTestsActivity : BaseActivity() {
         add_test_button.setOnClickListener {
             val intent = Intent(this, AddTestsActivity::class.java)
             intent.putExtra("quiz_id", quiz_id)
+            intent.putExtra("survey_title", quiz_name)
             startActivity(intent)
         }
 
