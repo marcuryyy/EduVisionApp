@@ -15,17 +15,32 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class Student(
+data class GetStudent(
     val aruco_num: Int,
     val name: String
+)
+
+@Serializable
+data class Student(
+    val name: String
+)
+
+@Serializable
+data class AddStudentRequest(
+    val class_id: Int,
+    val students: List<Student>
 )
 
 
@@ -35,7 +50,6 @@ class ClassInfoPage : BaseActivity() {
         setContentView(R.layout.activity_class_info)
 
         val student_name_label: EditText = findViewById(R.id.addStudentCell)
-        val student_id_label: EditText = findViewById(R.id.addStudentIDcell)
         val button: Button = findViewById(R.id.addStudentButton)
         val class_title: TextView = findViewById(R.id.class_title)
 
@@ -55,11 +69,48 @@ class ClassInfoPage : BaseActivity() {
 
 
         button.setOnClickListener{
-            // add student func WIP
+            val student = listOf<Student>(Student(student_name_label.text.toString()))
+            lifecycleScope.launch {
+                student_name_label.text.clear()
+                putStudent(class_id, student)
+                val students = fetchStudentsFromClass(class_id)
+                val adapter = StudentAdapter(students, this@ClassInfoPage)
+                list_view.adapter = adapter
+
+            }
+
+
         }
     }
 
-    suspend fun fetchStudentsFromClass(classId: Int): MutableList<Student> {
+
+    suspend fun putStudent(class_id: Int, students: List<Student>) {
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "")
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        try {
+            val response = client.post("https://araka-project.onrender.com/api/students") {
+                    contentType(ContentType.Application.Json)
+                    setBody(AddStudentRequest(class_id, students))
+                    headers {
+                        append(HttpHeaders.Authorization, "Bearer $token")
+                    }
+                }
+
+            println(response.bodyAsText())
+        }
+        finally {
+            client.close()
+        }
+    }
+
+
+    suspend fun fetchStudentsFromClass(classId: Int): MutableList<GetStudent> {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPref.getString("token", "")
 
@@ -81,7 +132,7 @@ class ClassInfoPage : BaseActivity() {
             println(response.bodyAsText())
 
 
-            val students = response.body<MutableList<Student>>()
+            val students = response.body<MutableList<GetStudent>>()
 
             return students
         }

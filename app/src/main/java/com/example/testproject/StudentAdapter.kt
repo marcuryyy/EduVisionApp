@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class StudentAdapter(var students: MutableList<Student>, var context: Context) : RecyclerView.Adapter<StudentAdapter.MyViewFolder>() {
+class StudentAdapter(var students: MutableList<GetStudent>, var context: Context) : RecyclerView.Adapter<StudentAdapter.MyViewFolder>() {
 
     class MyViewFolder(view: View): RecyclerView.ViewHolder(view) {
         var student_name: TextView = view.findViewById(R.id.student_name)
@@ -37,5 +37,4 @@ class StudentAdapter(var students: MutableList<Student>, var context: Context) :
             notificationPopup.show()
         }
     }
-
 }
