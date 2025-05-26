@@ -96,7 +96,10 @@ class MyTestsActivity : BaseActivity() {
         }
 
         runAllTestsButton.setOnClickListener {
-            // TODO
+            val intent = Intent(this, SelectClassActivity::class.java)
+            intent.putExtra("quiz_id", quiz_id)
+            intent.putExtra("survey_title", quiz_name)
+            startActivity(intent)
         }
     }
 
@@ -119,7 +122,7 @@ class MyTestsActivity : BaseActivity() {
         val token = sharedPref.getString("token", "") ?: ""
 
         return withContext(Dispatchers.IO) {
-            val response = client.get("https://araka-project.onrender.com/api/surveys/$quizId") {
+            val response = client.get("https://eduvision.na4u.ru/api/api/surveys/$quizId") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

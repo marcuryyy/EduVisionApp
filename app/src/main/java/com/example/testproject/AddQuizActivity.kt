@@ -29,17 +29,29 @@ import kotlinx.serialization.Serializable
 //    val correct_option: Int,
 //    val options: List<String>
 //)
-@Serializable
-data class AddQuizRequest(
-    val user_id: Int,
-    val title: String,
-    val questions: List<Question>
-)
+
 
 
 
 
 class AddQuizActivity : BaseActivity()  {
+    @Serializable
+    data class Question(
+        val id: Int,
+        val text: String,
+        val correct_option: Int,
+        val file_url: String?,
+        val file_folder: String?,
+        val file_name: String?,
+        val file_type: String?,
+        val options: List<String>
+    )
+    @Serializable
+    data class AddQuizRequest(
+        val user_id: Int,
+        val title: String,
+        val questions: List<Question>
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_quiz)
@@ -81,7 +93,7 @@ class AddQuizActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.post("https://araka-project.onrender.com/api/surveys") {
+            val response = client.post("https://eduvision.na4u.ru/api/api/surveys") {
                 contentType(ContentType.Application.Json)
                 setBody(AddQuizRequest(user_id.toInt(), title, emptyList()))
                 headers{
@@ -112,7 +124,7 @@ class AddQuizActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.get("https://araka-project.onrender.com/api/folders/$folder_id/surveys") {
+            val response = client.get("https://eduvision.na4u.ru/api/api/folders/$folder_id/surveys") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

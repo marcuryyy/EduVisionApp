@@ -87,7 +87,7 @@ class QuizActivity : BaseActivity() {
         }
 
         try {
-            val response = client.get("https://araka-project.onrender.com/api/folders/$folder_id/surveys") {
+            val response = client.get("https://eduvision.na4u.ru/api/api/folders/$folder_id/surveys") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

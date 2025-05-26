@@ -88,7 +88,7 @@ class MyFoldersActivity : BaseActivity() {
         }
 
         try {
-            val response = client.get("https://araka-project.onrender.com/api/folders") {
+            val response = client.get("https://eduvision.na4u.ru/api/api/folders") {
 
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")

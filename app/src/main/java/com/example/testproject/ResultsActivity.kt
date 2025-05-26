@@ -22,14 +22,14 @@ class ResultsActivity: BaseActivity()  {
 
         val keys = intent.getStringArrayListExtra("keys") ?: return
         val values = intent.getStringArrayListExtra("values") ?: return
-        val aruco_ids = intent.getStringArrayListExtra("aruco_id") ?: return
+        val aruco_ids = intent.getIntegerArrayListExtra("aruco_id") ?: return
         val student_names = intent.getStringArrayListExtra("student_name") ?: return
-
+        val arucoIds = aruco_ids.map { it.toString() } as ArrayList<String>
         val correct_students: MutableList<String> = mutableListOf()
         val incorrect_students: MutableList<String> = mutableListOf()
 
         val answer_results = keys.zip(values).toMap()
-        val student_list_dict: Map<String, String> = aruco_ids.zip(student_names).toMap()
+        val student_list_dict: Map<String, String> = arucoIds.zip(student_names).toMap()
 
         val adapterCorrectAnswers = ArrayAdapter(this, android.R.layout.simple_list_item_1, correct_students)
         students_ans_correct.adapter = adapterCorrectAnswers

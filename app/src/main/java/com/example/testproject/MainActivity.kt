@@ -107,7 +107,7 @@ class MainActivity : BaseActivity()  {
                     db.addUser(user)
                     lifecycleScope.launch { // Создает блокирующую корутину
                         registerUser( // Вызов suspend-функции
-                            apiUrl = "https://araka-project.onrender.com",
+                            apiUrl = "https://eduvision.na4u.ru/api",
                             login = login,
                             email = email,
                             password = password,
@@ -124,7 +124,7 @@ class MainActivity : BaseActivity()  {
         }
 
     }
-    // https://araka-project.onrender.com
+    // https://eduvision.na4u.ru/api
 
 
 
@@ -163,7 +163,7 @@ class MainActivity : BaseActivity()  {
                 lifecycleScope.launch {
                     sendVerificationCode(
                         context = this@MainActivity,
-                        apiUrl = "https://araka-project.onrender.com",
+                        apiUrl = "https://eduvision.na4u.ru/api",
                         email = email,
                     )
                 }

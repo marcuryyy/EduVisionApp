@@ -75,7 +75,7 @@ class AddClassActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.post("https://araka-project.onrender.com/api/classes") {
+            val response = client.post("https://eduvision.na4u.ru/api/api/classes") {
                 contentType(ContentType.Application.Json)
                 setBody(AddClassRequest(title))
                 headers{
@@ -105,7 +105,7 @@ class AddClassActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.get("https://araka-project.onrender.com/api/classes/user/my") {
+            val response = client.get("https://eduvision.na4u.ru/api/api/classes/user/my") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

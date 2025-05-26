@@ -26,44 +26,45 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class Question(
-    val id: Int,
-    val text: String,
-    val correct_option: Int,
-    val file_url: String?,
-    val file_folder: String?,
-    val file_name: String?,
-    val file_type: String?,
-    val options: List<String>
-)
 
-@Serializable
-data class QuestionToAdd(
-    val text: String,
-    val correct_option: Int,
-    val file_url: String?,
-    val file_folder: String?,
-    val file_name: String?,
-    val file_type: String?,
-    val options: List<String>
-)
-
-@Serializable
-data class TestResponse(
-    val id: Int,
-    val title: String,
-    val createdAt: String,
-    val questions: List<Question>
-)
-
-@Serializable
-data class AddQuestionRequest(
-    val user_id: Int,
-    val title: String,
-    val questions: List<QuestionToAdd>
-)
 class AddTestsActivity : BaseActivity() {
+    @Serializable
+    data class Question(
+        val id: Int,
+        val text: String,
+        val correct_option: Int,
+        val file_url: String?,
+        val file_folder: String?,
+        val file_name: String?,
+        val file_type: String?,
+        val options: List<String>
+    )
+
+    @Serializable
+    data class QuestionToAdd(
+        val text: String,
+        val correct_option: Int,
+        val file_url: String?,
+        val file_folder: String?,
+        val file_name: String?,
+        val file_type: String?,
+        val options: List<String>
+    )
+
+    @Serializable
+    data class TestResponse(
+        val id: Int,
+        val title: String,
+        val createdAt: String,
+        val questions: List<Question>
+    )
+
+    @Serializable
+    data class AddQuestionRequest(
+        val user_id: Int,
+        val title: String,
+        val questions: List<QuestionToAdd>
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_tests)
@@ -102,9 +103,7 @@ class AddTestsActivity : BaseActivity() {
                 val options: List<String> =
                     listOf(option_one_text, option_two_text, option_three_text, option_four_text)
                 lifecycleScope.launch {
-                    //  val question_amount: Int = fetchTestNames(quiz_id)
                     val question_to_create = QuestionToAdd(
-                        //   question_amount + 1,
                         testName,
                         right_answer,
                         "",
@@ -144,7 +143,7 @@ class AddTestsActivity : BaseActivity() {
 
         try {
             println(questions)
-            val response = client.put("https://araka-project.onrender.com/api/surveys/$quiz_id") {
+            val response = client.put("https://eduvision.na4u.ru/api/api/surveys/$quiz_id") {
                 contentType(ContentType.Application.Json)
                 setBody(AddQuestionRequest(user_id, title, questions))
                 headers {

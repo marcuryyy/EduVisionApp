@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="Проверить"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <Button
         android:id="@+id/next_button"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:text="Следующий"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_gravity="end|bottom"/>
 
     <Button
@@ -55,6 +55,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="Предыдущий"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_gravity="bottom"/>
 </FrameLayout>

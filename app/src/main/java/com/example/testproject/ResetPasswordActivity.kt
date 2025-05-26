@@ -130,7 +130,7 @@ class ResetPasswordActivity : AppCompatActivity() {
             println("Пароль: ${newPassword}")
             println("Email: ${email}")
             println("Code: ${code}")
-            val response: HttpResponse = client.post("https://araka-project.onrender.com/auth/login/reset-password") {
+            val response: HttpResponse = client.post("https://eduvision.na4u.ru/api/api/auth/login/reset-password") {
                 contentType(ContentType.Application.Json)
                 setBody(ResetPasswordRequest(email, code, newPassword))
             }

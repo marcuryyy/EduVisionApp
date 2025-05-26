@@ -2,6 +2,7 @@ package com.example.testproject
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
@@ -10,7 +11,7 @@ class DBtests(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
     SQLiteOpenHelper(context, "TestStorage", factory, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val query = "CREATE TABLE tests (id INTEGER PRIMARY KEY AUTOINCREMENT, folder_id TEXT, question_text TEXT, right_answer TEXT)"
+        val query = "CREATE TABLE tests (id INTEGER PRIMARY KEY AUTOINCREMENT, question_text TEXT, right_answer TEXT, question_id INT)"
         db!!.execSQL(query)
     }
 
@@ -21,13 +22,23 @@ class DBtests(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
 
     fun addTest(test_example: TestCreator){
         val values = ContentValues()
-        values.put("folder_id", test_example.folder_id)
         values.put("question_text", test_example.question_text)
         values.put("right_answer", test_example.right_answer)
 
         val db = this.writableDatabase
         db.insert("tests", null, values)
 
+        db.close()
+    }
+    fun addQuestion(questionText: String, rightAnswer: String, questionId: Int) {
+        val values = ContentValues().apply {
+            put("question_text", questionText)
+            put("right_answer", rightAnswer)
+            put("question_id", questionId)
+        }
+
+        val db = writableDatabase
+        db.insert("tests", null, values)
         db.close()
     }
     fun getTestId(test_name: String): Bundle {
@@ -48,7 +59,11 @@ class DBtests(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
         }
         return test_info
     }
-
+    fun clearQuestions() {
+        val db = writableDatabase
+        db.delete("tests", null, null)
+        db.close()
+    }
     fun getTestText(test_id: String): String {
         val db = this.readableDatabase
         var test_text = ""
@@ -57,5 +72,45 @@ class DBtests(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
             test_text = result.getString(result.getColumnIndexOrThrow("question_text"))
         }
         return test_text
+    }
+    fun getAllQuestions(): Cursor {
+        val db = readableDatabase
+        return db.query(
+            "tests",
+            arrayOf("id", "question_text", "right_answer", "question_id"),
+            null, null, null, null, null
+        )
+    }
+
+    fun getTestQuestions(testId: String): Cursor {
+        val db = readableDatabase
+        return db.query(
+            "tests",
+            arrayOf("id", "question_text", "right_answer", "question_id"),
+            "id = ?",
+            arrayOf(testId),
+            null, null, null
+        )
+    }
+    fun getQuestionByText(questionText: String): Cursor {
+        val db = readableDatabase
+        return db.query(
+            "tests",
+            arrayOf("id", "question_text", "right_answer", "question_id"),
+            "question_text = ?",
+            arrayOf(questionText),
+            null, null, null
+        )
+    }
+
+    fun getQuestionById(questionId: Int): Cursor {
+        val db = readableDatabase
+        return db.query(
+            "tests",
+            arrayOf("id", "question_text", "right_answer", "question_id"),
+            "question_id = ?",
+            arrayOf(questionId.toString()),
+            null, null, null
+        )
     }
 }
