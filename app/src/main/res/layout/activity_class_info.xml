@@ -1,90 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="16dp"
     tools:context=".ClassInfoPage">
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/addStudentButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <EditText
-            android:id="@+id/addStudentCell"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:background="@drawable/rounded_corners"
-            android:ems="10"
-            android:hint="Имя ученика"
-            android:inputType="text"
-            android:padding="5dp"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/addStudentIDcell"
-            android:layout_width="139dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="42dp"
-            android:background="@drawable/rounded_corners"
-            android:ems="10"
-            android:hint="ID"
-            android:inputType="number"
-            android:padding="5dp"
-            android:textSize="20sp"
-            tools:layout_editor_absoluteX="256dp"
-            tools:layout_editor_absoluteY="722dp" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/addStudentButton"
-        android:layout_width="240dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/lightblue"
-        android:text="Добавить"
-        android:textSize="20sp"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/listview"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/class_title"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintHeight_percent="0.65"/>
-
+    <!-- Заголовок -->
     <TextView
         android:id="@+id/class_title"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/lightblue"
-        android:layout_marginBottom="750dp"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="#1E88E5"
         android:fontFamily="@font/inter_semibold"
-        android:textColor="@color/white"
+        android:gravity="center"
+        android:paddingVertical="12dp"
         android:text="Студенты"
+        android:textColor="@android:color/white"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Список студентов -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/inputContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/class_title" />
+
+    <!-- Контейнер для ввода -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inputContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/addStudentButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Поле для имени -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:hint="Имя ученика"
+            app:boxStrokeColor="#42A5F5"
+            app:cornerRadius="12dp"
+            app:boxBackgroundColor="#E3F2FD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/idInputLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.6">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addStudentCell"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="#0D47A1"
+                android:textSize="16sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Поле для ID -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="ID"
+            app:boxStrokeColor="#42A5F5"
+            app:cornerRadius="12dp"
+            app:boxBackgroundColor="#E3F2FD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/nameInputLayout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addStudentIDcell"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="#0D47A1"
+                android:textSize="16sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Кнопка добавления -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addStudentButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:text="Добавить"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:backgroundTint="#1E88E5"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

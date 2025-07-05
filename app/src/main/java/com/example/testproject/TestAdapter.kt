@@ -18,7 +18,6 @@ class TestAdapter(var TestsInAdapter: MutableList<String>, var context: Context)
 
     class MyViewFolder(view: View): RecyclerView.ViewHolder(view) {
         var test_name: TextView = view.findViewById(R.id.test_name)
-        val btn: ImageButton = view.findViewById(R.id.test_info)
         val del_btn: ImageButton = view.findViewById(R.id.del_test)
     }
 
@@ -36,14 +35,6 @@ class TestAdapter(var TestsInAdapter: MutableList<String>, var context: Context)
         val db = DBtests(context, null)
         val returned_bundle: Bundle = db.getTestId(holder.test_name.text.toString())
         val test_id: String = returned_bundle.getString("test_id").toString()
-        holder.btn.setOnClickListener {
-            val intent = Intent(context, SelectClassActivity::class.java)
-            intent.putExtra("test_id", test_id)
-            if (context is Activity){
-                val activity = context as Activity
-                activity.startActivity(intent)
-            }
-        }
         holder.del_btn.setOnClickListener{
             val notificationPopup = NotificationPopup(context) {
                 val writeable_db = db.writableDatabase

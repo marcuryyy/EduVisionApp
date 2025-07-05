@@ -1,51 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:windowTranslucentStatus="true"
-    android:windowTranslucentNavigation="true"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:layout_gravity="">
+    android:background="@android:color/white"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
+    <!-- Буква класса -->
     <TextView
         android:id="@+id/class_letter"
-        android:layout_width="328dp"
-        android:layout_height="49dp"
-        android:ems="10"
-        android:gravity="center_vertical"
-        android:paddingStart="18dp"
-        android:text="Name"
-        android:textSize="22sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:fontFamily="@font/inter_medium"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="Название класса"
+        android:textColor="#0D47A1"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.818" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Кнопка действия -->
     <ImageButton
         android:id="@+id/button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        android:src="@drawable/icons8__100"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_info_details"
+        app:tint="#1E88E5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.954"
-        app:layout_constraintStart_toStartOf="@+id/class_letter"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.444" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Разделитель -->
     <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
+        android:id="@+id/divider"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
+        android:background="#E0E0E0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -1,234 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:windowTranslucentStatus="true"
-    android:windowTranslucentNavigation="true"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="16dp"
     tools:context=".AddTestsActivity">
 
+    <!-- Кнопка назад -->
 
-    <Button
-        android:id="@+id/button_create_test"
-        android:layout_width="match_parent"
+    <!-- Заголовок страницы -->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/backButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="810dp"
-        android:layout_marginBottom="20dp"
-        android:text="Создать вопрос"
-        android:backgroundTint="@color/lightblue"
-        android:textSize="20sp"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="648dp"
+        android:text="Назад"
+        android:textColor="#1E88E5"
+        android:textSize="16sp"
+        app:icon="@android:drawable/ic_menu_revert"
+        app:iconTint="#1E88E5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_test_label"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/add_test_label"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="700dp"
-        android:fontFamily="sans-serif-black"
-        android:gravity="center"
+        android:layout_marginTop="16dp"
         android:text="Создание вопроса"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#1E88E5"
+        android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/add_variants_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="210dp"
-        android:layout_marginRight="12dp"
-        android:fontFamily="sans-serif-black"
-        android:text="Варианты ответов:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="23sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- Разделитель -->
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#E0E0E0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02" />
-
-    <EditText
-        android:id="@+id/test_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_corners"
-        android:padding="10dp"
-        android:ems="10"
-        android:hint="Вопрос"
-        android:inputType="text"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_test_label" />
 
-
-    <EditText
-        android:id="@+id/variant1"
-        android:layout_width="match_parent"
+    <!-- Поле для вопроса -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/questionInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="10dp"
-        android:background="@drawable/rounded_corners"
-        android:padding="10dp"
-        android:ems="10"
-        android:hint="Вариант 1"
-        android:inputType="text"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toTopOf="@+id/variant2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        android:layout_marginTop="16dp"
+        android:hint="Вопрос"
+        app:boxStrokeColor="#42A5F5"
+        app:cornerRadius="12dp"
+        app:boxBackgroundColor="#E3F2FD"
+        app:layout_constraintTop_toBottomOf="@+id/divider1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_variants_label"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/test_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="#0D47A1"
+            android:textSize="18sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Заголовок вариантов -->
+    <TextView
+        android:id="@+id/add_variants_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Варианты ответов:"
+        android:textColor="#1E88E5"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/questionInputLayout" />
+
+    <!-- Разделитель -->
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#E0E0E0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_variants_label" />
+
+    <!-- Вариант 1 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/variant1Layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Вариант 1"
+        app:boxStrokeColor="#42A5F5"
+        app:cornerRadius="12dp"
+        app:boxBackgroundColor="#E3F2FD"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/checkBoxVar1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/variant1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="#0D47A1"
+            android:textSize="16sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
         android:id="@+id/checkBoxVar1"
-        android:layout_width="51dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginBottom="22dp"
-        android:checked="false"
-        app:layout_constraintBottom_toTopOf="@+id/checkBoxVar2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.997"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_variants_label"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/variant2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginTop="350dp"
-        android:layout_marginBottom="480dp"
-        android:ems="10"
-        android:background="@drawable/rounded_corners"
-        android:padding="10dp"
-        android:hint="Вариант 2"
-        android:inputType="text"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toTopOf="@+id/variant3"
+        android:layout_marginEnd="8dp"
+        android:checked="false"
+        app:layout_constraintBottom_toBottomOf="@+id/variant1Layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintTop_toTopOf="@+id/variant1Layout" />
+
+    <!-- Вариант 2 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/variant2Layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Вариант 2"
+        app:boxStrokeColor="#42A5F5"
+        app:cornerRadius="12dp"
+        app:boxBackgroundColor="#E3F2FD"
+        app:layout_constraintTop_toBottomOf="@+id/variant1Layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_variants_label"
-        app:layout_constraintVertical_bias="0.351" />
+        app:layout_constraintEnd_toStartOf="@+id/checkBoxVar2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/variant2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="#0D47A1"
+            android:textSize="16sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
         android:id="@+id/checkBoxVar2"
-        android:layout_width="51dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="101dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="8dp"
         android:checked="false"
-        app:layout_constraintBottom_toTopOf="@+id/checkBoxVar3"
+        app:layout_constraintBottom_toBottomOf="@+id/variant2Layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.997"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_variants_label"
-        app:layout_constraintVertical_bias="0.421" />
+        app:layout_constraintTop_toTopOf="@+id/variant2Layout" />
 
-    <EditText
-        android:id="@+id/variant3"
-        android:layout_width="match_parent"
+    <!-- Вариант 3 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/variant3Layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="420dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="410dp"
-        android:background="@drawable/rounded_corners"
-        android:padding="10dp"
-        android:ems="10"
+        android:layout_marginTop="16dp"
         android:hint="Вариант 3"
-        android:inputType="text"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toTopOf="@+id/variant4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:boxStrokeColor="#42A5F5"
+        app:cornerRadius="12dp"
+        app:boxBackgroundColor="#E3F2FD"
+        app:layout_constraintTop_toBottomOf="@+id/variant2Layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_variants_label"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintEnd_toStartOf="@+id/checkBoxVar3">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/variant3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="#0D47A1"
+            android:textSize="16sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
         android:id="@+id/checkBoxVar3"
-        android:layout_width="51dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toTopOf="@+id/checkBoxVar4"
+        android:layout_marginEnd="8dp"
+        android:checked="false"
+        app:layout_constraintBottom_toBottomOf="@+id/variant3Layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.997"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_variants_label" />
+        app:layout_constraintTop_toTopOf="@+id/variant3Layout" />
 
-    <EditText
-        android:id="@+id/variant4"
-        android:layout_width="match_parent"
+    <!-- Вариант 4 -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/variant4Layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="240dp"
-        android:layout_marginEnd="50dp"
-        android:ems="10"
+        android:layout_marginTop="16dp"
         android:hint="Вариант 4"
-        android:background="@drawable/rounded_corners"
-        android:padding="10dp"
-        android:inputType="text"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:boxStrokeColor="#42A5F5"
+        app:cornerRadius="12dp"
+        app:boxBackgroundColor="#E3F2FD"
+        app:layout_constraintTop_toBottomOf="@+id/variant3Layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_variants_label" />
+        app:layout_constraintEnd_toStartOf="@+id/checkBoxVar4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/variant4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="#0D47A1"
+            android:textSize="16sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
         android:id="@+id/checkBoxVar4"
-        android:layout_width="51dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
-        android:checked="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.997"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_variants_label" />
-
-    <TextView
-        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="3dp"
-        android:text="Назад"
-        android:textColor="@color/lightblue"
-        app:layout_constraintEnd_toStartOf="@+id/add_test_label"
-        app:layout_constraintHorizontal_bias="0.125"
+        android:layout_marginEnd="8dp"
+        android:checked="false"
+        app:layout_constraintBottom_toBottomOf="@+id/variant4Layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/variant4Layout" />
+
+    <!-- Кнопка создания вопроса -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_create_test"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="Создать вопрос"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:backgroundTint="#1E88E5"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/variant4Layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

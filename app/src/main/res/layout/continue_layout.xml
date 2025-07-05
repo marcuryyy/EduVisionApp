@@ -3,45 +3,63 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="280dp"
     android:layout_height="wrap_content"
     android:background="@drawable/popup_background"
-    android:gravity="center">
+    android:padding="16dp">
 
+    <!-- Текст сообщения -->
     <TextView
         android:id="@+id/popup_message"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="Продолжить?"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textColor="#0D47A1"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <!-- Кнопка Да -->
+
+    <!-- Кнопка Нет -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/yes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="22dp"
-        android:backgroundTint="@color/lightblue"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:text="Да"
-        app:cornerRadius="10dp"
+        android:textColor="@android:color/white"
+        app:backgroundTint="#1E88E5"
+        app:cornerRadius="12dp"
         app:layout_constraintEnd_toStartOf="@+id/no"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popup_message" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/no"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/lightblue"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:text="Нет"
-        app:cornerRadius="10dp"
+        android:textColor="#000000"
+        app:strokeColor="#1E88E5"
+        app:backgroundTint="#C5DADE"
+        app:strokeWidth="1dp"
+        app:cornerRadius="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popup_message" />
 
+    <!-- Разделитель (опционально) -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#E0E0E0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_message" />
 </androidx.constraintlayout.widget.ConstraintLayout>

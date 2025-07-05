@@ -1,44 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:windowTranslucentStatus="true"
-    android:windowTranslucentNavigation="true"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true"
+    android:padding="16dp">
 
+    <!-- Заголовок -->
     <TextView
         android:id="@+id/select_class_label"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Выберите класс"
-        android:textSize='25sp'
-        app:layout_constraintBottom_toTopOf="@+id/class_list_for_tests"
+        android:textColor="#1E88E5"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.018" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
+    <!-- Разделитель -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:background="#E0E0E0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_class_label" />
+
+    <!-- Список классов -->
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/class_list_for_tests"
-        android:layout_width="401dp"
-        android:layout_height="765dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:background="@drawable/listview"
-        android:padding="1dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.452" />
+        app:layout_constraintTop_toBottomOf="@+id/select_class_label" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
