@@ -29,7 +29,7 @@ class ClassesAdapter(var classes: List<Class>, var context: Context) : RecyclerV
         holder.class_title.text = cls.title
 
         holder.info_button.setOnClickListener{
-            val intent = Intent(context, ClassInfoPage::class.java)
+            val intent = Intent(context, ClassInfoActivity::class.java)
             intent.putExtra("class_title", cls.title)
             intent.putExtra("class_id", cls.id)
             if (context is Activity){

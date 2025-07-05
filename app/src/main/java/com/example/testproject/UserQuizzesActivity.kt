@@ -18,31 +18,31 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.Serializable
 
+
 @Serializable
-data class Folder(
+data class Survey(
     val id: Int,
-    val user_id: Int,
-    val name: String,
+    val title: String,
     val created_at: String,
-    val updated_at: String,
-    val surveys: List<Survey>
+  //  val questionCount: Int
 )
 
-
-class MyFoldersActivity : BaseActivity() {
+class UserQuizzesActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_folders)
+        setContentView(R.layout.activity_user_quizzes)
 
-        val add_folder_button: Button = findViewById(R.id.add_folder_button)
+        val add_quiz_button: Button = findViewById(R.id.add_test_button)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val folder_id: Int = intent.getIntExtra("folder_id", -1)
+        println(folder_id)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_classes -> {
-                    startActivity(Intent(this, MyClasses::class.java))
+                    startActivity(Intent(this, UserClassesActivity::class.java))
                     true
                 }
                 R.id.nav_folders -> {
@@ -58,28 +58,27 @@ class MyFoldersActivity : BaseActivity() {
 
         bottomNav.selectedItemId = R.id.nav_folders
 
-        recyclerView = findViewById(R.id.my_folders_list)
+        recyclerView = findViewById(R.id.my_tests_list)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
-            val surveys = fetchDataFromAPI()
-            val adapter = FoldersAdapter(surveys, this@MyFoldersActivity)
+            val quizes = fetchQuizes(folder_id)
+            val adapter = QuizAdapter(quizes, this@UserQuizzesActivity)
             recyclerView.adapter = adapter
         }
 
 
-        add_folder_button.setOnClickListener {
-            val nextIntent = Intent(this, AddTestFolderActivity::class.java)
+        add_quiz_button.setOnClickListener {
+            val nextIntent = Intent(this, AddQuizActivity::class.java)
+            nextIntent.putExtra("folder_id", folder_id)
             startActivity(nextIntent)
         }
 
     }
 
-    suspend fun fetchDataFromAPI(): List<Folder> {
+    suspend fun fetchQuizes(folder_id: Int?): List<Survey> {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPref.getString("token", "")
-        println("---------")
-        println(token)
 
         val client = HttpClient(CIO) {
             install(ContentNegotiation) {
@@ -88,16 +87,15 @@ class MyFoldersActivity : BaseActivity() {
         }
 
         try {
-            val response = client.get("https://eduvision.na4u.ru/api/api/folders") {
-
+            val response = client.get("https://eduvision.na4u.ru/api/api/folders/$folder_id/surveys") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }
             }
 
-
-            val surveys = response.body<List<Folder>>()
-            return surveys
+            val quizes = response.body<List<Survey>>()
+            println(quizes)
+            return quizes
         }
         finally {
             client.close()

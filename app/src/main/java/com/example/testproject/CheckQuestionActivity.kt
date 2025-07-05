@@ -9,7 +9,6 @@ import android.graphics.ImageFormat
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,16 +20,13 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.processNextEventInCurrentThread
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.core.Point
-import org.opencv.core.Scalar
 import org.opencv.imgproc.Imgproc
 import org.opencv.objdetect.ArucoDetector
 import org.opencv.objdetect.Objdetect
 import org.opencv.objdetect.Objdetect.DICT_5X5_100
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.graphics.Color
 import android.widget.Toast
@@ -51,7 +47,6 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlin.properties.Delegates
 
 @Serializable
 data class QuestionResultsRequest(
@@ -488,8 +483,8 @@ open class CheckQuestionActivity : AppCompatActivity() {
             val markerIds = Mat()
             val positionsToDrawOn: MutableList<Point> = mutableListOf()
             Aruco.detectMarkers(grayMat, markerCorners, markerIds)
-            val scaleX = overlayView.width / rgbaMat.size().width // scale по Х работает нормально
-            val scaleY = overlayView.height / rgbaMat.size().height // делаю скейл по У и при умножении далее почему-то все плохо
+            val scaleX = overlayView.width / rgbaMat.size().width
+            val scaleY = overlayView.height / rgbaMat.size().height
             if (markerIds.rows() > 0) {
                 for (i in 0 until markerCorners.size) {
                     val corners = markerCorners[i]

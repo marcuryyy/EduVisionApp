@@ -2,10 +2,8 @@ package com.example.testproject
 
 import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -19,11 +17,11 @@ class SettingsActivity : AppCompatActivity() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_classes -> {
-                    startActivity(Intent(this, MyClasses::class.java))
+                    startActivity(Intent(this, UserClassesActivity::class.java))
                     true
                 }
                 R.id.nav_folders -> {
-                    startActivity(Intent(this, MyFoldersActivity::class.java))
+                    startActivity(Intent(this, UserLibrary::class.java))
                     true
                 }
                 R.id.nav_settings -> {
@@ -42,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
             editor.remove("authorized")
             editor.putBoolean("authorized", false)
             editor.apply()
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
 
         }

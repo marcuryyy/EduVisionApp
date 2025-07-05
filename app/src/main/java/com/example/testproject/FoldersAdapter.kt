@@ -30,7 +30,7 @@ class FoldersAdapter(
         holder.titleTextView.text = folder.name
 
         holder.infoButton.setOnClickListener {
-            val intent = Intent(context, QuizActivity::class.java).apply {
+            val intent = Intent(context, UserQuizzesActivity::class.java).apply {
                 println(folder.id)
                 putExtra("folder_id", folder.id)
                     //  putExtra("survey_title", folder.name)

@@ -30,10 +30,10 @@ data class AddFolderRequest(
         )
 
 
-class AddTestFolderActivity : BaseActivity()  {
+class AddQuizFolderActivity : BaseActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_folder)
+        setContentView(R.layout.activity_add_quiz_folder)
 
         val folderName: EditText = findViewById(R.id.folder_name)
         val add_button: Button = findViewById(R.id.button_create_folder)
@@ -45,7 +45,7 @@ class AddTestFolderActivity : BaseActivity()  {
                 lifecycleScope.launch {
                     val survey_titles = fetchFolderNames()
                     if (folder_name in survey_titles) {
-                        Toast.makeText(this@AddTestFolderActivity, "Такая папка уже существует!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@AddQuizFolderActivity, "Такая папка уже существует!", Toast.LENGTH_SHORT).show()
                     }
                     else {
                         println("Putting title to db ---")
@@ -88,7 +88,7 @@ class AddTestFolderActivity : BaseActivity()  {
         }
         finally {
             client.close()
-            val nextIntent = Intent(this, MyFoldersActivity::class.java)
+            val nextIntent = Intent(this, UserLibrary::class.java)
             startActivity(nextIntent)
         }
     }

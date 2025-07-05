@@ -1,10 +1,7 @@
 import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
-import android.widget.TextView
-import com.example.testproject.DBstudent
 import com.example.testproject.R
 
 class NotificationPopup(context: Context, var onYesClick: (() -> Unit)? = null) : Dialog(context) {

@@ -14,13 +14,11 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -28,7 +26,7 @@ data class SessionInfo(
     val survey_id: Int,
     val class_id: Int
 )
-class SelectClassActivity : BaseActivity() {
+class SelectClassForQuizActivity : BaseActivity() {
     private lateinit var classes: List<Class>
     private lateinit var dbTests: DBtests // Объявляем базу данных
     @Serializable
@@ -82,7 +80,7 @@ class SelectClassActivity : BaseActivity() {
         lifecycleScope.launch {
             classes = fetchClasses()
             val names = classes.map { it.title }
-            val adapter = ArrayAdapter(this@SelectClassActivity, android.R.layout.simple_list_item_1, names)
+            val adapter = ArrayAdapter(this@SelectClassForQuizActivity, android.R.layout.simple_list_item_1, names)
             list_view.adapter = adapter
         }
 
@@ -108,7 +106,7 @@ class SelectClassActivity : BaseActivity() {
                 saveQuestionsToDatabase(questions)
 
                 // 3. Создаём Intent с новыми параметрами
-                val intent = Intent(this@SelectClassActivity, CheckQuestionActivity::class.java).apply {
+                val intent = Intent(this@SelectClassForQuizActivity, CheckQuestionActivity::class.java).apply {
                     putExtras(Bundle().apply {
                         putBoolean("allTests", intent.getBooleanExtra("allTests", true))
                         putString("test_id", test_id)

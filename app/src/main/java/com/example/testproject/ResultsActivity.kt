@@ -2,7 +2,6 @@ package com.example.testproject
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
@@ -38,7 +37,7 @@ class ResultsActivity: BaseActivity()  {
         students_ans_incorrect.adapter = adapterIncorrectAnswers
 
         button.setOnClickListener{
-            val intent = Intent(this, MyClasses::class.java)
+            val intent = Intent(this, UserClassesActivity::class.java)
             startActivity(intent)
         }
 

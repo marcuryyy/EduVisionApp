@@ -1,11 +1,9 @@
 package com.example.testproject
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -19,11 +17,9 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.*
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.textfield.TextInputLayout
 
 
 @Serializable
@@ -44,7 +40,7 @@ data class VerificationRequest(val email: String)
 
 
 
-class MainActivity : BaseActivity()  {
+class RegistrationActivity : BaseActivity()  {
     private fun requestInternetPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_WIFI_STATE), 101)
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_NETWORK_STATE), 101)
@@ -56,7 +52,7 @@ class MainActivity : BaseActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_registration)
 
         val userEmail: EditText = findViewById(R.id.editEmail)
         val userLogin: EditText = findViewById(R.id.editName)
@@ -69,7 +65,7 @@ class MainActivity : BaseActivity()  {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         if(intent.getStringExtra("Source")!="Authentication") {
             if ((sharedPref.getString("username", "") != "") && (sharedPref.getBoolean("authorized", false) == true)) {
-                val intent = Intent(this, MyClasses::class.java)
+                val intent = Intent(this, UserClassesActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -162,7 +158,7 @@ class MainActivity : BaseActivity()  {
 
                 lifecycleScope.launch {
                     sendVerificationCode(
-                        context = this@MainActivity,
+                        context = this@RegistrationActivity,
                         apiUrl = "https://eduvision.na4u.ru/api",
                         email = email,
                     )

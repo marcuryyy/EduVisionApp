@@ -1,6 +1,5 @@
 package com.example.testproject
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -31,7 +30,7 @@ class QuizAdapter(
         holder.titleTextView.text = survey.title
 
         holder.infoButton.setOnClickListener {
-            val intent = Intent(context, MyTestsActivity::class.java).apply {
+            val intent = Intent(context, UserTestQuestions::class.java).apply {
                 putExtra("survey_title", survey.title)
                 putExtra("quiz_id", survey.id)
             }

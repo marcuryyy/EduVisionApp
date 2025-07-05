@@ -3,7 +3,6 @@ package com.example.testproject
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -21,7 +20,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
@@ -67,7 +65,7 @@ class AuthActivity : BaseActivity()  {
         val editor = sharedPref.edit()
 
         linkToReg.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, RegistrationActivity::class.java)
             intent.putExtra("Source", "Authentication")
             startActivity(intent)
         }
@@ -195,7 +193,7 @@ class AuthActivity : BaseActivity()  {
                     putLong("user_id", authResponse.user.id)
                 }
 
-                val intent = Intent(this, MyClasses::class.java)
+                val intent = Intent(this, UserClassesActivity::class.java)
                 startActivity(intent)
 
             }

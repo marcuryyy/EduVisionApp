@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testproject.MyFoldersActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -19,7 +18,6 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.launch
@@ -33,7 +31,7 @@ data class Class(
 )
 
 
-class MyClasses : BaseActivity()  {
+class UserClassesActivity : BaseActivity()  {
 
     private lateinit var recyclerView: RecyclerView
     @Deprecated("Deprecated in Java")
@@ -44,7 +42,7 @@ class MyClasses : BaseActivity()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_classes)
+        setContentView(R.layout.activity_user_classes)
         if (!hasCameraPermission()) {
             requestCameraPermission()
         } else {
@@ -57,7 +55,7 @@ class MyClasses : BaseActivity()  {
 
         lifecycleScope.launch {
             val classes = fetchClasses()
-            val adapter = ClassesAdapter(classes, this@MyClasses)
+            val adapter = ClassesAdapter(classes, this@UserClassesActivity)
             recyclerView.adapter = adapter
         }
 
@@ -69,7 +67,7 @@ class MyClasses : BaseActivity()  {
                     true
                 }
                 R.id.nav_folders -> {
-                    startActivity(Intent(this, MyFoldersActivity::class.java))
+                    startActivity(Intent(this, UserLibrary::class.java))
                     true
                 }
                 R.id.nav_settings -> {

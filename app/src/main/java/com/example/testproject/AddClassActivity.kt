@@ -89,7 +89,7 @@ class AddClassActivity : BaseActivity()  {
         }
         finally {
             client.close()
-            val nextIntent = Intent(this, MyClasses::class.java)
+            val nextIntent = Intent(this, UserClassesActivity::class.java)
             startActivity(nextIntent)
         }
     }

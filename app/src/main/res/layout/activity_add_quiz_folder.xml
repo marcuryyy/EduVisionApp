@@ -9,7 +9,7 @@
     android:fitsSystemWindows="true"
     android:windowTranslucentNavigation="true"
     android:windowTranslucentStatus="true"
-    tools:context=".AddTestFolderActivity"
+    tools:context=".AddQuizFolderActivity"
     android:padding="16dp">
 
 

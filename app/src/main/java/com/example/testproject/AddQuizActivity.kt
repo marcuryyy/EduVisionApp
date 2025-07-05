@@ -107,7 +107,7 @@ class AddQuizActivity : BaseActivity()  {
         }
         finally {
             client.close()
-            val nextIntent = Intent(this, QuizActivity::class.java)
+            val nextIntent = Intent(this, UserQuizzesActivity::class.java)
             nextIntent.putExtra("folder_id", folder_id)
             startActivity(nextIntent)
         }

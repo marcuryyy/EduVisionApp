@@ -13,14 +13,13 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-class MyTestsActivity : BaseActivity() {
+class UserTestQuestions : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TestAdapter
@@ -59,7 +58,7 @@ class MyTestsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_tests)
+        setContentView(R.layout.activity_user_questions)
 
         val add_test_button: Button = findViewById(R.id.add_test_button)
         val runAllTestsButton: Button = findViewById(R.id.runAllTestsButton)
@@ -75,7 +74,7 @@ class MyTestsActivity : BaseActivity() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_classes -> {
-                    startActivity(Intent(this, MyClasses::class.java))
+                    startActivity(Intent(this, UserClassesActivity::class.java))
                     true
                 }
                 R.id.nav_folders -> true
@@ -89,14 +88,14 @@ class MyTestsActivity : BaseActivity() {
         bottomNav.selectedItemId = R.id.nav_folders
 
         add_test_button.setOnClickListener {
-            val intent = Intent(this, AddTestsActivity::class.java)
+            val intent = Intent(this, AddQuestionActivity::class.java)
             intent.putExtra("quiz_id", quiz_id)
             intent.putExtra("survey_title", quiz_name)
             startActivity(intent)
         }
 
         runAllTestsButton.setOnClickListener {
-            val intent = Intent(this, SelectClassActivity::class.java)
+            val intent = Intent(this, SelectClassForQuizActivity::class.java)
             intent.putExtra("quiz_id", quiz_id)
             intent.putExtra("survey_title", quiz_name)
             startActivity(intent)
@@ -108,10 +107,10 @@ class MyTestsActivity : BaseActivity() {
             try {
                 val questions = fetchQuestionsFromApi(quizId)
                 val questionTexts = questions.map { it.text }
-                adapter = TestAdapter(ArrayList(questionTexts), this@MyTestsActivity)
+                adapter = TestAdapter(ArrayList(questionTexts), this@UserTestQuestions)
                 recyclerView.adapter = adapter
             } catch (e: Exception) {
-                Log.e("MyTestsActivity", "Error loading tests: ${e.message}")
+                Log.e("UserTestQuestions", "Error loading tests: ${e.message}")
 
             }
         }

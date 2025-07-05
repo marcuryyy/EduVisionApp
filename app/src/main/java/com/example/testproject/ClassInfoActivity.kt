@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,7 +43,7 @@ data class AddStudentRequest(
 )
 
 
-class ClassInfoPage : BaseActivity() {
+class ClassInfoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_class_info)
@@ -63,7 +62,7 @@ class ClassInfoPage : BaseActivity() {
 
         lifecycleScope.launch {
             val students = fetchStudentsFromClass(class_id)
-            val adapter = StudentAdapter(students, this@ClassInfoPage)
+            val adapter = StudentAdapter(students, this@ClassInfoActivity)
             list_view.adapter = adapter
         }
 
@@ -74,7 +73,7 @@ class ClassInfoPage : BaseActivity() {
                 student_name_label.text.clear()
                 putStudent(class_id, student)
                 val students = fetchStudentsFromClass(class_id)
-                val adapter = StudentAdapter(students, this@ClassInfoPage)
+                val adapter = StudentAdapter(students, this@ClassInfoActivity)
                 list_view.adapter = adapter
 
             }
