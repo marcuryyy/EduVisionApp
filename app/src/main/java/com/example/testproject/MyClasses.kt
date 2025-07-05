@@ -107,8 +107,6 @@ class MyClasses : BaseActivity()  {
                 }
             }
 
-            println(response.bodyAsText())
-
 
             val classes = response.body<List<Class>>()
 

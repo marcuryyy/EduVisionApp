@@ -53,7 +53,7 @@ class ClassInfoPage : BaseActivity() {
         val button: Button = findViewById(R.id.addStudentButton)
         val class_title: TextView = findViewById(R.id.class_title)
 
-        val class_name = intent.getStringExtra("class_name")
+        val class_name = intent.getStringExtra("class_title")
         val class_id: Int = intent.getIntExtra("class_id", -1)
 
         class_title.text = "Ученики " + class_name

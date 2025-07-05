@@ -25,6 +25,7 @@ class ClassesAdapter(var classes: List<Class>, var context: Context) : RecyclerV
 
     override fun onBindViewHolder(holder: MyViewClass, position: Int) {
         val cls = classes[position]
+
         holder.class_title.text = cls.title
 
         holder.info_button.setOnClickListener{
