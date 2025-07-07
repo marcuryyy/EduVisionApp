@@ -48,6 +48,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
+
 @Serializable
 data class QuestionResultsRequest(
     val taken_survey_id: Int,
@@ -89,7 +90,7 @@ data class QuestionData(
     val options: Map<String, String>? = null,
     var taken_survey_id: Int? = null
 )
-open class CheckQuestionActivity : AppCompatActivity() {
+open class CheckQuestionActivity : BaseActivity() {
 
     init {
         System.loadLibrary("opencv_java4")
@@ -573,7 +574,7 @@ open class CheckQuestionActivity : AppCompatActivity() {
 
         return try {
             println(taken_question_id)
-            val response = client.post("https://eduvision.na4u.ru/api/api/conducting/answers") {
+            val response = client.post("$API_URL/api/conducting/answers") {
                 contentType(ContentType.Application.Json)
                 setBody(QuestionResultsRequest(taken_survey_id, taken_question_id, answers))
                 headers {
@@ -601,7 +602,7 @@ open class CheckQuestionActivity : AppCompatActivity() {
         }
 
         try {
-            val response = client.post("https://eduvision.na4u.ru/api/api/conducting/stop") {
+            val response = client.post("$API_URL/api/conducting/stop") {
                 contentType(ContentType.Application.Json)
                 setBody(SessionInfo(quiz_id, class_id))
                 headers {
@@ -628,7 +629,7 @@ open class CheckQuestionActivity : AppCompatActivity() {
         }
 
         try {
-            val response = client.get("https://eduvision.na4u.ru/api/api/conducting/students?class_id=$class_id") {
+            val response = client.get("$API_URL/api/conducting/students?class_id=$class_id") {
               //  contentType(ContentType.Application.Json)
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")

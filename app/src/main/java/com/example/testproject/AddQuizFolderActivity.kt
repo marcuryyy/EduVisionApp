@@ -74,7 +74,7 @@ class AddQuizFolderActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.post("https://eduvision.na4u.ru/api/api/folders") {
+            val response = client.post("$API_URL/api/folders") {
                 contentType(ContentType.Application.Json)
                 setBody(AddFolderRequest(title))
                 headers{
@@ -105,7 +105,7 @@ class AddQuizFolderActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.get("https://eduvision.na4u.ru/api/api/folders") {
+            val response = client.get("$API_URL/api/folders") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

@@ -121,7 +121,7 @@ class UserTestQuestions : BaseActivity() {
         val token = sharedPref.getString("token", "") ?: ""
 
         return withContext(Dispatchers.IO) {
-            val response = client.get("https://eduvision.na4u.ru/api/api/surveys/$quizId") {
+            val response = client.get("$API_URL/api/surveys/$quizId") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

@@ -103,7 +103,7 @@ class RegistrationActivity : BaseActivity()  {
                     db.addUser(user)
                     lifecycleScope.launch { // Создает блокирующую корутину
                         registerUser( // Вызов suspend-функции
-                            apiUrl = "https://eduvision.na4u.ru/api",
+                            apiUrl = API_URL,
                             login = login,
                             email = email,
                             password = password,
@@ -159,7 +159,7 @@ class RegistrationActivity : BaseActivity()  {
                 lifecycleScope.launch {
                     sendVerificationCode(
                         context = this@RegistrationActivity,
-                        apiUrl = "https://eduvision.na4u.ru/api",
+                        apiUrl = API_URL,
                         email = email,
                     )
                 }

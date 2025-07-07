@@ -48,7 +48,7 @@ class CodeConfirmActivity : BaseActivity() {
         resend_code_text.setOnClickListener {
             if (timer_text.visibility != View.VISIBLE) {
                 lifecycleScope.launch {
-                    sendVerificationCode(this@CodeConfirmActivity, URL, email)
+                    sendVerificationCode(this@CodeConfirmActivity, API_URL, email)
                 }
                 Toast.makeText(this, "Код отправлен повторно", Toast.LENGTH_SHORT).show()
                 startResendTimer(timer_text)
@@ -66,7 +66,7 @@ class CodeConfirmActivity : BaseActivity() {
             lifecycleScope.launch {
                 verifyCode(
                     context = this@CodeConfirmActivity,
-                    apiUrl = URL,
+                    apiUrl = API_URL,
                     email = email,
                     code = code
                 )

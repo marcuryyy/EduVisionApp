@@ -140,7 +140,7 @@ class AddQuestionActivity : BaseActivity() {
 
         try {
             println(questions)
-            val response = client.put("https://eduvision.na4u.ru/api/api/surveys/$quiz_id") {
+            val response = client.put("$API_URL/api/surveys/$quiz_id") {
                 contentType(ContentType.Application.Json)
                 setBody(AddQuestionRequest(user_id, title, questions))
                 headers {

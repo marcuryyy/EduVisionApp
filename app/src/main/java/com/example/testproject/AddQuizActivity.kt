@@ -93,7 +93,7 @@ class AddQuizActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.post("https://eduvision.na4u.ru/api/api/surveys") {
+            val response = client.post("$API_URL/api/surveys") {
                 contentType(ContentType.Application.Json)
                 setBody(AddQuizRequest(user_id.toInt(), title, emptyList()))
                 headers{
@@ -124,7 +124,7 @@ class AddQuizActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.get("https://eduvision.na4u.ru/api/api/folders/$folder_id/surveys") {
+            val response = client.get("$API_URL/api/folders/$folder_id/surveys") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

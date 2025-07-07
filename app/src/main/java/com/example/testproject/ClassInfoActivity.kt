@@ -93,7 +93,7 @@ class ClassInfoActivity : BaseActivity() {
             }
         }
         try {
-            val response = client.post("https://eduvision.na4u.ru/api/api/students") {
+            val response = client.post("$API_URL/api/students") {
                     contentType(ContentType.Application.Json)
                     setBody(AddStudentRequest(class_id, students))
                     headers {
@@ -120,7 +120,7 @@ class ClassInfoActivity : BaseActivity() {
         }
 
         try {
-            val response = client.get("https://eduvision.na4u.ru/api/api/students/${classId}") {
+            val response = client.get("$API_URL/api/students/${classId}") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

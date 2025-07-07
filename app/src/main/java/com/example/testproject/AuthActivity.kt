@@ -76,7 +76,7 @@ class AuthActivity : BaseActivity()  {
             lifecycleScope.launch {
                 val login = userLoginOrEmail.text.toString().trim()
                 sendResetPassRequest(
-                    apiUrl = "https://eduvision.na4u.ru/api",
+                    apiUrl = API_URL,
                     loginOrEmail = login,
                 )
             }
@@ -98,7 +98,7 @@ class AuthActivity : BaseActivity()  {
                 editor.apply()
                 runBlocking {
                     AuthUser(
-                        apiUrl = "https://eduvision.na4u.ru/api",
+                        apiUrl = API_URL,
                         loginOrEmail = login,
                         password = password
                     )
@@ -110,7 +110,7 @@ class AuthActivity : BaseActivity()  {
 
 //        forgotPassBtn.setOnClickListener{ // also should move to CodeConfirmActivity
 //            lifecycleScope.launch { sendResetPassRequest(
-//                apiUrl = "https://eduvision.na4u.ru/api",
+//                apiUrl = API_URL,
 //                loginOrEmail = userLoginOrEmail.text.toString().trim(),
 //                startTimer = startResendTimer(timer_text, requestNewCodeButton) // should start in CodeConfirmActivity
 //            ) }

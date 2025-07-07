@@ -99,7 +99,7 @@ class UserClassesActivity : BaseActivity()  {
         }
 
         try {
-            val response = client.get("https://eduvision.na4u.ru/api/api/classes/user/my") {
+            val response = client.get("$API_URL/api/classes/user/my") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

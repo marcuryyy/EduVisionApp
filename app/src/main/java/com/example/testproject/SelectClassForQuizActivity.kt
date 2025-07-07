@@ -138,7 +138,7 @@ class SelectClassForQuizActivity : BaseActivity() {
         }
 
             try {
-                val response = client.get("https://eduvision.na4u.ru/api/api/surveys/$quizId") {
+                val response = client.get("$API_URL/api/surveys/$quizId") {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $token")
                     }
@@ -174,7 +174,7 @@ class SelectClassForQuizActivity : BaseActivity() {
         }
 
         try {
-            val response = client.get("https://eduvision.na4u.ru/api/api/classes/user/my") {
+            val response = client.get("$API_URL/api/classes/user/my") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }
@@ -201,7 +201,7 @@ class SelectClassForQuizActivity : BaseActivity() {
         }
 
         return try {
-            val response = client.post("https://eduvision.na4u.ru/api/api/conducting/start") {
+            val response = client.post("$API_URL/api/conducting/start") {
                 contentType(ContentType.Application.Json)
                 setBody(SessionInfo(quiz_id, class_id))
                 headers {
@@ -227,7 +227,7 @@ class SelectClassForQuizActivity : BaseActivity() {
         }
 
         try {
-            val response = client.get("https://eduvision.na4u.ru/api/api/students/$class_id") {
+            val response = client.get("$API_URL/api/students/$class_id") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

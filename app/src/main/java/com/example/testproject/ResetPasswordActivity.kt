@@ -24,7 +24,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 
-class ResetPasswordActivity : AppCompatActivity() {
+class ResetPasswordActivity : BaseActivity() {
 
     private lateinit var newPasswordInput: TextInputEditText
     private lateinit var confirmPasswordInput: TextInputEditText
@@ -130,7 +130,7 @@ class ResetPasswordActivity : AppCompatActivity() {
             println("Пароль: ${newPassword}")
             println("Email: ${email}")
             println("Code: ${code}")
-            val response: HttpResponse = client.post("https://eduvision.na4u.ru/api/api/auth/login/reset-password") {
+            val response: HttpResponse = client.post("$API_URL/api/auth/login/reset-password") {
                 contentType(ContentType.Application.Json)
                 setBody(ResetPasswordRequest(email, code, newPassword))
             }
