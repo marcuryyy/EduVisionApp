@@ -1,14 +1,11 @@
 package com.example.testproject
 
 import NotificationPopup
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +19,8 @@ class TestAdapter(var TestsInAdapter: MutableList<String>, var context: Context)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewFolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.test_layout, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.survey_layout, parent, false)
         return MyViewFolder(view)
     }
 

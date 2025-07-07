@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:background="@android:color/white">
+
 
     <!-- Иконка теста/опроса -->
     <ImageView
@@ -14,16 +14,15 @@
         android:layout_height="36dp"
         android:layout_marginStart="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/folder_open_24px"
+        android:src="@drawable/assignment_24px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#1E88E5" />
 
-
     <!-- Название папки -->
     <TextView
-        android:id="@+id/folder_name"
+        android:id="@+id/survey_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -33,13 +32,15 @@
         android:gravity="center_vertical"
         android:maxLines="1"
         android:paddingStart="8dp"
-        android:text="Название папки"
+        android:text="Название теста"
         android:textColor="#0D47A1"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/survey_icon"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <!-- Кнопка -->
     <ImageButton
@@ -49,10 +50,10 @@
         android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@android:drawable/ic_menu_more"
-        app:tint="#1E88E5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#1E88E5" />
 
     <!-- Разделитель -->
     <View

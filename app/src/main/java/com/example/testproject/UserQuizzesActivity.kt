@@ -24,7 +24,6 @@ data class Survey(
     val id: Int,
     val title: String,
     val created_at: String,
-  //  val questionCount: Int
 )
 
 class UserQuizzesActivity : BaseActivity() {

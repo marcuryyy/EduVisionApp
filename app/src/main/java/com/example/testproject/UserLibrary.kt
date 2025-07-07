@@ -62,8 +62,9 @@ class UserLibrary : BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
-            val surveys = fetchDataFromAPI()
-            val adapter = FoldersAdapter(surveys, this@UserLibrary)
+            val folders = fetchFoldersFromAPI()
+            val surveys = fetchSurveysFromAPI()
+            val adapter = FoldersAdapter(folders, surveys, this@UserLibrary)
             recyclerView.adapter = adapter
         }
 
@@ -75,7 +76,7 @@ class UserLibrary : BaseActivity() {
 
     }
 
-    suspend fun fetchDataFromAPI(): List<Folder> {
+    suspend fun fetchFoldersFromAPI(): List<Folder> {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPref.getString("token", "")
         println("---------")
@@ -96,7 +97,37 @@ class UserLibrary : BaseActivity() {
             }
 
 
-            val surveys = response.body<List<Folder>>()
+            val folders = response.body<List<Folder>>()
+            return folders
+        }
+        finally {
+            client.close()
+        }
+    }
+
+
+    suspend fun fetchSurveysFromAPI(): List<Survey> {
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "")
+        println("---------")
+        println(token)
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+
+        try {
+            val response = client.get("$API_URL/api/folders/unfoldered/surveys") {
+
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+            }
+
+
+            val surveys = response.body<List<Survey>>()
             return surveys
         }
         finally {
