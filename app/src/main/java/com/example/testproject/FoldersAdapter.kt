@@ -81,7 +81,7 @@ class FoldersAdapter(
                 val survey = items[position] as Survey
                 holder.titleTextView.text = survey.title
                 // Обработка клика на опрос
-                holder.itemView.setOnClickListener {
+                holder.infoButton.setOnClickListener {
                     // Открытие активности для опроса
                     val intent = Intent(context, UserTestQuestions::class.java).apply {
                         putExtra("quiz_id", survey.id)

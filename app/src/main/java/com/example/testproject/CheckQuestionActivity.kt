@@ -31,6 +31,8 @@ import java.util.concurrent.Executors
 import android.graphics.Color
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -111,10 +113,11 @@ open class CheckQuestionActivity : BaseActivity() {
     private var questionNum: Int = 0
     private var questionList = mutableListOf<String>()
     private lateinit var db_tests: DBtests
-    private var questionResults: ArrayList<MutableMap<String, String>> = ArrayList()
-    private var studentsAnswers: List<Answer> = emptyList()
+    private lateinit var adapter: UnansweredStudentsAdapter
     private lateinit var questionText: TextView
-    private lateinit var arucoToStudentMap: Map<Int, Int>
+    private lateinit var arucoToStudentIDMap: Map<Int, Int>
+    private var arucoToStudentNameMap: MutableMap<Int, String> = mutableMapOf()
+    private lateinit var studentsList: RecyclerView
     private var currentQuestionData: QuestionData? = QuestionData("")
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1001
@@ -142,15 +145,18 @@ open class CheckQuestionActivity : BaseActivity() {
         val class_id = intent.getIntExtra("class_id", -1)
         val takenSurveyId = intent.getIntExtra("taken_survey_id", -1)
         val takenQuestionId = intent.getIntExtra("taken_question_id", -1)
-        val initial_question = intent.getStringExtra("question_text").toString()
         currentQuestionData?.taken_question_id = takenQuestionId
         currentQuestionData?.taken_survey_id = takenSurveyId
         lifecycleScope.launch {
             val classInfoList = fetchClassInfo(class_id)
-            arucoToStudentMap = classInfoList.associate { it.aruco_num to it.id }
+            arucoToStudentIDMap = classInfoList.associate { it.aruco_num to it.id }
+            arucoToStudentNameMap = classInfoList.associate { it.aruco_num to it.name } as MutableMap<Int, String>
         }
         val initialQuestionText = intent.getStringExtra("question_text") ?: ""
-
+        adapter = UnansweredStudentsAdapter(arucoToStudentNameMap, this)
+        studentsList = findViewById(R.id.studentsList)
+        studentsList.layoutManager = LinearLayoutManager(this)
+        studentsList.adapter = adapter
         // Инициализируем первый вопрос
         currentQuestionData = QuestionData(
             status = "next_question",
@@ -165,8 +171,6 @@ open class CheckQuestionActivity : BaseActivity() {
             updateQuestionUI(currentQuestionData!!)
         }
         val answers = mutableListOf<Answer>()
-
-        loadQuestionsFromDatabase(allTestsMode, testId)
 
         showCurrentQuestion()
         next_button.setOnClickListener {
@@ -258,7 +262,7 @@ open class CheckQuestionActivity : BaseActivity() {
             try {
                 val arucoNum = arucoIdStr.toInt()
                 val answer = answerStr.toInt()
-                val studentId = arucoToStudentMap[arucoNum]
+                val studentId = arucoToStudentIDMap[arucoNum]
 
                 studentId?.let {
                     answers.add(Answer(
@@ -293,26 +297,6 @@ open class CheckQuestionActivity : BaseActivity() {
         if (questionNum > 0) {
             questionNum--
             showCurrentQuestion()
-        }
-    }
-
-    private fun loadQuestionsFromDatabase(allTestsMode: Boolean, testId: String) {
-        if (allTestsMode) {
-            val cursor = db_tests.getAllQuestions()
-            while (cursor.moveToNext()) {
-                questionList.add(cursor.getString(1)) // question_text
-                right_answers.add(cursor.getString(2))
-                question_ids.add(cursor.getInt(3))// right_answer
-            }
-            cursor.close()
-        } else {
-            val cursor = db_tests.getTestQuestions(testId)
-            while (cursor.moveToNext()) {
-                questionList.add(cursor.getString(1)) // question_text
-                right_answers.add(cursor.getString(2))
-                question_ids.add(cursor.getInt(3))// right_answer
-            }
-            cursor.close()
         }
     }
 
@@ -508,6 +492,12 @@ open class CheckQuestionActivity : BaseActivity() {
                             text_to_put = "3"
                         }
                         id_map[sliced_id] = text_to_put
+                        println("$text_to_put, $right_answers")
+                        arucoToStudentNameMap.remove(sliced_id.toInt())
+                        runOnUiThread {
+                                adapter.updateData(arucoToStudentNameMap)
+                        }
+
                         if (overlayView.circles.find { it.id == sliced_id } == null) {
                             if (text_to_put in right_answers){
                                 overlayView.addCircle(sliced_id, ((topLeftX + bottomRightX)/2) * scaleX,
