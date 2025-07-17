@@ -132,6 +132,11 @@ class UserTestQuestions : BaseActivity() {
         }
     }
 
+    // WIP deleting questions from survey
+    suspend fun deleteQuestion() {
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         client.close()

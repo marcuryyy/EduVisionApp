@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 
 class QuizAdapter(
-    private var surveys: List<Survey>,
-    private val context: Context
+    private var surveys: MutableList<Survey>,
+    private val context: Context,
+    private val onQuizDeleted: suspend (Int) -> Unit
 ) : RecyclerView.Adapter<QuizAdapter.QuizViewHolder>() {
 
     class QuizViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -40,12 +43,17 @@ class QuizAdapter(
         }
 
         holder.deleteButton.setOnClickListener{
-            val notificationPopup = NotificationPopup(context) {
-                // Удаление опроса из папки через API
-                // ...
-                notifyDataSetChanged()
+            val popup = NotificationPopup(context) {
+                val surveyId = survey.id
+                surveys.removeAt(holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
+                notifyItemRangeChanged(holder.adapterPosition, itemCount - holder.adapterPosition)
+
+                (context as? UserQuizzesActivity)?.lifecycleScope?.launch {
+                    onQuizDeleted(surveyId)
+                }
             }
-            notificationPopup.show()
+            popup.show()
         }
     }
 

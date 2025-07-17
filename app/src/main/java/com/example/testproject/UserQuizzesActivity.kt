@@ -13,7 +13,10 @@ import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.Serializable
@@ -61,9 +64,7 @@ class UserQuizzesActivity : BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
-            val quizes = fetchQuizes(folder_id)
-            val adapter = QuizAdapter(quizes, this@UserQuizzesActivity)
-            recyclerView.adapter = adapter
+            recyclerView.adapter = getSurveysList(folder_id)
         }
 
 
@@ -75,7 +76,16 @@ class UserQuizzesActivity : BaseActivity() {
 
     }
 
-    suspend fun fetchQuizes(folder_id: Int?): List<Survey> {
+
+    suspend fun getSurveysList(folder_id: Int?): QuizAdapter {
+        val quizzes = fetchQuizes(folder_id)
+        val adapter = QuizAdapter(quizzes, this@UserQuizzesActivity) {folder_id ->
+            deleteSurvey(folder_id)
+        }
+        return adapter
+    }
+
+    suspend fun fetchQuizes(folder_id: Int?): MutableList<Survey> {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPref.getString("token", "")
 
@@ -92,11 +102,36 @@ class UserQuizzesActivity : BaseActivity() {
                 }
             }
 
-            val quizes = response.body<List<Survey>>()
-            println(quizes)
-            return quizes
+            val quizzes = response.body<MutableList<Survey>>()
+            println(quizzes)
+            return quizzes
         }
         finally {
+            client.close()
+        }
+    }
+
+    suspend fun deleteSurvey(surveyId: Int) {
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "")
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+
+        try {
+            val response = client.delete("$API_URL/api/folders/surveys/$surveyId") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+            }
+            println(response.bodyAsText())
+        } catch (e: Exception) {
+            println("Ошибка: ${e.message}")
+        } finally {
             client.close()
         }
     }
