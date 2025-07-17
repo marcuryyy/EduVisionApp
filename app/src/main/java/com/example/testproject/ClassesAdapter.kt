@@ -15,7 +15,8 @@ class ClassesAdapter(var classes: List<Class>, var context: Context) : RecyclerV
 
     class MyViewClass(view: View): RecyclerView.ViewHolder(view) {
         var class_title: TextView = view.findViewById(R.id.class_letter)
-        val info_button: ImageButton = view.findViewById(R.id.button)
+        val info_button: ImageButton = view.findViewById(R.id.info_button)
+        val edit_button: ImageButton = view.findViewById(R.id.edit_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewClass {
@@ -30,6 +31,16 @@ class ClassesAdapter(var classes: List<Class>, var context: Context) : RecyclerV
 
         holder.info_button.setOnClickListener{
             val intent = Intent(context, ClassInfoActivity::class.java)
+            intent.putExtra("class_title", cls.title)
+            intent.putExtra("class_id", cls.id)
+            if (context is Activity){
+                val activity = context as Activity
+                activity.startActivity(intent)
+            }
+        }
+
+        holder.edit_button.setOnClickListener{
+            val intent = Intent(context, EditClassActivity::class.java)
             intent.putExtra("class_title", cls.title)
             intent.putExtra("class_id", cls.id)
             if (context is Activity){

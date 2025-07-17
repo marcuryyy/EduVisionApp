@@ -7,34 +7,49 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 
 
-class StudentAdapter(var students: MutableList<GetStudent>, var context: Context) : RecyclerView.Adapter<StudentAdapter.MyViewFolder>() {
+class StudentAdapter(
+    var students: MutableList<GetStudent>,
+    private val context: Context,
+    private val onStudentDeleted: suspend (Int) -> Unit
+) : RecyclerView.Adapter<StudentAdapter.MyViewHolder>() {
 
-    class MyViewFolder(view: View): RecyclerView.ViewHolder(view) {
-        var student_name: TextView = view.findViewById(R.id.student_name)
-        val delete_button: ImageButton = view.findViewById(R.id.del_button)
+    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val arucoNum: TextView = view.findViewById(R.id.aruco_num)
+        val studentName: TextView = view.findViewById(R.id.student_name)
+        val deleteButton: ImageButton = view.findViewById(R.id.del_button)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewFolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.student_layout, parent, false)
-        return MyViewFolder(view)
+        return MyViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return students.count()
-    }
+    override fun getItemCount(): Int = students.size
 
-    override fun onBindViewHolder(holder: MyViewFolder, position: Int) {
-        holder.student_name.text = students[position].name
-        holder.delete_button.setOnClickListener{
-            println(position) // debug
-            val notificationPopup = NotificationPopup(context) {
-                students.removeAt(position)
-                // delete student from class WIP
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
+        val student = students[holder.adapterPosition]
+        holder.studentName.text = student.name
+        holder.arucoNum.text = student.aruco_num.toString()
+        holder.deleteButton.setOnClickListener {
+            val popup = NotificationPopup(context) {
+                val arucoNum = student.aruco_num
+                students.removeAt(holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
+                notifyItemRangeChanged(holder.adapterPosition, itemCount - holder.adapterPosition)
+
+                (context as? ClassInfoActivity)?.lifecycleScope?.launch {
+                    onStudentDeleted(arucoNum)
+                }
             }
-            notificationPopup.show()
+            popup.show()
         }
+
     }
 }
+

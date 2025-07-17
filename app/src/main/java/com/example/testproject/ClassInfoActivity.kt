@@ -12,10 +12,12 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -61,25 +63,35 @@ class ClassInfoActivity : BaseActivity() {
         list_view.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
-            val students = fetchStudentsFromClass(class_id)
-            val adapter = StudentAdapter(students, this@ClassInfoActivity)
-            list_view.adapter = adapter
+            list_view.adapter = getStudentList(class_id)
         }
 
 
-        button.setOnClickListener{
-            val student = listOf<Student>(Student(student_name_label.text.toString()))
+        button.setOnClickListener {
+            val studentName = student_name_label.text.toString().trim()
+
+            if (studentName.isEmpty()) {
+                // Показываем сообщение об ошибке, если поле пустое
+                student_name_label.error = "Введите имя ученика"
+                return@setOnClickListener
+            }
+
+            val student = listOf<Student>(Student(studentName))
             lifecycleScope.launch {
                 student_name_label.text.clear()
                 putStudent(class_id, student)
-                val students = fetchStudentsFromClass(class_id)
-                val adapter = StudentAdapter(students, this@ClassInfoActivity)
-                list_view.adapter = adapter
-
+                list_view.adapter = getStudentList(class_id)
             }
-
-
         }
+    }
+
+
+    suspend fun getStudentList(class_id: Int): StudentAdapter {
+        val students = fetchStudentsFromClass(class_id)
+        val adapter = StudentAdapter(students,this@ClassInfoActivity) { arucoNum ->
+            deleteStudent(class_id, arucoNum)
+        }
+        return adapter
     }
 
 
@@ -136,6 +148,34 @@ class ClassInfoActivity : BaseActivity() {
             return students
         }
         finally {
+            client.close()
+        }
+    }
+
+
+    suspend fun deleteStudent(class_id: Int, aruco_num: Int) {
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "")
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+
+        try {
+            val response: HttpResponse = client.delete("$API_URL/api/students/${class_id}/${aruco_num}") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+            }
+
+            println("Ответ сервера ${response.bodyAsText()}")
+
+        } catch (e: Exception) {
+            println("Ошибка: ${e.message}")
+        } finally {
             client.close()
         }
     }

@@ -15,13 +15,13 @@ class QuizAdapter(
 ) : RecyclerView.Adapter<QuizAdapter.QuizViewHolder>() {
 
     class QuizViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val titleTextView: TextView = view.findViewById(R.id.folder_name)
-        val infoButton: ImageButton = view.findViewById(R.id.button)
+        val titleTextView: TextView = view.findViewById(R.id.survey_name)
+        val infoButton: ImageButton = view.findViewById(R.id.info_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.folder_layout, parent, false)
+            .inflate(R.layout.unfoldered_survey_layout, parent, false)
         return QuizViewHolder(view)
     }
 

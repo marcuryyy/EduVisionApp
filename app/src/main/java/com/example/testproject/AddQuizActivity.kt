@@ -15,6 +15,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
@@ -52,6 +53,18 @@ class AddQuizActivity : BaseActivity()  {
         val title: String,
         val questions: List<Question>
     )
+    @Serializable
+    data class SurveyResponse(
+        val message: String,
+        val surveyId: Int,
+    )
+    @Serializable
+    data class SurveyAddRequest(
+        val survey_id: Int,
+        val user_id: Int
+    )
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_quiz)
@@ -60,20 +73,23 @@ class AddQuizActivity : BaseActivity()  {
         val add_button: Button = findViewById(R.id.button_create_quiz)
         val back_button: TextView = findViewById(R.id.backButton)
         val folder_id = intent.getIntExtra("folder_id", -1)
+        println("adding... " + folder_id)
+
         add_button.setOnClickListener {
-        val quiz_name: String = quiz_textbox.text.toString()
-        if(quiz_name != "") {
-            lifecycleScope.launch {
-                val survey_titles = fetchQuizNames(folder_id)
-                if (quiz_name in survey_titles) {
-                    Toast.makeText(this@AddQuizActivity, "Такой опрос уже существует!", Toast.LENGTH_SHORT).show()
-                }
-                else {
-                    putQuiz(quiz_name, folder_id)
+            val quiz_name: String = quiz_textbox.text.toString()
+            if(quiz_name != "") {
+                lifecycleScope.launch {
+//                    val survey_titles = fetchQuizNames(folder_id)
+//                    if (quiz_name in survey_titles) {
+//                        Toast.makeText(this@AddQuizActivity, "Такой опрос уже существует!", Toast.LENGTH_SHORT).show()
+//                    }
+//                    else {
+                        println("Zaxodit")
+                        putQuiz(quiz_name, folder_id)
+//                    }
                 }
             }
-        }
-            else Toast.makeText(this, "Нет названия опроса!", Toast.LENGTH_LONG).show()
+                else Toast.makeText(this, "Нет названия опроса!", Toast.LENGTH_LONG).show()
         }
 
         back_button.setOnClickListener{
@@ -101,9 +117,21 @@ class AddQuizActivity : BaseActivity()  {
                 }
             }
 
+            if (folder_id != -1){
+                val surveyId = response.body<SurveyResponse>().surveyId
+
+                val resp = client.put("$API_URL/api/folders/$folder_id/surveys") {
+                    contentType(ContentType.Application.Json)
+                    setBody(SurveyAddRequest(surveyId, user_id.toInt()))
+                    headers{
+                        append(HttpHeaders.Authorization, "Bearer $token")
+                    }
+                }
+                println(resp.bodyAsText())
+            }
+
             println("Response after put quiz in db")
-            println(response.status)
-            println(response.bodyAsText())
+
         }
         finally {
             client.close()

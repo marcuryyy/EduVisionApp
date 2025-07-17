@@ -31,13 +31,13 @@ class FoldersAdapter(
     // ViewHolder для папки
     class FolderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.folder_name)
-        val infoButton: ImageButton = view.findViewById(R.id.button)
+        val infoButton: ImageButton = view.findViewById(R.id.info_button)
     }
 
     // ViewHolder для опроса
     class SurveyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.survey_name)
-        val infoButton: ImageButton = view.findViewById(R.id.button)
+        val infoButton: ImageButton = view.findViewById(R.id.info_button)
     }
 
     override fun getItemViewType(position: Int): Int {
