@@ -65,7 +65,7 @@ class AddQuestionActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_question)
-        val testNameText: EditText = findViewById(R.id.test_name)
+        val testNameText: EditText = findViewById(R.id.survey_name)
         val add_button: Button = findViewById(R.id.button_create_test)
         var right_answer: Int = 0
         val checkbox_one: CheckBox = findViewById(R.id.checkBoxVar1)

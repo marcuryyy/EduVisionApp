@@ -1,5 +1,6 @@
 package com.example.testproject
 
+import NotificationPopup
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -17,11 +18,12 @@ class QuizAdapter(
     class QuizViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.survey_name)
         val infoButton: ImageButton = view.findViewById(R.id.info_button)
+        val deleteButton: ImageButton = view.findViewById(R.id.delete_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.unfoldered_survey_layout, parent, false)
+            .inflate(R.layout.survey_layout, parent, false)
         return QuizViewHolder(view)
     }
 
@@ -36,12 +38,17 @@ class QuizAdapter(
             }
             context.startActivity(intent)
         }
+
+        holder.deleteButton.setOnClickListener{
+            val notificationPopup = NotificationPopup(context) {
+                // Удаление опроса из папки через API
+                // ...
+                notifyDataSetChanged()
+            }
+            notificationPopup.show()
+        }
     }
 
     override fun getItemCount(): Int = surveys.size
 
-    fun updateData(newSurveys: List<Survey>) {
-        surveys = newSurveys
-        notifyDataSetChanged()
-    }
 }
