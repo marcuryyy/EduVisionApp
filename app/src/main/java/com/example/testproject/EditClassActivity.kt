@@ -1,34 +1,44 @@
 package com.example.testproject
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.delete
+import io.ktor.client.request.headers
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.launch
 
 
-class EditClassActivity : AppCompatActivity() {
+class EditClassActivity : BaseActivity() {
 
     private var currentClassName: String = ""
-    private var classId: Long = -1 // ID класса в базе данных
+    private var classId: Int = -1 // ID класса в базе данных
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_class)
 
-        // Получаем данные из Intent
-        classId = intent.getLongExtra("class_id", -1)
+        classId = intent.getIntExtra("class_id", -1)
         currentClassName = intent.getStringExtra("class_title") ?: ""
 
         val classNameEditText: TextInputEditText = findViewById(R.id.classNameEditText)
         val saveButton: Button = findViewById(R.id.saveButton)
         val deleteButton: Button = findViewById(R.id.deleteButton)
 
-        // Устанавливаем текущее название класса в поле ввода
         classNameEditText.setText(currentClassName)
 
-        // Обработчик кнопки сохранения
         saveButton.setOnClickListener {
             val newClassName = classNameEditText.text.toString().trim()
             if (newClassName.isEmpty()) {
@@ -37,14 +47,13 @@ class EditClassActivity : AppCompatActivity() {
             saveClassName(newClassName)
         }
 
-        // Обработчик кнопки удаления
         deleteButton.setOnClickListener {
-            showDeleteConfirmationDialog()
+            showDeleteConfirmationDialog(classId)
         }
     }
 
     private fun saveClassName(newClassName: String) {
-        // Проверка, изменилось ли название
+
         if (newClassName == currentClassName) {
             showToast("Название не изменено")
             return
@@ -56,21 +65,45 @@ class EditClassActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun showDeleteConfirmationDialog() {
+    private fun showDeleteConfirmationDialog(classId: Int) {
         AlertDialog.Builder(this)
             .setTitle("Подтверждение удаления")
             .setMessage("Вы уверены, что хотите удалить класс \"$currentClassName\"? Это действие нельзя отменить.")
             .setPositiveButton("Удалить") { _, _ ->
-                deleteClass()
+                lifecycleScope.launch { deleteClass(classId) }
             }
             .setNegativeButton("Отмена", null)
             .create()
             .show()
     }
 
-    private fun deleteClass() {
-        // Здесь должна быть логика удаления через API
-        // ...
+    // Проверить на работоспособность
+    private suspend fun deleteClass(classId: Int) {
+        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "")
+
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+
+        try {
+            val response = client.delete("$API_URL/api/classes/$classId") {
+                contentType(ContentType.Application.Json)
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $token")
+                }
+            }
+
+
+            println(response.bodyAsText())
+            println(response.status)
+        }
+
+        finally {
+            client.close()
+        }
         setResult(RESULT_OK)
         finish()
     }
