@@ -9,22 +9,30 @@
     android:padding="16dp"
     tools:context=".ClassInfoActivity">
 
-    <!-- Заголовок -->
-    <TextView
-        android:id="@+id/class_title"
+    <!-- Заголовок с тенью -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/headerCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:background="#1E88E5"
-        android:fontFamily="@font/inter_semibold"
-        android:gravity="center"
-        android:paddingVertical="12dp"
-        android:text="Студенты"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
+        app:cardBackgroundColor="#1E88E5"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/class_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_semibold"
+            android:gravity="center"
+            android:paddingVertical="16dp"
+            android:text="Студенты"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"/>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Список студентов -->
     <androidx.recyclerview.widget.RecyclerView
@@ -32,72 +40,40 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/inputContainer"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/nameInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/class_title" />
+        app:layout_constraintTop_toBottomOf="@+id/headerCard"/>
 
-    <!-- Контейнер для ввода -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/inputContainer"
+    <!-- Поле ввода (упрощенная версия без вложенного layout) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nameInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Имя ученика"
+        app:boxBackgroundColor="@android:color/white"
+        app:boxStrokeColor="#1E88E5"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:cornerRadius="12dp"
+        app:endIconMode="clear_text"
+        app:endIconTint="#1E88E5"
         app:layout_constraintBottom_toTopOf="@+id/addStudentButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.8">
 
-        <!-- Поле для имени -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addStudentCell"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="Имя ученика"
-            app:boxStrokeColor="#42A5F5"
-            app:cornerRadius="12dp"
-            app:boxBackgroundColor="#E3F2FD"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/idInputLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.6">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addStudentCell"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:textColor="#0D47A1"
-                android:textSize="16sp"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Поле для ID -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="ID"
-            app:boxStrokeColor="#42A5F5"
-            app:cornerRadius="12dp"
-            app:boxBackgroundColor="#E3F2FD"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/nameInputLayout"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addStudentIDcell"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="#0D47A1"
-                android:textSize="16sp"/>
-        </com.google.android.material.textfield.TextInputLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:inputType="textCapWords"
+            android:textColor="#0D47A1"
+            android:textSize="16sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Кнопка добавления -->
     <com.google.android.material.button.MaterialButton
@@ -105,13 +81,20 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginBottom="16dp"
-        android:text="Добавить"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Добавить студента"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:backgroundTint="#1E88E5"
         app:cornerRadius="12dp"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:iconTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="#0D47A1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
