@@ -83,38 +83,48 @@ class AddQuestionActivity : BaseActivity() {
         val quiz_name: String = intent.getStringExtra("survey_title").toString()
         add_button.setOnClickListener {
             val testName: String = testNameText.text.toString()
-            if (testName != "") {
-                if (checkbox_one.isChecked) {
-                    right_answer = 0
-                } else if (checkbox_two.isChecked) {
-                    right_answer = 1
-                } else if (checkbox_three.isChecked) {
-                    right_answer = 2
-                } else if (checkbox_four.isChecked) {
-                    right_answer = 3
-                }
-                val option_one_text: String = option_one.text.toString()
-                val option_two_text: String = option_two.text.toString()
-                val option_three_text: String = option_three.text.toString()
-                val option_four_text: String = option_four.text.toString()
-                val options: List<String> =
-                    listOf(option_one_text, option_two_text, option_three_text, option_four_text)
-                lifecycleScope.launch {
-                    val question_to_create = QuestionToAdd(
-                        testName,
-                        right_answer,
-                        "",
-                        "",
-                        "",
-                        "",
-                        options
-                    )
-                    putQuestion(quiz_id, quiz_name, user_id.toInt(), listOf(question_to_create))
+            if (option_one.text.toString() != "" &&
+                option_two.text.toString() != "" &&
+                option_three.text.toString() != "" &&
+                option_four.text.toString() != "") {
+                if (testName != "") {
+                    if (checkbox_one.isChecked) {
+                        right_answer = 0
+                    } else if (checkbox_two.isChecked) {
+                        right_answer = 1
+                    } else if (checkbox_three.isChecked) {
+                        right_answer = 2
+                    } else if (checkbox_four.isChecked) {
+                        right_answer = 3
+                    }
+                    val option_one_text: String = option_one.text.toString()
+                    val option_two_text: String = option_two.text.toString()
+                    val option_three_text: String = option_three.text.toString()
+                    val option_four_text: String = option_four.text.toString()
+                    val options: List<String> =
+                        listOf(
+                            option_one_text,
+                            option_two_text,
+                            option_three_text,
+                            option_four_text
+                        )
+                    lifecycleScope.launch {
+                        val question_to_create = QuestionToAdd(
+                            testName,
+                            right_answer,
+                            "",
+                            "",
+                            "",
+                            "",
+                            options
+                        )
+                        putQuestion(quiz_id, quiz_name, user_id.toInt(), listOf(question_to_create))
 
-                }
+                    }
 
 
-            } else Toast.makeText(this, "Нет названия теста!", Toast.LENGTH_LONG).show()
+                } else Toast.makeText(this, "Нет названия теста!", Toast.LENGTH_LONG).show()
+            }
         }
 
         back_button.setOnClickListener {
