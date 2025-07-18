@@ -112,11 +112,11 @@
 
         <!-- Кнопка "Предыдущий" (слева) -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/prev_button"
+            android:id="@+id/backToQuizzesButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:text="Предыдущий"
+            android:text="Вернуться"
             android:textColor="#FFFFFF"
             app:strokeColor="#FFFFFF"
             app:strokeWidth="1dp"

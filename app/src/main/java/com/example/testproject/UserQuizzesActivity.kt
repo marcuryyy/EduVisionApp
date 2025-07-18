@@ -1,5 +1,6 @@
 package com.example.testproject
 
+import AppData
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -32,15 +33,20 @@ data class Survey(
 class UserQuizzesActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_quizzes)
-
+        AppData.init(this)
         val add_quiz_button: Button = findViewById(R.id.add_test_button)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val folder_id: Int = intent.getIntExtra("folder_id", -1)
-        println(folder_id)
+        var currentFolderID = 0
+    
+        if(folder_id != -1) {
+            AppData.folderId = folder_id
+        }
+        currentFolderID = AppData.folderId
+
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_classes -> {
@@ -64,28 +70,28 @@ class UserQuizzesActivity : BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
-            recyclerView.adapter = getSurveysList(folder_id)
+            recyclerView.adapter = getSurveysList(currentFolderID)
         }
 
 
         add_quiz_button.setOnClickListener {
             val nextIntent = Intent(this, AddQuizActivity::class.java)
-            nextIntent.putExtra("folder_id", folder_id)
+            nextIntent.putExtra("folder_id", currentFolderID)
             startActivity(nextIntent)
         }
 
     }
 
 
-    suspend fun getSurveysList(folder_id: Int?): QuizAdapter {
-        val quizzes = fetchQuizes(folder_id)
-        val adapter = QuizAdapter(quizzes, this@UserQuizzesActivity) {folder_id ->
-            deleteSurvey(folder_id)
+    suspend fun getSurveysList(folderId: Int?): QuizAdapter {
+        val quizzes = fetchQuizes(folderId)
+        val adapter = QuizAdapter(quizzes, this@UserQuizzesActivity) {folderId ->
+            deleteSurvey(folderId)
         }
         return adapter
     }
 
-    suspend fun fetchQuizes(folder_id: Int?): MutableList<Survey> {
+    suspend fun fetchQuizes(folderId: Int?): MutableList<Survey> {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPref.getString("token", "")
 
@@ -96,7 +102,7 @@ class UserQuizzesActivity : BaseActivity() {
         }
 
         try {
-            val response = client.get("$API_URL/api/folders/$folder_id/surveys") {
+            val response = client.get("$API_URL/api/folders/$folderId/surveys") {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

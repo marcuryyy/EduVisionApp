@@ -11,7 +11,6 @@ import android.util.Log
 import android.util.Size
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -132,16 +131,12 @@ open class CheckQuestionActivity : BaseActivity() {
         db_tests = DBtests(this, null)
         viewFinder = findViewById(R.id.viewFinder)
         val next_button: Button = findViewById(R.id.next_button)
-        val prev_button: Button = findViewById(R.id.prev_button)
+        val quiz_id = intent.getIntExtra("quiz_id", -1)
+        val backToQuizzesButton: Button = findViewById(R.id.backToQuizzesButton)
         student_names = intent.getStringArrayListExtra("students")!!
         aruco_ids = intent.getIntegerArrayListExtra("aruco_ids")!!
         questionText = findViewById(R.id.questionText)
 
-        val resultsButton: Button = findViewById(R.id.results_button)
-
-        val testId = intent.getStringExtra("test_id") ?: ""
-        val allTestsMode = intent.getBooleanExtra("allTests", false)
-        val quiz_id = intent.getIntExtra("quiz_id", -1)
         val class_id = intent.getIntExtra("class_id", -1)
         val takenSurveyId = intent.getIntExtra("taken_survey_id", -1)
         val takenQuestionId = intent.getIntExtra("taken_question_id", -1)
@@ -170,28 +165,23 @@ open class CheckQuestionActivity : BaseActivity() {
             loadCurrentQuestionAnswer()
             updateQuestionUI(currentQuestionData!!)
         }
-        val answers = mutableListOf<Answer>()
 
         showCurrentQuestion()
         next_button.setOnClickListener {
             lifecycleScope.launch {
-                println(currentQuestionData)
                 overlayView.removeCircles()
                 handleNextQuestion(takenSurveyId)
+
             }
         }
 
-        resultsButton.setOnClickListener {
+        backToQuizzesButton.setOnClickListener {
             lifecycleScope.launch {
+                println("$quiz_id, $class_id")
                 stopSession(quiz_id, class_id)
-                navigateToResults(allTestsMode, testId)
+                val intent = Intent(this@CheckQuestionActivity, UserQuizzesActivity::class.java)
+                startActivity(intent)
             }
-        }
-
-
-
-        prev_button.setOnClickListener {
-            showPreviousQuestion()
         }
     }
     private suspend fun handleNextQuestion(takenSurveyId: Int) {
@@ -211,15 +201,13 @@ open class CheckQuestionActivity : BaseActivity() {
                     updateQuestionUI(response.data)
                     loadCurrentQuestionAnswer()
                 }
-                "survey_completed" -> {
-                    navigateToResults()
-                }
                 else -> {
                     Toast.makeText(this, "Неизвестный статус: ${response.data.status}", Toast.LENGTH_SHORT).show()
                 }
             }
         } catch (e: Exception) {
             Toast.makeText(this, "Вопросы закончились, проверьте результаты!", Toast.LENGTH_LONG).show()
+
             e.printStackTrace()
         }
     }
@@ -309,18 +297,7 @@ open class CheckQuestionActivity : BaseActivity() {
     }
 
 
-    private fun navigateToResults(allTestsMode: Boolean = false, testId: String = "") {
-        val intent = Intent(this, ResultsActivity::class.java).apply {
-                putStringArrayListExtra("questions", ArrayList(questionList))
-                bundle.putStringArrayList("keys", ArrayList(id_map.keys))
-                bundle.putStringArrayList("values", ArrayList(id_map.values.map { it.toString() }))
-                bundle.putIntegerArrayList("aruco_id", aruco_ids)
-                bundle.putStringArrayList("student_name", student_names)
-            }
 
-
-        startActivity(intent)
-    }
 
     private fun requestCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -563,7 +540,6 @@ open class CheckQuestionActivity : BaseActivity() {
         }
 
         return try {
-            println(taken_question_id)
             val response = client.post("$API_URL/api/conducting/answers") {
                 contentType(ContentType.Application.Json)
                 setBody(QuestionResultsRequest(taken_survey_id, taken_question_id, answers))

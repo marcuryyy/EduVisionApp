@@ -94,6 +94,7 @@ class SelectClassForQuizActivity : BaseActivity() {
 
             lifecycleScope.launch {
                 // 1. Запускаем сессию и получаем данные
+                println("$quiz_id, $classId")
                 val sessionResponse = startSession(quiz_id, classId)
                 val takenSurveyId = sessionResponse.data.taken_survey_id
                 val takenQuestionId = sessionResponse.data.taken_question_id
@@ -208,8 +209,7 @@ class SelectClassForQuizActivity : BaseActivity() {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }
             }
-
-            // Парсим ответ
+            println(response)
             response.body<StartSessionResponse>()
         } finally {
             client.close()
