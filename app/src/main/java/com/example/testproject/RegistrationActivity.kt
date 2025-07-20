@@ -97,13 +97,9 @@ class RegistrationActivity : BaseActivity()  {
                     editor.putString("username", login)
                     editor.putString("email", email)
                     editor.apply()
-                    val user = User(login, password)
 
-                    val db = DBuser(this, null)
-                    db.addUser(user)
                     lifecycleScope.launch { // Создает блокирующую корутину
                         registerUser( // Вызов suspend-функции
-                            apiUrl = API_URL,
                             login = login,
                             email = email,
                             password = password,
@@ -132,7 +128,6 @@ class RegistrationActivity : BaseActivity()  {
 
 
     suspend fun registerUser(
-        apiUrl: String,
         login: String,
         email: String,
         password: String
@@ -145,9 +140,9 @@ class RegistrationActivity : BaseActivity()  {
         }
 
         try {
-            println("$apiUrl/auth/register")
+            println("$API_URL/auth/register")
 
-            val response = client.post("$apiUrl/auth/register") {
+            val response = client.post("$API_URL/auth/register") {
                 contentType(ContentType.Application.Json)
                 setBody(RegisterRequest(login, email, password))
             }
@@ -159,7 +154,6 @@ class RegistrationActivity : BaseActivity()  {
                 lifecycleScope.launch {
                     sendVerificationCode(
                         context = this@RegistrationActivity,
-                        apiUrl = API_URL,
                         email = email,
                     )
                 }

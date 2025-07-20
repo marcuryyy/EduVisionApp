@@ -104,8 +104,7 @@ class DBtests(val context: Context, val factory: SQLiteDatabase.CursorFactory?) 
     }
 
     fun getQuestionById(questionId: Int): Cursor {
-        val db = readableDatabase
-        return db.query(
+        return readableDatabase.query(
             "tests",
             arrayOf("id", "question_text", "right_answer", "question_id"),
             "question_id = ?",

@@ -97,9 +97,6 @@ open class CheckQuestionActivity : BaseActivity() {
         System.loadLibrary("opencv_java4")
     }
 
-
-
-
     private lateinit var viewFinder: PreviewView
     private lateinit var overlayView: OverlayView
     private var cameraExecutor = Executors.newSingleThreadExecutor()
@@ -112,12 +109,13 @@ open class CheckQuestionActivity : BaseActivity() {
     private var questionNum: Int = 0
     private var questionList = mutableListOf<String>()
     private lateinit var db_tests: DBtests
-    private lateinit var adapter: UnansweredStudentsAdapter
     private lateinit var questionText: TextView
     private lateinit var arucoToStudentIDMap: Map<Int, Int>
     private var arucoToStudentNameMap: MutableMap<Int, String> = mutableMapOf()
+    private var arucoToStudentMap: MutableMap<Int, Pair<Int, String>> = mutableMapOf()
     private lateinit var studentsList: RecyclerView
     private var currentQuestionData: QuestionData? = QuestionData("")
+    private var adapter: UnansweredStudentsAdapter = UnansweredStudentsAdapter(arucoToStudentNameMap.toMutableMap(), this@CheckQuestionActivity)
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1001
         private const val TAG = "CameraXApp"
@@ -133,10 +131,17 @@ open class CheckQuestionActivity : BaseActivity() {
         val next_button: Button = findViewById(R.id.next_button)
         val quiz_id = intent.getIntExtra("quiz_id", -1)
         val backToQuizzesButton: Button = findViewById(R.id.backToQuizzesButton)
+        val initialQuestionText = intent.getStringExtra("question_text") ?: ""
         student_names = intent.getStringArrayListExtra("students")!!
         aruco_ids = intent.getIntegerArrayListExtra("aruco_ids")!!
         questionText = findViewById(R.id.questionText)
-
+        studentsList = findViewById(R.id.studentsList)
+        val studentNameToArucoMap = mutableMapOf<String, Int>()
+        aruco_ids.forEachIndexed { index, arucoNum ->
+            if (index < student_names.size) {
+                studentNameToArucoMap[student_names[index]] = arucoNum
+            }
+        }
         val class_id = intent.getIntExtra("class_id", -1)
         val takenSurveyId = intent.getIntExtra("taken_survey_id", -1)
         val takenQuestionId = intent.getIntExtra("taken_question_id", -1)
@@ -144,32 +149,42 @@ open class CheckQuestionActivity : BaseActivity() {
         currentQuestionData?.taken_survey_id = takenSurveyId
         lifecycleScope.launch {
             val classInfoList = fetchClassInfo(class_id)
-            arucoToStudentIDMap = classInfoList.associate { it.aruco_num to it.id }
-            arucoToStudentNameMap = classInfoList.associate { it.aruco_num to it.name } as MutableMap<Int, String>
-        }
-        val initialQuestionText = intent.getStringExtra("question_text") ?: ""
-        adapter = UnansweredStudentsAdapter(arucoToStudentNameMap, this)
-        studentsList = findViewById(R.id.studentsList)
-        studentsList.layoutManager = LinearLayoutManager(this)
-        studentsList.adapter = adapter
-        // Инициализируем первый вопрос
-        currentQuestionData = QuestionData(
-            status = "next_question",
-            taken_question_id = takenQuestionId,
-            taken_survey_id = takenSurveyId,
-            question_text = initialQuestionText
-        )
+            println("Class info: $classInfoList")
 
-        // Загружаем правильный ответ для первого вопроса из БД
-        lifecycleScope.launch {
+            val tempMap = mutableMapOf<Int, Pair<Int, String>>()
+
+            classInfoList.forEach { student ->
+                if (aruco_ids.contains(student.aruco_num)) {
+                    val studentName = studentNameToArucoMap.entries
+                        .firstOrNull { it.value == student.aruco_num }?.key
+                        ?: student.name
+                    tempMap[student.aruco_num] = student.id to studentName
+                }
+            }
+            println("Questionid: $takenQuestionId")
+            currentQuestionData = QuestionData(
+                status = "next_question",
+                taken_question_id = takenQuestionId,
+                taken_survey_id = takenSurveyId,
+                question_text = initialQuestionText
+            )
+            arucoToStudentMap = tempMap.toMap() as MutableMap<Int, Pair<Int, String>>
+            arucoToStudentNameMap = arucoToStudentMap.mapValues { it.value.second } as MutableMap<Int, String>
+            arucoToStudentIDMap = arucoToStudentMap.mapValues { it.value.first }
+            studentsList.layoutManager = LinearLayoutManager(this@CheckQuestionActivity)
+            adapter = UnansweredStudentsAdapter(arucoToStudentNameMap.toMutableMap(), this@CheckQuestionActivity)
+            studentsList.adapter = adapter
+
+
             loadCurrentQuestionAnswer()
             updateQuestionUI(currentQuestionData!!)
+            showCurrentQuestion()
         }
 
-        showCurrentQuestion()
         next_button.setOnClickListener {
             lifecycleScope.launch {
                 overlayView.removeCircles()
+                println("SurveyId: $takenSurveyId")
                 handleNextQuestion(takenSurveyId)
 
             }
@@ -186,14 +201,18 @@ open class CheckQuestionActivity : BaseActivity() {
     }
     private suspend fun handleNextQuestion(takenSurveyId: Int) {
         val answers = collectAnswers()
+        println(takenSurveyId)
+        println(currentQuestionData?.taken_question_id ?: -1)
         println("Collected answers: $answers")
-
+ // 73 184 185
         try {
+
             val response = sendResults(
                 takenSurveyId,
                 currentQuestionData?.taken_question_id ?: -1,
                 answers
             )
+            println(response.data)
 
             when (response.data.status) {
                 "next_question" -> {
@@ -213,36 +232,55 @@ open class CheckQuestionActivity : BaseActivity() {
     }
     private fun loadCurrentQuestionAnswer() {
         currentQuestionData?.let { questionData ->
-            questionData.question_id?.let { questionId ->
-                val cursor = db_tests.getQuestionById(questionId)
-                if (cursor.moveToFirst()) {
-                    updateRightAnswers(cursor)
-                } else {
-                    questionData.question_text?.let { questionText ->
-                        val textCursor = db_tests.getQuestionByText(questionText)
-                        if (textCursor.moveToFirst()) {
-                            updateRightAnswers(textCursor)
-                            questionData.question_id = textCursor.getInt(3)
-                        }
-                    }
-                }
-            } ?: run {
-                // Если question_id нет, ищем по тексту вопроса
-                questionData.question_text?.let { questionText ->
-                    val cursor = db_tests.getQuestionByText(questionText)
+            try {
+                questionData.question_id?.let { questionId ->
+                    val cursor = db_tests.getQuestionById(questionId)
                     if (cursor.moveToFirst()) {
                         updateRightAnswers(cursor)
-                        questionData.question_id = cursor.getInt(3)
+                    } else {
+                        questionData.question_text?.let { questionText ->
+                            val textCursor = db_tests.getQuestionByText(questionText)
+                            if (textCursor.moveToFirst()) {
+                                updateRightAnswers(textCursor)
+                                questionData.question_id = textCursor.getInt(textCursor.getColumnIndexOrThrow("question_id"))
+                            }
+                            textCursor.close()
+                        }
+                    }
+                } ?: run {
+                    questionData.question_text?.let { questionText ->
+                        val cursor = db_tests.getQuestionByText(questionText)
+                        if (cursor.moveToFirst()) {
+                            updateRightAnswers(cursor)
+                            questionData.question_id = cursor.getInt(cursor.getColumnIndexOrThrow("question_id"))
+                        }
+                        cursor.close()
                     }
                 }
+            } catch (e: Exception) {
+                println("Error loading question answer: ${e.message}")
+                e.printStackTrace()
             }
         }
     }
 
     private fun updateRightAnswers(cursor: Cursor) {
-        right_answers.clear()
-        val answer = cursor.getString(2)
-        right_answers.add(answer)
+        try {
+            right_answers.clear()
+            val answerIndex = cursor.getColumnIndexOrThrow("right_answer")
+            if (!cursor.isNull(answerIndex)) {
+                val answer = cursor.getString(answerIndex)
+                println("Right answer from DB: $answer")
+                right_answers.add(answer)
+            } else {
+                println("Right answer is null in DB")
+            }
+        } catch (e: Exception) {
+            println("Error getting right answer: ${e.message}")
+            e.printStackTrace()
+        } finally {
+            cursor.close()
+        }
     }
     private fun collectAnswers(): List<Answer> {
         val answers = mutableListOf<Answer>()
@@ -266,7 +304,7 @@ open class CheckQuestionActivity : BaseActivity() {
     }
 
     private fun updateQuestionUI(questionData: QuestionData) {
-
+        println("updateQuestionUI called with: $questionData")
         questionData.question_text?.let {
             questionText.text = it
             questionList.add(it)
@@ -281,14 +319,9 @@ open class CheckQuestionActivity : BaseActivity() {
         }
     }
 
-    private fun showPreviousQuestion() {
-        if (questionNum > 0) {
-            questionNum--
-            showCurrentQuestion()
-        }
-    }
 
     private fun showCurrentQuestion() {
+        println("showCurrentQuestion called")
         println(questionNum)
         if (questionList.isNotEmpty() && questionNum < questionList.size && questionNum > 0) {
             println(questionList[questionNum])
@@ -471,6 +504,7 @@ open class CheckQuestionActivity : BaseActivity() {
                         id_map[sliced_id] = text_to_put
                         println("$text_to_put, $right_answers")
                         arucoToStudentNameMap.remove(sliced_id.toInt())
+                        println(arucoToStudentNameMap)
                         runOnUiThread {
                                 adapter.updateData(arucoToStudentNameMap)
                         }

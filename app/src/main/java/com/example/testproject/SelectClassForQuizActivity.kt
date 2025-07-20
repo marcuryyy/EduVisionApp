@@ -93,36 +93,22 @@ class SelectClassForQuizActivity : BaseActivity() {
             val classId = selectedClass.id
 
             lifecycleScope.launch {
-                // 1. Запускаем сессию и получаем данные
                 println("$quiz_id, $classId")
-                val sessionResponse = startSession(quiz_id, classId)
-                val takenSurveyId = sessionResponse.data.taken_survey_id
-                val takenQuestionId = sessionResponse.data.taken_question_id
-                val question_text = sessionResponse.data.question_text
-
+//
                 val questions = fetchTestQuestions(quiz_id)
-                val (names, arucoIds) = fetchStudents(classId)
 
-                // 2. Сохраняем вопросы в БД
                 saveQuestionsToDatabase(questions)
 
-                // 3. Создаём Intent с новыми параметрами
-                val intent = Intent(this@SelectClassForQuizActivity, CheckQuestionActivity::class.java).apply {
-                    putExtras(Bundle().apply {
+                val intent = Intent(this@SelectClassForQuizActivity, chooseStudentsForTestActivity::class.java).apply {
+                   putExtras(Bundle().apply {
                         putBoolean("allTests", intent.getBooleanExtra("allTests", true))
                         putString("test_id", test_id)
                         putStringArrayList("questionsArray", questionList)
-                        putStringArrayList("students", ArrayList(names ?: emptyList()))
-                        putIntegerArrayList("aruco_ids", ArrayList(arucoIds ?: emptyList()))
                         putInt("quiz_id", quiz_id)
                         putInt("class_id", classId)
-                        putInt("taken_survey_id", takenSurveyId)
-                        putInt("taken_question_id", takenQuestionId)
-                        putString("question_text", question_text)
-                    })
+                   })
                 }
 
-                // 4. Запускаем активность
                 startActivity(intent)
             }
         }
@@ -184,61 +170,6 @@ class SelectClassForQuizActivity : BaseActivity() {
 
             val classes = response.body<List<Class>>()
             return classes
-        }
-        finally {
-            client.close()
-        }
-
-    }
-
-    suspend fun startSession(quiz_id: Int, class_id: Int): StartSessionResponse {
-        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val token = sharedPref.getString("token", "") ?: ""
-
-        val client = HttpClient(CIO) {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
-
-        return try {
-            val response = client.post("$API_URL/api/conducting/start") {
-                contentType(ContentType.Application.Json)
-                setBody(SessionInfo(quiz_id, class_id))
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $token")
-                }
-            }
-            println(response)
-            response.body<StartSessionResponse>()
-        } finally {
-            client.close()
-        }
-    }
-
-    suspend fun fetchStudents(class_id: Int): Pair<List<String>, List<Int>> {
-        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val token = sharedPref.getString("token", "")
-
-        val client = HttpClient(CIO) {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
-
-        try {
-            val response = client.get("$API_URL/api/students/$class_id") {
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $token")
-                }
-            }
-
-
-            val students = response.body<List<GetStudent>>()
-            val names = students.map{ it.name }
-            val aruco_ids = students.map{ it.aruco_num }
-
-            return Pair(names, aruco_ids)
         }
         finally {
             client.close()

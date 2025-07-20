@@ -34,9 +34,9 @@ class UnansweredStudentsAdapter(var studentMap: MutableMap<Int, String>, var con
         return studentMap.size
     }
     fun updateData(newMap: MutableMap<Int, String>) {
-        studentMap.clear()
-        studentMap.putAll(newMap)
+        this.studentMap = newMap
         notifyDataSetChanged()
+        println("Adapter data updated")
     }
 
 
