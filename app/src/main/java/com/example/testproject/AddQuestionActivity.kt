@@ -13,6 +13,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.headers
+import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -41,27 +42,9 @@ class AddQuestionActivity : BaseActivity() {
     data class QuestionToAdd(
         val text: String,
         val correct_option: Int,
-        val file_url: String?,
-        val file_folder: String?,
-        val file_name: String?,
-        val file_type: String?,
         val options: List<String>
     )
 
-    @Serializable
-    data class TestResponse(
-        val id: Int,
-        val title: String,
-        val createdAt: String,
-        val questions: List<Question>
-    )
-
-    @Serializable
-    data class AddQuestionRequest(
-        val user_id: Int,
-        val title: String,
-        val questions: List<QuestionToAdd>
-    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_question)
@@ -77,10 +60,7 @@ class AddQuestionActivity : BaseActivity() {
         val option_three: EditText = findViewById(R.id.variant3)
         val option_four: EditText = findViewById(R.id.variant4)
         val back_button: TextView = findViewById(R.id.backButton)
-        val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val user_id = sharedPref.getLong("user_id", -1)
         val quiz_id = intent.getIntExtra("quiz_id", -1)
-        val quiz_name: String = intent.getStringExtra("survey_title").toString()
         add_button.setOnClickListener {
             val testName: String = testNameText.text.toString()
             if (option_one.text.toString() != "" &&
@@ -112,13 +92,9 @@ class AddQuestionActivity : BaseActivity() {
                         val question_to_create = QuestionToAdd(
                             testName,
                             right_answer,
-                            "",
-                            "",
-                            "",
-                            "",
                             options
                         )
-                        putQuestion(quiz_id, quiz_name, user_id.toInt(), listOf(question_to_create))
+                        putQuestion(quiz_id, question_to_create)
 
                     }
 
@@ -135,9 +111,7 @@ class AddQuestionActivity : BaseActivity() {
 
     suspend fun putQuestion(
         quiz_id: Int,
-        title: String,
-        user_id: Int,
-        questions: List<QuestionToAdd>
+        question: QuestionToAdd
     ) {
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPref.getString("token", "")
@@ -149,10 +123,9 @@ class AddQuestionActivity : BaseActivity() {
         }
 
         try {
-            println(questions)
-            val response = client.put("$API_URL/api/surveys/$quiz_id") {
+            val response = client.post("$API_URL/api/surveys/$quiz_id/question") {
                 contentType(ContentType.Application.Json)
-                setBody(AddQuestionRequest(user_id, title, questions))
+                setBody(QuestionToAdd(question.text, question.correct_option, question.options))
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $token")
                 }

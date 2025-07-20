@@ -56,6 +56,7 @@ class UserTestQuestions : BaseActivity() {
         val questions: List<Question>
     )
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_questions)
@@ -127,7 +128,7 @@ class UserTestQuestions : BaseActivity() {
                 }
             }
             val testResponse = response.body<TestResponse>()
-
+            println(testResponse.questions)
             testResponse.questions
         }
     }
