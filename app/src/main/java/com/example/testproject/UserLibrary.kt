@@ -7,6 +7,7 @@ import android.widget.Button
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -32,46 +33,22 @@ data class Folder(
 class UserLibrary : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var shimmerContainer: ShimmerFrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_quiz_folders)
+        setContentView(R.layout.loading_library)
 
-        val add_folder_button: Button = findViewById(R.id.add_folder_button)
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_classes -> {
-                    startActivity(Intent(this, UserClassesActivity::class.java))
-                    true
-                }
-                R.id.nav_folders -> {
-                    true
-                }
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
+        shimmerContainer = findViewById(R.id.shimmer_container)
+        shimmerContainer.startShimmer() // Запускаем анимаци
 
-        bottomNav.selectedItemId = R.id.nav_folders
 
-        recyclerView = findViewById(R.id.my_folders_list)
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
             val folders = fetchFoldersFromAPI()
             val surveys = fetchSurveysFromAPI()
-            val adapter = FoldersAdapter(folders, surveys, this@UserLibrary)
-            recyclerView.adapter = adapter
-        }
 
-
-        add_folder_button.setOnClickListener {
-            val nextIntent = Intent(this, AddQuizFolderActivity::class.java)
-            startActivity(nextIntent)
+            showContent(folders, surveys)
         }
 
     }
@@ -132,6 +109,43 @@ class UserLibrary : BaseActivity() {
         }
         finally {
             client.close()
+        }
+    }
+
+
+    private fun showContent(folders: List<Folder>, surveys:List<Survey>){
+        setContentView(R.layout.activity_user_quiz_folders)
+
+        val add_folder_button: Button = findViewById(R.id.add_folder_button)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_classes -> {
+                    startActivity(Intent(this, UserClassesActivity::class.java))
+                    true
+                }
+                R.id.nav_folders -> {
+                    true
+                }
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+
+        bottomNav.selectedItemId = R.id.nav_folders
+
+        recyclerView = findViewById(R.id.my_folders_list)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val adapter = FoldersAdapter(folders, surveys, this@UserLibrary)
+        recyclerView.adapter = adapter
+
+        add_folder_button.setOnClickListener {
+            val nextIntent = Intent(this, AddQuizFolderActivity::class.java)
+            startActivity(nextIntent)
         }
     }
 }

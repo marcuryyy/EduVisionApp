@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shimmer_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Скелетон заголовка -->
+        <View
+            android:id="@+id/skeleton_title"
+            android:layout_width="120dp"
+            android:layout_height="32dp"
+            android:background="#E0E0E0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Скелетон разделителя -->
+        <View
+            android:id="@+id/skeleton_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"
+            app:layout_constraintTop_toBottomOf="@id/skeleton_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Скелетон списка папок -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            app:layout_constraintTop_toBottomOf="@id/skeleton_divider"
+            app:layout_constraintBottom_toTopOf="@id/skeleton_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp">
+
+            <!-- Скелетон элементов списка (повторить нужное количество раз) -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="#E0E0E0"
+                android:layout_marginBottom="8dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="#E0E0E0"
+                android:layout_marginBottom="8dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="#E0E0E0"/>
+        </LinearLayout>
+
+        <!-- Скелетон кнопки -->
+        <View
+            android:id="@+id/skeleton_button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="#E0E0E0"
+            app:layout_constraintBottom_toTopOf="@id/skeleton_navigation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Скелетон нижней навигации -->
+        <View
+            android:id="@+id/skeleton_navigation"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="#E0E0E0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>

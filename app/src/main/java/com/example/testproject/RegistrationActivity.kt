@@ -171,7 +171,7 @@ class RegistrationActivity : BaseActivity()  {
     }
 
 
-    // Функция отправки кода подтверждения
+    // Функция перехода на страницу подтверждения
     suspend fun sendVerificationCode(context: Context, apiUrl: String, email: String) {
         // Проверка на пустую почту
         if (email.isBlank()) {
@@ -179,33 +179,9 @@ class RegistrationActivity : BaseActivity()  {
             return
         }
 
-        val client = HttpClient(CIO) {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
-
-        try {
-            withContext(Dispatchers.Main) {
-                val intent = Intent(context, CodeConfirmActivity::class.java)
-                intent.putExtra("source", "registration")
-                client.close()
-                context.startActivity(intent)
-            }
-
-            val response: HttpResponse = client.post("$apiUrl/auth/registration/send-code") {
-                contentType(ContentType.Application.Json)
-                setBody(VerificationRequest(email))
-            }
-
-            println("Код отправлен: ${response.bodyAsText()}")
-
-
-        } catch (e: Exception) {
-            println("Ошибка при отправке кода: ${e.message}")
-        } finally {
-            client.close()
-        }
+        val intent = Intent(context, CodeConfirmActivity::class.java)
+        intent.putExtra("source", "registration")
+        context.startActivity(intent)
     }
 }
 

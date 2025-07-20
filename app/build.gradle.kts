@@ -49,8 +49,9 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.5") // Сериализатор
     implementation("androidx.camera:camera-view:1.0.0-alpha27")
     implementation("androidx.camera:camera-extensions:${camerax_version}")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("com.google.android.material:material:1.6.0")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

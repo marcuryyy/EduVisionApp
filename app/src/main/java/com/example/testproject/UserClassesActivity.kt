@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -34,6 +35,7 @@ data class Class(
 class UserClassesActivity : BaseActivity()  {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var shimmerContainer: ShimmerFrameLayout
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
@@ -42,50 +44,17 @@ class UserClassesActivity : BaseActivity()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_classes)
-        if (!hasCameraPermission()) {
-            requestCameraPermission()
-        } else {
-        }
+        setContentView(R.layout.loading_classes)
 
-
-        recyclerView = findViewById(R.id.ClassList)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        shimmerContainer = findViewById(R.id.shimmer_container)
+        shimmerContainer.startShimmer() // Запускаем анимаци
 
 
         lifecycleScope.launch {
             val classes = fetchClasses()
-            val adapter = ClassesAdapter(classes, this@UserClassesActivity)
-            recyclerView.adapter = adapter
+            showContent(classes)
         }
 
-        val add_class_button: Button = findViewById(R.id.add_class)
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_classes -> {
-                    true
-                }
-                R.id.nav_folders -> {
-                    startActivity(Intent(this, UserLibrary::class.java))
-                    true
-                }
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
-
-        bottomNav.selectedItemId = R.id.nav_classes
-
-        add_class_button.setOnClickListener {
-            val intent = Intent(this, AddClassActivity::class.java)
-            startActivity(intent)
-        }
-
-        
     }
 
     suspend fun fetchClasses(): List<Class> {
@@ -125,5 +94,43 @@ class UserClassesActivity : BaseActivity()  {
     }
 
 
+    private fun showContent(classes: List<Class>){
+        setContentView(R.layout.activity_user_classes)
+        if (!hasCameraPermission()) {
+            requestCameraPermission()
+        }
 
+
+        recyclerView = findViewById(R.id.ClassList)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val adapter = ClassesAdapter(classes, this@UserClassesActivity)
+        recyclerView.adapter = adapter
+
+        val add_class_button: Button = findViewById(R.id.add_class)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_classes -> {
+                    true
+                }
+                R.id.nav_folders -> {
+                    startActivity(Intent(this, UserLibrary::class.java))
+                    true
+                }
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+
+        bottomNav.selectedItemId = R.id.nav_classes
+
+        add_class_button.setOnClickListener {
+            val intent = Intent(this, AddClassActivity::class.java)
+            startActivity(intent)
+        }
+    }
 }

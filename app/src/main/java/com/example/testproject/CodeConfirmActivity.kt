@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.textfield.TextInputLayout
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -29,48 +30,43 @@ import kotlinx.serialization.Serializable
 
 class CodeConfirmActivity : BaseActivity() {
     private var timerJob: Job? = null
+    private var email: String = ""
+    private lateinit var shimmerContainer: ShimmerFrameLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_confirm_code)
+        setContentView(R.layout.loading_code_confirm)
 
-        val confirmation_field: TextInputLayout = findViewById(R.id.confirmation_field)
-        val confirm_button: Button = findViewById(R.id.confirm_button)
-        val timer_text: TextView = findViewById(R.id.timer_text)
-        val resend_code_text: TextView = findViewById(R.id.resend_code_text)
+        shimmerContainer = findViewById(R.id.shimmer_container)
+        shimmerContainer.startShimmer() // Запускаем анимацию
+
+
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val email = sharedPref.getString("email", "").toString()
+        email = sharedPref.getString("email", "").toString()
 
         println(email)
-        // Запускаем таймер сразу
-        startResendTimer(timer_text)
 
-        // Обработка повторной отправки кода
-        resend_code_text.setOnClickListener {
-            if (timer_text.visibility != View.VISIBLE) {
-                lifecycleScope.launch {
-                    sendVerificationCode(this@CodeConfirmActivity, API_URL, email)
+        lifecycleScope.launch {
+            val client = HttpClient(CIO) {
+                install(ContentNegotiation) {
+                    json()
                 }
-                Toast.makeText(this, "Код отправлен повторно", Toast.LENGTH_SHORT).show()
-                startResendTimer(timer_text)
-            }
-        }
-
-        confirm_button.setOnClickListener {
-            val code = confirmation_field.editText?.text.toString().trim()
-
-            if (code.isBlank()) {
-                Toast.makeText(this, "Введите код подтверждения", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
             }
 
-            lifecycleScope.launch {
-                verifyCode(
-                    context = this@CodeConfirmActivity,
-                    apiUrl = API_URL,
-                    email = email,
-                    code = code
-                )
+            try {
+                val response: HttpResponse = client.post("$API_URL/auth/registration/send-code") {
+                    contentType(ContentType.Application.Json)
+                    setBody(VerificationRequest(email))
+                }
+
+                println("Код отправлен: ${response.bodyAsText()}")
+            } catch (e: Exception) {
+                println("Ошибка при отправке кода: ${e.message}")
+            } finally {
+                client.close()
             }
+
+            showContent()
         }
     }
 
@@ -168,6 +164,8 @@ class CodeConfirmActivity : BaseActivity() {
             client.close()
         }
     }
+
+
     suspend fun sendVerificationCode(context: Context, apiUrl: String, email: String) {
         // Проверка на пустую почту
         if (email.isBlank()) {
@@ -195,6 +193,46 @@ class CodeConfirmActivity : BaseActivity() {
             println("Ошибка при отправке кода: ${e.message}")
         } finally {
             client.close()
+        }
+    }
+
+
+    private fun showContent() {
+        setContentView(R.layout.activity_confirm_code)
+
+        val confirmation_field: TextInputLayout = findViewById(R.id.confirmation_field)
+        val confirm_button: Button = findViewById(R.id.confirm_button)
+        val timer_text: TextView = findViewById(R.id.timer_text)
+        val resend_code_text: TextView = findViewById(R.id.resend_code_text)
+
+        startResendTimer(timer_text)
+
+        resend_code_text.setOnClickListener {
+            if (timer_text.visibility != View.VISIBLE) {
+                lifecycleScope.launch {
+                    sendVerificationCode(this@CodeConfirmActivity, API_URL, email)
+                }
+                Toast.makeText(this, "Код отправлен повторно", Toast.LENGTH_SHORT).show()
+                startResendTimer(timer_text)
+            }
+        }
+
+        confirm_button.setOnClickListener {
+            val code = confirmation_field.editText?.text.toString().trim()
+
+            if (code.isBlank()) {
+                Toast.makeText(this, "Введите код подтверждения", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            lifecycleScope.launch {
+                verifyCode(
+                    context = this@CodeConfirmActivity,
+                    apiUrl = API_URL,
+                    email = email,
+                    code = code
+                )
+            }
         }
     }
 }
