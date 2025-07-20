@@ -1,6 +1,7 @@
 package com.example.testproject
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
@@ -61,8 +62,7 @@ class EditClassActivity : BaseActivity() {
 
         // Здесь должна быть логика сохранения через API
         // ...
-        setResult(RESULT_OK)
-        finish()
+        backToClasses()
     }
 
     private fun showDeleteConfirmationDialog(classId: Int) {
@@ -104,12 +104,15 @@ class EditClassActivity : BaseActivity() {
         finally {
             client.close()
         }
-        setResult(RESULT_OK)
-        finish()
+        backToClasses()
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun backToClasses(){
+        startActivity(Intent(this, UserClassesActivity::class.java))
     }
 
 }
