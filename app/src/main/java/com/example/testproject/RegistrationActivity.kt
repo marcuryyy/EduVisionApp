@@ -166,7 +166,7 @@ class RegistrationActivity : BaseActivity()  {
 
 
     // Функция перехода на страницу подтверждения
-    suspend fun sendVerificationCode(context: Context, apiUrl: String, email: String) {
+    suspend fun sendVerificationCode(context: Context, email: String) {
         // Проверка на пустую почту
         if (email.isBlank()) {
             println("Пожалуйста, заполните почту")
